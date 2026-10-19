@@ -1,6 +1,6 @@
 <div align="center">
 
-<!-- Add your logo here if you have one: <img src="path/to/logo.png" width="120" alt="AgriAI logo" /> -->
+<img src="favicon.png" width="120" alt="AgriAI Logo" />
 
 # 🌱 AgriAI
 
