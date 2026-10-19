@@ -1,112 +1,137 @@
-# 🌿 AgriAI - Smart Agriculture Assistant
+# 🌱 AgriAI
 
-[![Status](https://img.shields.io/badge/Status-Active-brightgreen.svg)](https://ipbl.vercel.app)
-[![PWA](https://img.shields.io/badge/PWA-Ready-blue.svg)](https://ipbl.vercel.app)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-October%202026-orange.svg)](https://github.com/Dheeraj-del-cyber/IPBL)
+### AI-Powered Crop Disease Detection and Smart Farming Assistant
 
-**Project link:** [https://ipbl.vercel.app](https://ipbl.vercel.app)
-
-An AI-powered, full-stack platform designed to empower farmers with modern technology. **AgriAI** provides intelligent crop disease detection, personalized agricultural advisory, and real-time IoT monitoring, all wrapped in a robust, multilingual, and mobile-first Progressive Web App (PWA).
+**Live Demo:** [https://ipbl.vercel.app](https://ipbl.vercel.app)
 
 ---
 
-## ✨ Core Features
+## 📌 Project Overview
 
-- 🦠 **Smart Disease Detection**: Scan crop leaves using the device camera. The system uses an **EfficientNetB0 CNN** with Test-Time Augmentation (TTA) to diagnose diseases instantly.
-- 🛡️ **Intelligent Image Validation**: Automatically detects blurry images or non-leaf photos (via Green Pixel Ratio calculation) before sending them to the model, saving bandwidth and processing power.
-- 🤖 **AI-Driven Advisory**: Integrates with the **Groq API (Llama 3)** to generate tailored, context-aware treatment plans (organic and chemical interventions).
-- 🌾 **AI Crop Recommendation**: Suggests the best crops based on location, soil type, season, temperature, and humidity using geolocation and weather APIs.
-- 🌍 **Deep Multilingual Support**: Fully localized in English, Hindi, and Kannada. The AI dynamically generates responses natively in the selected language.
-- 💧 **IoT Dashboard**: Real-time soil moisture monitoring and smart irrigation recommendations based on live sensor data
+AgriAI is an AI- and IoT-based smart farming solution designed to help farmers detect crop diseases early, understand crop health, and make informed farming decisions.
 
+Farmers can upload or capture a leaf image using the application. The system analyzes the image using computer vision and deep learning to identify supported crop diseases. It also integrates weather information and real-time soil moisture readings to provide relevant farming guidance.
+
+The platform includes crop recommendations, an AI-powered multilingual chatbot, and basic offline support to improve accessibility for farmers in rural areas with limited internet connectivity.
 
 ---
 
-## ⚙️ Tech Stack
+## 🎯 Objectives
 
-**Frontend:**
-- HTML5, Vanilla JavaScript, CSS3
-- Web Speech API
-
-**Backend:**
-- Python 3 / Flask REST API
-- Groq API (LLM Integration & Prompt Engineering)
-
-**Machine Learning & Computer Vision:**
-- TensorFlow / Keras (EfficientNetB0)
-- OpenCV (Blur detection, HSV color masking)
-- Scikit-learn
+- Detect crop diseases from leaf images using AI.
+- Provide timely and understandable farming guidance.
+- Monitor soil moisture using IoT sensors.
+- Integrate weather information into farming decisions.
+- Recommend suitable crops based on available soil, weather, and regional data.
+- Support farmers through a multilingual chatbot.
+- Improve accessibility on low-end smartphones and unreliable networks.
 
 ---
 
-## 📂 Project Structure
+## ✨ Key Features
 
-```text
-IPBL2/
-├── server/               # Python Flask Backend
-│   ├── app.py            # Main API routing and orchestration
-│   ├── model_handler.py  # Image processing and CNN inference
-│   ├── llm_handler.py    # Groq API integration and prompt generation
-│   ├── data_validation.py# Image quality and green pixel checks
-│   ├── .env              # Environment variables (API keys)
-│   └── models/           # Pre-trained .h5 model weights
-├── web/                  # Frontend PWA
-│   ├── index.html        # Main application UI
-│   ├── style.css         # Styling and design system
-│   ├── script.js         # Client-side logic, i18n dictionary, IoT polling
-│   ├── sw.js             # Service Worker for offline caching
-│   └── manifest.json     # PWA configuration
-├── data/                 # Training datasets and CSVs
-├── scripts/              # Utility and model conversion scripts
-└── requirements.txt      # Python dependencies
-```
+### 1. AI-Based Disease Detection
+- Upload or capture crop leaf images.
+- Use OpenCV to check image quality and detect blur.
+- Use YOLO to detect and locate the leaf.
+- Use a CNN model to classify healthy leaves and supported diseases.
+- Display the predicted condition and confidence score.
 
----
+### 2. Smart Farming Advisory
+- Combine disease predictions, weather information, and soil moisture readings.
+- Generate farming guidance using the Grok API and trusted agricultural information.
+- Provide basic recommendations from a local knowledge base when offline.
 
+### 3. IoT-Based Soil Monitoring
+- Use an ESP32 connected to a soil moisture sensor.
+- Collect soil moisture readings.
+- Use the readings to support irrigation and crop management decisions.
 
+### 4. Weather Integration
+- Retrieve available weather information through a weather API.
+- Include temperature, humidity, rainfall, and wind speed where supported.
+- Use weather conditions to provide more relevant farming guidance.
 
+### 5. AI-Based Crop Recommendation
+- Use a Random Forest machine learning model.
+- Consider available soil characteristics, weather, season, and regional data.
+- Present suitable crop options to help farmers make informed decisions.
 
+### 6. Multilingual AI Chatbot
+- Allow farmers to ask farming-related questions in supported languages.
+- Use the Grok API for online responses.
+- Provide predefined guidance through a local knowledge base when internet access is unavailable.
 
-### Prerequisites
-- Python 3.8+
-- A Groq API Key
+### 7. Offline and Low-Network Support
+- Cache previously viewed results and essential information.
+- Provide access to saved farming guidance.
+- Queue selected requests for synchronization when connectivity returns.
+- Optimize the interface for low-end smartphones and slower networks.
 
-### 1. Setup Backend
-```bash
-# Navigate to the server directory
-cd server
-
-# Create and activate a virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows use: venv\Scripts\activate
-
-# Install dependencies
-pip install -r ../requirements.txt
-
-# Configure Environment Variables
-# Create a .env file in the server directory and add your Groq API key:
-echo "GROQ_API_KEY=your_actual_api_key_here" > .env
-```
-
-### 2. Run the Backend Server
-```bash
-python app.py
-```
-*The Flask API will run on `http://localhost:5000`.*
+> **Note:** Live weather updates, Grok API responses, and cloud-based AI predictions require internet connectivity unless suitable offline alternatives are implemented.
 
 ---
 
-## 📱 Usage Guide
+## 🛠️ Technology Stack
 
-1. **Dashboard**: View real-time IoT metrics (Moisture, Temp, Humidity) and daily farming tips.
-2. **Language Selection**: Use the top-right globe icon to instantly switch the interface and AI responses to your preferred language.
-3. **Disease Detection**: Navigate to the "Detect" tab. Upload an image or use your camera to snap a picture of a diseased leaf. The AI will validate the image and provide a diagnosis.
-4. **Crop Recommendation**: Navigate to the "Recommend" tab. Tap the Auto-detect button or manually enter your field details to get personalized AI crop suggestions.
-5. **Chatbot**: Use the floating chat button on the bottom right to ask any agriculture-related questions.
-6. **Voice Input**: Click the microphone icon to speak your questions instead of typing.
+| Component | Technology |
+| :--- | :--- |
+| **Frontend** | React.js / Next.js |
+| **UI Styling** | Tailwind CSS |
+| **Backend** | Python, FastAPI |
+| **Leaf Detection** | YOLO |
+| **Disease Classification** | CNN, TensorFlow/Keras or PyTorch |
+| **Image Processing** | OpenCV |
+| **Crop Recommendation** | Random Forest, Scikit-learn |
+| **IoT Hardware** | ESP32, Soil Moisture Sensor |
+| **Weather Information** | Weather API |
+| **AI Chatbot and Advisory** | Grok API (xAI) |
+| **Database** | PostgreSQL |
+| **Offline Knowledge Base** | JSON / SQLite |
+| **Deployment** | Vercel, Render |
+| **Version Control** | Git, GitHub |
 
 ---
 
-## 🏆 Credits
+## 🔄 How It Works
 
-This project was developed as part of **IPBL 2026**.
+1. The farmer captures or uploads a crop leaf image.
+2. The system checks the image quality and detects blur.
+3. YOLO identifies and locates the leaf.
+4. The CNN model predicts the leaf's health condition.
+5. The system retrieves weather information and soil moisture readings.
+6. The advisory engine combines the available information to generate relevant farming guidance.
+7. The crop recommendation model suggests suitable crop options.
+8. The farmer views the results and can ask further questions through the multilingual chatbot.
+
+---
+
+## 🌾 Expected Impact
+
+- Earlier identification of supported crop diseases.
+- Better access to farming information.
+- Improved awareness of soil moisture and weather conditions.
+- More informed crop selection.
+- Easier access to agricultural guidance for farmers in rural areas.
+- Increased accessibility through multilingual and offline-friendly features.
+
+---
+
+## 🔮 Future Enhancements
+
+- Expand disease detection to support more crops and diseases.
+- Improve model performance using diverse, real-world agricultural images.
+- Add regional agricultural datasets and verified treatment recommendations.
+- Expand language support.
+- Introduce additional IoT sensors for environmental monitoring.
+- Develop more comprehensive offline AI capabilities.
+
+---
+
+## ⚠️ Important Note
+
+AgriAI is designed to support farming decisions, not replace agricultural experts. AI predictions are estimates and should be validated against real-world conditions. Disease-specific treatments and pesticide recommendations should be based on verified agricultural guidance.
+
+---
+
+**AgriAI** — *From a single leaf to smarter farming decisions.* 🌱
