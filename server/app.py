@@ -12,8 +12,14 @@ import logging
 from dotenv import load_dotenv
 load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 
-import model_handler
-import llm_handler
+try:
+    from handlers import model_handler, llm_handler
+except ImportError:
+    try:
+        from server.handlers import model_handler, llm_handler
+    except ImportError:
+        import model_handler
+        import llm_handler
 
 # Set static folder to the web directory (located one level up)
 app = Flask(__name__, static_folder='../web', static_url_path='')

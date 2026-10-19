@@ -3,9 +3,12 @@ const CACHE_NAME = 'agri-ai-v2.1';
 const ASSETS = [
   './',
   './index.html',
-  './style.css',
-  './script.js',
+  './css/style.css',
+  './js/script.js',
   './manifest.json',
+  './assets/images/logo.png',
+  './assets/images/logo2.png',
+  './assets/images/hero.png',
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
 ];
 

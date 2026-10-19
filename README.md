@@ -1,6 +1,6 @@
 <div align="center">
 
-<!-- Add your logo here if you have one: <img src="path/to/logo.png" width="120" alt="AgriAI logo" /> -->
+<img src="web/assets/images/logo.png" width="120" alt="AgriAI logo" />
 
 # 🌱 AgriAI
 
@@ -29,7 +29,7 @@
 
 ## 🧭 Quick Navigation
 
-[🌾 Why AgriAI](#-why-agriai) · [🧬 Anatomy](#-the-anatomy-of-agriai) · [🍃 Journey of a Leaf](#-the-journey-of-a-leaf) · [✨ Features](#-features) · [🏗️ Architecture](#️-architecture) · [📴 Online vs Offline](#-works-when-the-network-doesnt) · [🛠️ Tech Stack](#️-tech-stack) · [📖 Glossary](#-plain-language-glossary) · [❓ FAQ](#-faq) · [🛡️ Responsible Use](#️-responsible-use) · [🔭 Horizon](#-horizon)
+[🌾 Why AgriAI](#-why-agriai) · [🧬 Anatomy](#-the-anatomy-of-agriai) · [🍃 Journey of a Leaf](#-the-journey-of-a-leaf) · [✨ Features](#-features) · [🏗️ Architecture](#️-architecture) · [📴 Online vs Offline](#-works-when-the-network-doesnt) · [🛠️ Tech Stack](#️-tech-stack) · [📂 Repository Structure](#-repository-structure) · [📖 Glossary](#-plain-language-glossary) · [❓ FAQ](#-faq) · [🛡️ Responsible Use](#️-responsible-use) · [🔭 Horizon](#-horizon)
 
 ---
 
@@ -295,6 +295,59 @@ Rural connectivity is a design requirement, not an afterthought.
 | 📴 Offline Knowledge Base | JSON / SQLite | Guidance without internet |
 | 🚀 Deployment | Vercel, Render | Hosting |
 | 🔧 Version Control | Git, GitHub | Collaboration |
+
+---
+
+## 📂 Repository Structure
+
+```text
+IPBL2/
+├── data/                         # Plant disease training & validation datasets
+│   ├── dataset_combined/         # 11-class annotated leaf images
+│   │   ├── train/                # Training samples by disease category
+│   │   └── val/                  # Validation samples
+│   └── README.md                 # Dataset documentation & class listing
+├── scripts/                      # ML training, download & export utilities
+│   ├── download_model.py         # Automated model weights downloader
+│   ├── export_to_web.py          # TensorFlow.js converter for offline PWA
+│   └── train_model.py            # CNN fine-tuning pipeline (EfficientNetB0)
+├── server/                       # Backend REST API (Flask / Gunicorn)
+│   ├── handlers/                 # Modular domain services
+│   │   ├── __init__.py
+│   │   ├── llm_handler.py        # Groq LLM prompt generation & advisory
+│   │   └── model_handler.py      # Leaf preprocessing & CNN inference
+│   ├── models/                   # Neural network weights
+│   │   └── model.h5              # Trained model file
+│   ├── __init__.py
+│   └── app.py                    # API entrypoint, routes, and CORS setup
+├── tests/                        # Automated tests & verification
+│   ├── __init__.py
+│   └── test_api.py               # Groq & backend API validation
+├── web/                          # Frontend Progressive Web App (PWA)
+│   ├── assets/                   # Static media assets
+│   │   └── images/               # App imagery (logos, hero, illustrations)
+│   ├── css/                      # Stylesheet system
+│   │   └── style.css             # Glassmorphic UI & responsive layouts
+│   ├── js/                       # Client-side scripts
+│   │   ├── config.js             # API connection endpoint configuration
+│   │   └── script.js             # UI routing, camera, i18n, IoT sensor logic
+│   ├── config.js                 # Root runtime API configuration
+│   ├── favicon.ico               # Browser favicon
+│   ├── favicon.png               # High-res PWA icon
+│   ├── index.html                # Single-page application UI
+│   ├── manifest.json             # Web App Manifest for mobile installation
+│   ├── package.json              # Frontend build scripts
+│   ├── prepare_config.js         # Dynamic environment injector for Vercel
+│   └── sw.js                     # Service Worker for offline asset caching
+├── .gitignore                    # Git tracking rules
+├── .python-version               # Python runtime version
+├── Procfile                      # Cloud process declaration (Render/Heroku)
+├── README.md                     # Project documentation
+├── render.yaml                   # Render deployment specification
+├── requirements.txt              # Python server dependencies
+├── runtime.txt                   # Cloud deployment Python runtime
+└── vercel.json                   # Vercel deployment & routing configuration
+```
 
 ---
 

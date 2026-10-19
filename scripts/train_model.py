@@ -14,9 +14,13 @@ import numpy as np
 from sklearn.utils import class_weight
 
 # Configuration
-TRAIN_DIR = '../data/dataset_combined/train'
-VAL_DIR = '../data/dataset_combined/val'
-MODEL_NAME = 'model.h5'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(BASE_DIR)
+TRAIN_DIR = os.path.join(PROJECT_ROOT, 'data', 'dataset_combined', 'train')
+VAL_DIR = os.path.join(PROJECT_ROOT, 'data', 'dataset_combined', 'val')
+MODELS_DIR = os.path.join(PROJECT_ROOT, 'server', 'models')
+os.makedirs(MODELS_DIR, exist_ok=True)
+MODEL_NAME = os.path.join(MODELS_DIR, 'model.h5')
 IMG_SIZE = (224, 224)
 BATCH_SIZE = 16 
 EPOCHS = 15 # More epochs for actual learning

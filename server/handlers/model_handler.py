@@ -29,7 +29,14 @@ CLASS_NAMES = [
 MODEL = None
 MODEL_LOADED = False
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, 'model.h5')
+SERVER_DIR = os.path.dirname(BASE_DIR)
+
+CANDIDATE_PATHS = [
+    os.path.join(SERVER_DIR, 'models', 'model.h5'),
+    os.path.join(SERVER_DIR, 'model.h5'),
+    os.path.join(BASE_DIR, 'model.h5'),
+]
+MODEL_PATH = next((p for p in CANDIDATE_PATHS if os.path.exists(p)), CANDIDATE_PATHS[0])
 
 def load_model():
     global MODEL, MODEL_LOADED

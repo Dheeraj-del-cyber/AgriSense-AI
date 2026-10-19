@@ -6,7 +6,9 @@ Set MODEL_URL environment variable to your hosted model link.
 import os
 import requests
 
-MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'server', 'model.h5')
+MODELS_DIR = os.path.join(os.path.dirname(__file__), '..', 'server', 'models')
+os.makedirs(MODELS_DIR, exist_ok=True)
+MODEL_PATH = os.path.join(MODELS_DIR, 'model.h5')
 MODEL_URL = os.getenv("MODEL_URL", "")  # Set this in your cloud env vars
 
 def download_model():

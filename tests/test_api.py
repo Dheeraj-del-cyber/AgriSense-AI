@@ -5,8 +5,9 @@ import requests
 import os
 from dotenv import load_dotenv
 
-# Load key from .env
+# Load key from .env (root or server/.env)
 load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), '..', 'server', '.env'))
 
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 # Use the key from .env or fallback to hardcoded (for testing)
