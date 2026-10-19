@@ -1,136 +1,565 @@
+<div align="center">
+
+<!-- 🌱 Replace with your logo: <img src="docs/assets/logo.png" width="120" alt="AgriAI logo" /> -->
+
 # 🌱 AgriAI
 
-### AI-Powered Crop Disease Detection and Smart Farming Assistant
+### *From a single leaf to smarter farming decisions.*
 
+**AI-powered crop disease detection + IoT soil monitoring + a multilingual farming assistant — built for the farmer with a low-end phone and a weak signal.**
 
----
+<br/>
 
-## 📌 Project Overview
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![TensorFlow](https://img.shields.io/badge/TensorFlow%2FPyTorch-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)
+![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)
+![ESP32](https://img.shields.io/badge/ESP32-E7352C?style=for-the-badge&logo=espressif&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 
-AgriAI is an AI- and IoT-based smart farming solution designed to help farmers detect crop diseases early, understand crop health, and make informed farming decisions.
+![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
+![Status](https://img.shields.io/badge/status-active_development-brightgreen?style=flat-square)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4?style=flat-square)
+![Offline Friendly](https://img.shields.io/badge/offline-friendly-blue?style=flat-square)
+![Multilingual](https://img.shields.io/badge/multilingual-🌐-orange?style=flat-square)
 
-Farmers can upload or capture a leaf image using the application. The system analyzes the image using computer vision and deep learning to identify supported crop diseases. It also integrates weather information and real-time soil moisture readings to provide relevant farming guidance.
+[**Live Demo**](#) · [**Video Walkthrough**](#) · [**Report a Bug**](../../issues) · [**Request a Feature**](../../issues)
 
-The platform includes crop recommendations, an AI-powered multilingual chatbot, and basic offline support to improve accessibility for farmers in rural areas with limited internet connectivity.
-
----
-
-## 🎯 Objectives
-
-- Detect crop diseases from leaf images using AI.
-- Provide timely and understandable farming guidance.
-- Monitor soil moisture using IoT sensors.
-- Integrate weather information into farming decisions.
-- Recommend suitable crops based on available soil, weather, and regional data.
-- Support farmers through a multilingual chatbot.
-- Improve accessibility on low-end smartphones and unreliable networks.
-
----
-
-## ✨ Key Features
-
-### 1. AI-Based Disease Detection
-- Upload or capture crop leaf images.
-- Use OpenCV to check image quality and detect blur.
-- Use YOLO to detect and locate the leaf.
-- Use a CNN model to classify healthy leaves and supported diseases.
-- Display the predicted condition and confidence score.
-
-### 2. Smart Farming Advisory
-- Combine disease predictions, weather information, and soil moisture readings.
-- Generate farming guidance using the Grok API and trusted agricultural information.
-- Provide basic recommendations from a local knowledge base when offline.
-
-### 3. IoT-Based Soil Monitoring
-- Use an ESP32 connected to a soil moisture sensor.
-- Collect soil moisture readings.
-- Use the readings to support irrigation and crop management decisions.
-
-### 4. Weather Integration
-- Retrieve available weather information through a weather API.
-- Include temperature, humidity, rainfall, and wind speed where supported.
-- Use weather conditions to provide more relevant farming guidance.
-
-### 5. AI-Based Crop Recommendation
-- Use a Random Forest machine learning model.
-- Consider available soil characteristics, weather, season, and regional data.
-- Present suitable crop options to help farmers make informed decisions.
-
-### 6. Multilingual AI Chatbot
-- Allow farmers to ask farming-related questions in supported languages.
-- Use the Grok API for online responses.
-- Provide predefined guidance through a local knowledge base when internet access is unavailable.
-
-### 7. Offline and Low-Network Support
-- Cache previously viewed results and essential information.
-- Provide access to saved farming guidance.
-- Queue selected requests for synchronization when connectivity returns.
-- Optimize the interface for low-end smartphones and slower networks.
-
-> **Note:** Live weather updates, Grok API responses, and cloud-based AI predictions require internet connectivity unless suitable offline alternatives are implemented.
+</div>
 
 ---
 
-## 🛠️ Technology Stack
+## 📖 Table of Contents
 
-| Component | Technology |
+- [🌾 The Problem](#-the-problem)
+- [💡 The Solution](#-the-solution)
+- [📸 Screenshots](#-screenshots)
+- [✨ Features](#-features)
+- [🔄 How It Works](#-how-it-works)
+- [🏗️ System Architecture](#️-system-architecture)
+- [🧠 The AI Pipeline](#-the-ai-pipeline)
+- [🔌 IoT Soil Monitoring](#-iot-soil-monitoring)
+- [📡 Offline-First Design](#-offline-first-design)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [📂 Project Structure](#-project-structure)
+- [🚀 Getting Started](#-getting-started)
+- [🔐 Environment Variables](#-environment-variables)
+- [🔗 API Reference](#-api-reference)
+- [📊 Model Performance](#-model-performance)
+- [🛡️ Responsible AI](#️-responsible-ai)
+- [🗺️ Roadmap](#️-roadmap)
+- [🤝 Contributing](#-contributing)
+- [📜 License](#-license)
+
+---
+
+## 🌾 The Problem
+
+A farmer notices spots on a leaf. Is it a fungus? A nutrient deficiency? Something that will spread across the whole field by next week?
+
+Too often, the answer comes **too late**, or not at all:
+
+| 😟 Challenge | 🌍 Reality on the ground |
 | :--- | :--- |
-| **Frontend** | React.js / Next.js |
-| **UI Styling** | Tailwind CSS |
-| **Backend** | Python, FastAPI |
-| **Leaf Detection** | YOLO |
-| **Disease Classification** | CNN, TensorFlow/Keras or PyTorch |
-| **Image Processing** | OpenCV |
-| **Crop Recommendation** | Random Forest, Scikit-learn |
-| **IoT Hardware** | ESP32, Soil Moisture Sensor |
-| **Weather Information** | Weather API |
-| **AI Chatbot and Advisory** | Grok API (xAI) |
-| **Database** | PostgreSQL |
-| **Offline Knowledge Base** | JSON / SQLite |
-| **Deployment** | Vercel, Render |
-| **Version Control** | Git, GitHub |
+| Late disease detection | Small symptoms are missed until they become big losses |
+| Limited expert access | Agricultural officers are few; villages are many |
+| Language barriers | Most advisory tools aren't built for local languages |
+| Unreliable connectivity | Rural networks drop exactly when help is needed |
+| Disconnected data | Weather, soil, and crop health are checked separately, if at all |
+
+---
+
+## 💡 The Solution
+
+**AgriAI puts an agronomy assistant in the farmer's pocket.**
+
+> 📷 **Snap a leaf** → 🔍 **AI diagnoses it** → 🌦️ **Weather + 🌡️ soil data are added** → 💬 **Advice arrives in the farmer's language**
+
+One app. One photo. One clear next step.
+
+---
+
+## 📸 Screenshots
+
+<!-- Replace these placeholders with real screenshots / GIFs. A demo GIF here is the single best thing you can add to this README. -->
+
+<div align="center">
+
+| Disease Detection | Smart Advisory | Soil Dashboard | Multilingual Chat |
+| :---: | :---: | :---: | :---: |
+| `docs/assets/detect.png` | `docs/assets/advisory.png` | `docs/assets/soil.png` | `docs/assets/chat.png` |
+
+</div>
+
+---
+
+## ✨ Features
+
+<details open>
+<summary><b>🔬 1. AI-Based Disease Detection</b></summary>
+
+<br/>
+
+- 📷 Upload or capture a crop leaf photo
+- 🧼 **OpenCV quality gate**: detects blur and bad images *before* wasting a prediction
+- 🎯 **YOLO** finds and crops the leaf from a busy background
+- 🧠 **CNN** classifies the leaf as healthy or one of the supported diseases
+- 📊 Shows the **predicted condition + confidence score**
+
+</details>
+
+<details open>
+<summary><b>🧑‍🌾 2. Smart Farming Advisory</b></summary>
+
+<br/>
+
+- Fuses **disease prediction + weather + soil moisture** into one piece of guidance
+- Online: advisory generated by the **Grok API**, grounded in trusted agricultural information
+- Offline: falls back to a **local knowledge base** of basic recommendations
+
+</details>
+
+<details open>
+<summary><b>🌡️ 3. IoT Soil Monitoring</b></summary>
+
+<br/>
+
+- **ESP32 + soil moisture sensor** collects readings from the field
+- Readings inform irrigation and crop management decisions
+
+</details>
+
+<details open>
+<summary><b>🌦️ 4. Weather Integration</b></summary>
+
+<br/>
+
+- Pulls temperature, humidity, rainfall, and wind speed (where the weather API supports them)
+- Weather context makes advice relevant: *"Don't spray today, rain expected."*
+
+</details>
+
+<details open>
+<summary><b>🌾 5. AI Crop Recommendation</b></summary>
+
+<br/>
+
+- **Random Forest** model (Scikit-learn)
+- Considers available soil characteristics, weather, season, and regional data
+- Presents suitable crop options so farmers can decide with more information
+
+</details>
+
+<details open>
+<summary><b>💬 6. Multilingual AI Chatbot</b></summary>
+
+<br/>
+
+- Ask farming questions in supported languages
+- Online responses via the **Grok API**
+- Offline fallback with predefined guidance from the local knowledge base
+
+</details>
+
+<details open>
+<summary><b>📴 7. Offline & Low-Network Support</b></summary>
+
+<br/>
+
+- Caches previously viewed results and essential information
+- Saved farming guidance stays accessible
+- Queues selected requests and **syncs when connectivity returns**
+- Interface optimized for **low-end smartphones** and slow networks
+
+</details>
+
+> ℹ️ **Note:** Live weather, Grok API responses, and cloud-based AI predictions need internet connectivity unless suitable offline alternatives are implemented.
 
 ---
 
 ## 🔄 How It Works
 
-1. The farmer captures or uploads a crop leaf image.
-2. The system checks the image quality and detects blur.
-3. YOLO identifies and locates the leaf.
-4. The CNN model predicts the leaf's health condition.
-5. The system retrieves weather information and soil moisture readings.
-6. The advisory engine combines the available information to generate relevant farming guidance.
-7. The crop recommendation model suggests suitable crop options.
-8. The farmer views the results and can ask further questions through the multilingual chatbot.
+```text
+  📷  1. Farmer captures or uploads a leaf photo
+   │
+   ▼
+  🧼  2. OpenCV checks image quality (blur, clarity)
+   │
+   ▼
+  🎯  3. YOLO detects and locates the leaf
+   │
+   ▼
+  🧠  4. CNN predicts the leaf's health condition
+   │
+   ▼
+  🌦️🌡️ 5. Weather + soil moisture data are retrieved
+   │
+   ▼
+  🧑‍🌾  6. Advisory engine combines everything into guidance
+   │
+   ▼
+  🌾  7. Random Forest suggests suitable crops
+   │
+   ▼
+  💬  8. Farmer views results and asks follow-up questions in chat
+```
 
 ---
 
-## 🌾 Expected Impact
+## 🏗️ System Architecture
 
-- Earlier identification of supported crop diseases.
-- Better access to farming information.
-- Improved awareness of soil moisture and weather conditions.
-- More informed crop selection.
-- Easier access to agricultural guidance for farmers in rural areas.
-- Increased accessibility through multilingual and offline-friendly features.
+```mermaid
+flowchart TB
+    subgraph Client["📱 Client (React / Next.js + Tailwind)"]
+        UI[Camera / Upload UI]
+        Chat[Multilingual Chat]
+        Cache[(Offline Cache<br/>+ Sync Queue)]
+    end
+
+    subgraph Backend["⚙️ FastAPI Backend (Python)"]
+        API[REST API]
+        subgraph Vision["👁️ Vision Pipeline"]
+            CV[OpenCV<br/>Quality Check]
+            YOLO[YOLO<br/>Leaf Detection]
+            CNN[CNN<br/>Disease Classifier]
+        end
+        RF[Random Forest<br/>Crop Recommender]
+        ADV[Advisory Engine]
+    end
+
+    subgraph Data["🗄️ Data & Knowledge"]
+        PG[(PostgreSQL)]
+        KB[(Offline Knowledge Base<br/>JSON / SQLite)]
+    end
+
+    subgraph External["🌐 External Services"]
+        WX[Weather API]
+        GROK[Grok API - xAI]
+    end
+
+    subgraph Field["🌱 In the Field"]
+        ESP[ESP32 +<br/>Soil Moisture Sensor]
+    end
+
+    UI --> API
+    Chat --> API
+    Cache <--> UI
+    API --> CV --> YOLO --> CNN --> ADV
+    API --> RF --> ADV
+    ESP -- "Wi-Fi / HTTP" --> API
+    API <--> PG
+    ADV <--> WX
+    ADV <--> GROK
+    ADV -. "offline fallback" .-> KB
+    ADV --> API
+```
 
 ---
 
-## 🔮 Future Enhancements
+## 🧠 The AI Pipeline
 
-- Expand disease detection to support more crops and diseases.
-- Improve model performance using diverse, real-world agricultural images.
-- Add regional agricultural datasets and verified treatment recommendations.
-- Expand language support.
-- Introduce additional IoT sensors for environmental monitoring.
-- Develop more comprehensive offline AI capabilities.
+| Stage | Tool | Job | Why it matters |
+| :---: | :--- | :--- | :--- |
+| **1** | 🧼 OpenCV | Blur / quality check | Rejects unusable photos early and asks for a retake |
+| **2** | 🎯 YOLO | Detect & crop the leaf | Removes background noise so the classifier sees only the leaf |
+| **3** | 🧠 CNN | Classify health condition | Returns the predicted condition with a confidence score |
+| **4** | 🌲 Random Forest | Recommend crops | Uses soil, weather, season, and regional data |
+| **5** | 🤖 Grok API | Advisory + chat | Turns raw predictions into guidance farmers can understand |
 
----
-
-## ⚠️ Important Note
-
-AgriAI is designed to support farming decisions, not replace agricultural experts. AI predictions are estimates and should be validated against real-world conditions. Disease-specific treatments and pesticide recommendations should be based on verified agricultural guidance.
+> 💡 **Design idea:** a model is only as good as its input. The quality gate and leaf detector exist so the CNN rarely has to guess from a bad photo.
 
 ---
 
-**AgriAI** — *From a single leaf to smarter farming decisions.* 🌱
+## 🔌 IoT Soil Monitoring
+
+**Hardware:** ESP32 + soil moisture sensor
+
+| Sensor Pin | ESP32 Pin | Note |
+| :---: | :---: | :--- |
+| `VCC` | `3V3` | Power |
+| `GND` | `GND` | Ground |
+| `AOUT` | `GPIO34` | Analog read (use an ADC1 pin, since ADC2 conflicts with Wi-Fi) |
+
+```cpp
+// Minimal ESP32 sketch idea
+const int SOIL_PIN = 34;
+
+void loop() {
+  int raw = analogRead(SOIL_PIN);        // 0–4095
+  // 1. Convert raw → moisture % using your own dry/wet calibration
+  // 2. POST JSON to  /api/soil  over Wi-Fi
+  delay(60 * 1000);                      // send every minute
+}
+```
+
+> 🔧 **Calibrate your sensor.** Take a reading in dry air and in water, and map those two values to 0% and 100%. Raw values differ between sensors.
+
+---
+
+## 📡 Offline-First Design
+
+Rural connectivity is a **feature requirement**, not an edge case.
+
+| Situation | What AgriAI does |
+| :--- | :--- |
+| 🟢 Online | Live weather, Grok-powered advice, cloud AI predictions |
+| 🟡 Flaky network | Serves cached results, queues requests, retries on reconnect |
+| 🔴 Offline | Opens saved guidance, answers common questions from the local knowledge base |
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+| :--- | :--- |
+| 🖥️ **Frontend** | React.js / Next.js |
+| 🎨 **UI Styling** | Tailwind CSS |
+| ⚙️ **Backend** | Python, FastAPI |
+| 🎯 **Leaf Detection** | YOLO |
+| 🧠 **Disease Classification** | CNN (TensorFlow/Keras or PyTorch) |
+| 🧼 **Image Processing** | OpenCV |
+| 🌾 **Crop Recommendation** | Random Forest, Scikit-learn |
+| 🔌 **IoT Hardware** | ESP32, Soil Moisture Sensor |
+| 🌦️ **Weather** | Weather API |
+| 🤖 **Chatbot & Advisory** | Grok API (xAI) |
+| 🗄️ **Database** | PostgreSQL |
+| 📴 **Offline Knowledge Base** | JSON / SQLite |
+| ☁️ **Deployment** | Vercel (frontend), Render (backend) |
+| 🔧 **Version Control** | Git, GitHub |
+
+---
+
+## 📂 Project Structure
+
+> Suggested layout. Adjust it to match your repository.
+
+```text
+agriai/
+├── frontend/                # Next.js + Tailwind app
+│   ├── app/                 # Pages & routes
+│   ├── components/          # Camera, ResultCard, SoilGauge, Chat…
+│   └── lib/                 # API client, offline cache, sync queue
+│
+├── backend/                 # FastAPI service
+│   ├── app/
+│   │   ├── api/             # Route handlers
+│   │   ├── vision/          # quality_check.py · detector.py · classifier.py
+│   │   ├── recommend/       # Random Forest crop recommender
+│   │   ├── advisory/        # Advisory engine + Grok client
+│   │   ├── services/        # Weather client, soil data service
+│   │   └── db/              # PostgreSQL models
+│   └── requirements.txt
+│
+├── ml/                      # Training notebooks & scripts
+│   ├── disease_cnn/
+│   ├── leaf_yolo/
+│   └── crop_rf/
+│
+├── iot/
+│   └── esp32_soil_sensor/   # Firmware sketch
+│
+├── knowledge_base/          # Offline guidance (JSON / SQLite)
+├── docs/                    # Screenshots, diagrams
+└── README.md
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Python 3.10+
+- Node.js 18+
+- PostgreSQL
+- API keys for the **Grok API (xAI)** and your **weather provider**
+- *(Optional)* ESP32 board + soil moisture sensor
+
+### 1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/<your-username>/agriai.git
+cd agriai
+```
+
+### 2️⃣ Start the backend
+
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate          # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
+cp .env.example .env              # then fill in your keys
+uvicorn app.main:app --reload
+```
+
+API docs will be live at **http://localhost:8000/docs** 📘
+
+### 3️⃣ Start the frontend
+
+```bash
+cd frontend
+npm install
+cp .env.example .env.local
+npm run dev
+```
+
+Open **http://localhost:3000** 🎉
+
+### 4️⃣ *(Optional)* Flash the ESP32
+
+1. Open `iot/esp32_soil_sensor/` in Arduino IDE or PlatformIO
+2. Set your Wi-Fi credentials and backend URL
+3. Wire the sensor using the [pin table](#-iot-soil-monitoring)
+4. Upload and watch the readings appear on the dashboard 🌡️
+
+---
+
+## 🔐 Environment Variables
+
+**`backend/.env`**
+
+```env
+# 🤖 AI
+XAI_API_KEY=your_grok_api_key
+
+# 🌦️ Weather
+WEATHER_API_KEY=your_weather_api_key
+
+# 🗄️ Database
+DATABASE_URL=postgresql://user:password@localhost:5432/agriai
+
+# 🔌 IoT
+DEVICE_TOKEN=a_secret_token_for_your_esp32
+```
+
+**`frontend/.env.local`**
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+> ⚠️ **Never commit `.env` files.** Keep API keys out of Git.
+
+---
+
+## 🔗 API Reference
+
+> Example endpoints. Update them to match your implementation.
+
+| Method | Endpoint | Description |
+| :---: | :--- | :--- |
+| `POST` | `/api/detect` | Upload a leaf image, returns condition + confidence |
+| `POST` | `/api/advice` | Combine detection, weather, and soil data into guidance |
+| `POST` | `/api/recommend-crop` | Get suitable crop options |
+| `POST` | `/api/chat` | Ask the multilingual assistant a question |
+| `POST` | `/api/soil` | ESP32 posts a soil moisture reading |
+| `GET` | `/api/soil/latest` | Latest soil moisture reading |
+| `GET` | `/api/weather` | Weather for a location |
+
+<details>
+<summary><b>📦 Example: <code>POST /api/detect</code></b></summary>
+
+<br/>
+
+**Response**
+
+```json
+{
+  "image_quality": "ok",
+  "leaf_detected": true,
+  "prediction": {
+    "condition": "<predicted_class>",
+    "confidence": 0.00
+  },
+  "advice_ready": true
+}
+```
+
+</details>
+
+---
+
+## 📊 Model Performance
+
+> 🧪 Fill this in with **your real, measured results** so readers can trust the numbers.
+
+| Model | Dataset | Metric | Result |
+| :--- | :--- | :---: | :---: |
+| Leaf detector (YOLO) | _your dataset_ | mAP | `__` |
+| Disease classifier (CNN) | _your dataset_ | Accuracy / F1 | `__` |
+| Crop recommender (Random Forest) | _your dataset_ | Accuracy | `__` |
+
+**Supported crops & diseases:** _list them here_
+
+---
+
+## 🛡️ Responsible AI
+
+AgriAI is built to **support** farming decisions, not replace agricultural experts.
+
+- 🔎 **Predictions are estimates.** Validate them against real-world conditions.
+- 💊 **Treatment & pesticide advice** must be based on verified agricultural guidance. Consult a local agricultural expert before applying any chemical.
+- 📉 **Low confidence?** The app should ask for a clearer photo or recommend expert consultation instead of guessing.
+- 🌱 **Supported scope only.** Detection covers the crops and diseases listed above; anything else is out of scope.
+- 🔒 **Farmer data** stays minimal, secured, and used only to provide the service.
+
+---
+
+## 🗺️ Roadmap
+
+- [x] Leaf image upload and capture
+- [x] Image quality check (OpenCV)
+- [x] Leaf detection (YOLO) and disease classification (CNN)
+- [x] Weather and soil moisture integration
+- [x] Crop recommendation (Random Forest)
+- [x] Multilingual chatbot with offline knowledge base
+- [ ] 🌾 Expand disease detection to more crops and diseases
+- [ ] 📸 Improve models with diverse, real-world field images
+- [ ] 📚 Add regional agricultural datasets and verified treatment recommendations
+- [ ] 🌐 Expand language support
+- [ ] 🔌 Add more IoT sensors (temperature, humidity, pH…)
+- [ ] 📴 Build more comprehensive offline AI capabilities
+
+---
+
+## 🤝 Contributing
+
+Contributions make open source great, and they can help farmers too. 🌾
+
+1. 🍴 **Fork** the repository
+2. 🌿 Create a branch: `git checkout -b feature/amazing-feature`
+3. 💾 Commit your changes: `git commit -m "Add amazing feature"`
+4. 📤 Push: `git push origin feature/amazing-feature`
+5. 🔃 Open a **Pull Request**
+
+**Especially welcome:** new crop datasets, local-language translations, agronomy review, and low-end device testing.
+
+---
+
+## 📜 License
+
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for details.
+
+---
+
+## 🙏 Acknowledgements
+
+- The farmers whose everyday challenges inspired this project 👩‍🌾👨‍🌾
+- Open agricultural datasets and the research community
+- Open-source projects: FastAPI, OpenCV, YOLO, TensorFlow/PyTorch, Scikit-learn, Next.js
+
+---
+
+<div align="center">
+
+### 🌱 **AgriAI** — *From a single leaf to smarter farming decisions.*
+
+⭐ **If this project helps you, give it a star!** ⭐
+
+Made with 💚 for the people who feed the world.
+
+</div>
