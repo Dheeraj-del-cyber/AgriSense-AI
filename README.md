@@ -37,7 +37,7 @@
 
 A farmer sees a spot on a leaf and has to decide: *is this serious, and what should I do about it?*
 
-AgriSense AI exists to help answer that question **earlier**, in **plain language**, and with the **context of the field** (weather and soil), not just the leaf in isolation.
+AgriSense AI exists to help answer that question **earlier**, in **plain language** which cannot be understand by the farmers, and with the **context of the field** (weather and soil), not just the leaf in isolation.
 
 ### 🎯 What we set out to do
 
