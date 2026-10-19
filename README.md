@@ -2,7 +2,6 @@
 
 ### AI-Powered Crop Disease Detection and Smart Farming Assistant
 
-**Live Demo:** [https://ipbl.vercel.app](https://ipbl.vercel.app)
 
 ---
 
