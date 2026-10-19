@@ -1,5 +1,5 @@
 """
-AgriAI Model Inference Handler
+AgriSense AI Model Inference Handler
 Preprocesses plant leaf images and runs predictions using EfficientNetB0.
 """
 import cv2

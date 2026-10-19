@@ -1,3 +1,3 @@
 """
-AgriAI Test Suite
+AgriSense AI Test Suite
 """

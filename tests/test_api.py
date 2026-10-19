@@ -1,5 +1,5 @@
 """
-AgriAI API Connectivity and Key Verification Test
+AgriSense AI API Connectivity and Key Verification Test
 """
 import requests
 import os

@@ -1,4 +1,4 @@
-# AgriAI Render Deployment Configuration
+# AgriSense AI Render Deployment Configuration
 services:
   - type: web_service
     name: agri-ai-backend

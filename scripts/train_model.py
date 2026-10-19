@@ -1,5 +1,5 @@
 """
-AgriAI Model Training Pipeline
+AgriSense AI Model Training Pipeline
 Fine-tunes EfficientNetB0 on plant leaf disease datasets.
 """
 import tensorflow as tf

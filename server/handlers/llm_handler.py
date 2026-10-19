@@ -1,5 +1,5 @@
 """
-AgriAI LLM Agricultural Guidance Handler
+AgriSense AI LLM Agricultural Guidance Handler
 Integrates with Groq API for AI crop advisory and disease treatment plans.
 """
 import os

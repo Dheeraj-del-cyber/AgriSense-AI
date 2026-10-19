@@ -1,5 +1,5 @@
 """
-AgriAI Flask Application Server
+AgriSense AI Flask Application Server
 Handles crop disease detection, AI recommendations, and static file serving.
 """
 import os

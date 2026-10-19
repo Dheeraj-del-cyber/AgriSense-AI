@@ -1,6 +1,6 @@
-# 🌾 AgriAI Dataset Overview
+# 🌾 AgriSense AI Dataset Overview
 
-This directory contains the dataset used for training and evaluating the AgriAI plant disease classification model.
+This directory contains the dataset used for training and evaluating the AgriSense AI plant disease classification model.
 
 ## 📁 Directory Structure
 ```

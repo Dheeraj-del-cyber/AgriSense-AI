@@ -1,4 +1,4 @@
-// AgriAI Build Helper: Generate dynamic runtime config.js
+// AgriSense AI Build Helper: Generate dynamic runtime config.js
 const fs = require("fs");
 const path = require("path");
 

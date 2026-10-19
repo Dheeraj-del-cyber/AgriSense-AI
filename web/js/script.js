@@ -1,9 +1,9 @@
 /* ================================================
-   AGRI AI — REBUILT CORE LOGIC
+   AGRISENSE AI — REBUILT CORE LOGIC
    Clean, Modular, and Robust PWA Implementation
    ================================================ */
 
-// AgriAI Core State (v1.0.1)
+// AgriSense AI Core State (v1.0.1)
 const AppState = {
     currentScreen: 'screenHome',
     previousScreen: null,
@@ -63,7 +63,7 @@ const TRANSLATIONS = {
         iotRefreshWeather: '🔄 Refresh Weather',
         iotSoilHealth: 'Soil Health Score', iotWaiting: 'Waiting...',
         iotConnectSensor: 'Connect sensor to get your soil health score.',
-        chatGreeting: "👋 Hi! I'm your Agri AI assistant. Ask me anything about crops, diseases, or farming!",
+        chatGreeting: "👋 Hi! I'm your AgriSense AI assistant. Ask me anything about crops, diseases, or farming!",
         chatPlaceholder: 'Ask about diseases or farming...',
         iotDry: 'Too Dry', iotDryRec: '🚨 Soil moisture is low! Start irrigation immediately to prevent crop wilting.',
         iotOpt: 'Optimal', iotOptRec: '✅ Soil moisture is at an ideal level for most crops. No action needed.',
@@ -1026,7 +1026,7 @@ const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 let chatHistory = [
     {
         role: "system",
-        content: `You are AgriBot, an elite agricultural scientist and field expert embedded in the "Agri AI" platform. 
+        content: `You are AgriBot, an elite agricultural scientist and field expert embedded in the "AgriSense AI" platform. 
         
 Your mission is to provide definitive, high-accuracy answers to ANY agricultural question. Your knowledge base is vast and covers:
 - In-depth crop science, genetics, and variety selection
@@ -1052,7 +1052,7 @@ Rules:
 function updateChatSystemPrompt(lang) {
     if (typeof chatHistory !== 'undefined' && chatHistory[0]) {
         const langName = lang === 'hi' ? 'Hindi' : lang === 'kn' ? 'Kannada' : 'English';
-        chatHistory[0].content = `You are AgriBot, an elite agricultural scientist and field expert embedded in the "Agri AI" platform. 
+        chatHistory[0].content = `You are AgriBot, an elite agricultural scientist and field expert embedded in the "AgriSense AI" platform. 
         
 Your mission is to provide definitive, high-accuracy answers to ANY agricultural question. Your knowledge base is vast and covers:
 - In-depth crop science, genetics, and variety selection
@@ -1131,7 +1131,7 @@ function clearChat() {
     // Clear messages UI
     const container = document.getElementById('chatMessages');
     const dict = TRANSLATIONS[AppState.currentLang] || TRANSLATIONS.en;
-    const greetingMsg = dict.chatGreeting || "👋 Hi! I'm your Agri AI assistant. Ask me anything about crops, diseases, or farming!";
+    const greetingMsg = dict.chatGreeting || "👋 Hi! I'm your AgriSense AI assistant. Ask me anything about crops, diseases, or farming!";
     
     if (container) {
         container.innerHTML = `
@@ -1738,7 +1738,7 @@ function toggleAuthMode(mode) {
         nameGroup.style.display = 'none';
         authName.removeAttribute('required');
         authTitle.textContent = 'Welcome Back';
-        authSubtitle.textContent = 'Login to Agri AI to continue.';
+        authSubtitle.textContent = 'Login to AgriSense AI to continue.';
         authSubmitBtn.textContent = 'Login';
         if (forgotLink) forgotLink.style.display = 'block';
         if (authPassword) authPassword.placeholder = "Enter your password";
@@ -1754,7 +1754,7 @@ function toggleAuthMode(mode) {
         nameGroup.style.display = 'block';
         authName.setAttribute('required', 'true');
         authTitle.textContent = 'Create Account';
-        authSubtitle.textContent = 'Join Agri AI to continue.';
+        authSubtitle.textContent = 'Join AgriSense AI to continue.';
         authSubmitBtn.textContent = 'Sign Up';
         if (forgotLink) forgotLink.style.display = 'none';
         if (authPassword) authPassword.placeholder = "Create a password";

@@ -1,6 +1,6 @@
 {
-  "name": "Agri AI",
-  "short_name": "AgriAI",
+  "name": "AgriSense AI",
+  "short_name": "AgriSense AI",
   "description": "AI-Powered Smart Farming Assistant",
   "start_url": "./index.html",
   "display": "standalone",

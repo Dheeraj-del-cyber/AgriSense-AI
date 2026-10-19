@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="web/assets/images/logo.png" width="120" alt="AgriAI logo" />
+<img src="web/assets/images/logo.png" width="120" alt="AgriSense AI logo" />
 
-# 🌱 AgriAI
+# 🌱 AgriSense AI
 
 ### *From a single leaf to smarter farming decisions.*
 
@@ -29,15 +29,15 @@
 
 ## 🧭 Quick Navigation
 
-[🌾 Why AgriAI](#-why-agriai) · [🧬 Anatomy](#-the-anatomy-of-agriai) · [🍃 Journey of a Leaf](#-the-journey-of-a-leaf) · [✨ Features](#-features) · [🏗️ Architecture](#️-architecture) · [📴 Online vs Offline](#-works-when-the-network-doesnt) · [🛠️ Tech Stack](#️-tech-stack) · [📂 Repository Structure](#-repository-structure) · [📖 Glossary](#-plain-language-glossary) · [❓ FAQ](#-faq) · [🛡️ Responsible Use](#️-responsible-use) · [🔭 Horizon](#-horizon)
+[🌾 Why AgriSense AI](#-why-agrisense-ai) · [🧬 Anatomy](#-the-anatomy-of-agrisense-ai) · [🍃 Journey of a Leaf](#-the-journey-of-a-leaf) · [✨ Features](#-features) · [🏗️ Architecture](#️-architecture) · [📴 Online vs Offline](#-works-when-the-network-doesnt) · [🛠️ Tech Stack](#️-tech-stack) · [📂 Repository Structure](#-repository-structure) · [📖 Glossary](#-plain-language-glossary) · [❓ FAQ](#-faq) · [🛡️ Responsible Use](#️-responsible-use) · [🔭 Horizon](#-horizon)
 
 ---
 
-## 🌾 Why AgriAI
+## 🌾 Why AgriSense AI
 
 A farmer sees a spot on a leaf and has to decide: *is this serious, and what should I do about it?*
 
-AgriAI exists to help answer that question **earlier**, in **plain language**, and with the **context of the field** (weather and soil), not just the leaf in isolation.
+AgriSense AI exists to help answer that question **earlier**, in **plain language**, and with the **context of the field** (weather and soil), not just the leaf in isolation.
 
 ### 🎯 What we set out to do
 
@@ -53,9 +53,9 @@ AgriAI exists to help answer that question **earlier**, in **plain language**, a
 
 ---
 
-## 🧬 The Anatomy of AgriAI
+## 🧬 The Anatomy of AgriSense AI
 
-Think of AgriAI as a living system, where every part has a job.
+Think of AgriSense AI as a living system, where every part has a job.
 
 | 🧩 Sense | 🛠️ Powered by | 💭 What it does |
 | :--- | :--- | :--- |
@@ -71,7 +71,7 @@ Think of AgriAI as a living system, where every part has a job.
 
 ## 🍃 The Journey of a Leaf
 
-Follow one photo through AgriAI:
+Follow one photo through AgriSense AI:
 
 ```text
  📷  CAPTURE     The farmer captures or uploads a crop leaf image
@@ -279,7 +279,7 @@ Rural connectivity is a design requirement, not an afterthought.
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology | Role in AgriAI |
+| Layer | Technology | Role in AgriSense AI |
 | :--- | :--- | :--- |
 | 🖥️ Frontend | React.js / Next.js | The farmer-facing app |
 | 🎨 UI Styling | Tailwind CSS | Interface styling, optimized for low-end phones |
@@ -377,7 +377,7 @@ IPBL2/
 ## ❓ FAQ
 
 <details>
-<summary><b>Does AgriAI replace an agricultural expert?</b></summary>
+<summary><b>Does AgriSense AI replace an agricultural expert?</b></summary>
 
 <br/>
 
@@ -413,7 +413,7 @@ A blurry photo leads to unreliable predictions. OpenCV flags poor-quality images
 </details>
 
 <details>
-<summary><b>How does AgriAI know about my soil?</b></summary>
+<summary><b>How does AgriSense AI know about my soil?</b></summary>
 
 <br/>
 
@@ -434,9 +434,9 @@ That is a core goal. The interface is optimized for low-end smartphones and slow
 
 ## 🛡️ Responsible Use
 
-> **AgriAI is designed to support farming decisions, not replace agricultural experts.**
+> **AgriSense AI is designed to support farming decisions, not replace agricultural experts.**
 
-| ✅ AgriAI is | ❌ AgriAI is not |
+| ✅ AgriSense AI is | ❌ AgriSense AI is not |
 | :--- | :--- |
 | A decision-support tool | A replacement for agricultural experts |
 | An early-warning helper for supported crop diseases | A guarantee of diagnosis |
@@ -449,7 +449,7 @@ That is a core goal. The interface is optimized for low-end smartphones and slow
 
 ## 🔭 Horizon
 
-Where AgriAI is headed:
+Where AgriSense AI is headed:
 
 - [ ] 🌾 Expand disease detection to support more crops and diseases
 - [ ] 📸 Improve model performance using diverse, real-world agricultural images
@@ -475,7 +475,7 @@ Where AgriAI is headed:
 
 <div align="center">
 
-### 🌱 **AgriAI**
+### 🌱 **AgriSense AI**
 
 *From a single leaf to smarter farming decisions.*
 

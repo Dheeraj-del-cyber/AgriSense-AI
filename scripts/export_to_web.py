@@ -1,5 +1,5 @@
 """
-AgriAI TensorFlow.js Model Export Utility
+AgriSense AI TensorFlow.js Model Export Utility
 Converts trained Keras model.h5 to web format for client-side inference.
 """
 import os
