@@ -3,6 +3,7 @@
    Clean, Modular, and Robust PWA Implementation
    ================================================ */
 
+// AgriAI Core State (v1.0.1)
 const AppState = {
     currentScreen: 'screenHome',
     previousScreen: null,

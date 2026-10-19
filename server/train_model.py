@@ -1,3 +1,7 @@
+"""
+AgriAI Model Training Pipeline
+Fine-tunes EfficientNetB0 on plant leaf disease datasets.
+"""
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import EfficientNetB0

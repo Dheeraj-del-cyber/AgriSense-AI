@@ -1,4 +1,5 @@
 """
+AgriAI Model Downloader
 Download model.h5 from a hosted URL if not present locally.
 Set MODEL_URL environment variable to your hosted model link.
 """

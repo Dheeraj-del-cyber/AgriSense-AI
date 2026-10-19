@@ -1,4 +1,5 @@
-const CACHE_NAME = 'agri-ai-v2';
+// AgriAI Service Worker - Offline Cache & PWA Support
+const CACHE_NAME = 'agri-ai-v2.1';
 const ASSETS = [
   './',
   './index.html',

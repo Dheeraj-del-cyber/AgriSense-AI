@@ -1,3 +1,6 @@
+"""
+AgriAI API Connectivity and Key Verification Test
+"""
 import requests
 import os
 from dotenv import load_dotenv

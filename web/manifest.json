@@ -4,6 +4,7 @@
   "description": "AI-Powered Smart Farming Assistant",
   "start_url": "./index.html",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0a2614",
   "theme_color": "#3eaf60",
   "icons": [

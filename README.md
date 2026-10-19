@@ -1,5 +1,8 @@
 # 🌿 AgriAI - Smart Agriculture Assistant
 
+[![Status](https://img.shields.io/badge/Status-Active-brightgreen.svg)](https://ipbl.vercel.app)
+[![PWA](https://img.shields.io/badge/PWA-Ready-blue.svg)](https://ipbl.vercel.app)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-October%202026-orange.svg)](https://github.com/Dheeraj-del-cyber/IPBL)
 
 **Project link:** [https://ipbl.vercel.app](https://ipbl.vercel.app)
 

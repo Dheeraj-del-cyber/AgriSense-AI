@@ -1,3 +1,7 @@
+"""
+AgriAI Model Inference Handler
+Preprocesses plant leaf images and runs predictions using EfficientNetB0.
+"""
 import cv2
 import numpy as np
 import tensorflow as tf

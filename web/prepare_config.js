@@ -1,3 +1,4 @@
+// AgriAI Build Helper: Generate dynamic runtime config.js
 const fs = require("fs");
 
 const apiBase = process.env.API_BASE || "https://ipbl-p70f.onrender.com";

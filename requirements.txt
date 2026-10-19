@@ -1,3 +1,4 @@
+# AgriAI Core Dependencies
 flask
 flask-cors
 opencv-python-headless
