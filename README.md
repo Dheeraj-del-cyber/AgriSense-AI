@@ -67,7 +67,8 @@ Think of AgriSense AI as a living system, where every part has a job.
 | 🗣️ **Voice** | Grok API (xAI) | Explains everything and answers questions in supported languages |
 | 🗃️ **Memory** | JSON / SQLite knowledge base | Keeps essential guidance available when the internet is gone |
 
----
+-----------------------------------------------------------
+-----------------------------------------------------------
 
 ## 🍃 The Journey of a Leaf
 
@@ -116,7 +117,7 @@ flowchart LR
     style F fill:#fff8e1,stroke:#f9a825
 ```
 
----
+---------------------------------------------------------------------
 
 ## 🔄 What Goes In, What Comes Out
 
@@ -128,7 +129,7 @@ flowchart LR
 | 🌍 Soil characteristics, season, and regional data | 🌾 Suitable crop options |
 | 💬 The farmer's questions | 🗣️ Chatbot answers in supported languages |
 
----
+--------------------------------------------------------------------
 
 ## ✨ Features
 
@@ -136,7 +137,6 @@ flowchart LR
 <summary><b>🔬 AI-Based Disease Detection</b></summary>
 
 <br/>
-
 
 - Upload or capture crop leaf images
 - **OpenCV** checks image quality and detects blur
@@ -261,7 +261,7 @@ flowchart TB
     style ADV fill:#fff8e1,stroke:#f9a825
 ```
 
----
+--------------------------------------------------------------------------------------
 
 ## 📴 Works When the Network Doesn't
 
@@ -433,7 +433,7 @@ That is a core goal. The interface is optimized for low-end smartphones and slow
 
 ---
 
-## 🛡️ Responsible Use
+## 🛡️Responsible Use
 
 > **AgriSense AI is designed to support farming decisions, not replace agricultural experts.**
 
@@ -446,7 +446,7 @@ That is a core goal. The interface is optimized for low-end smartphones and slow
 - 🔎 AI predictions are **estimates** and should be validated against real-world conditions.
 - 💊 Disease-specific treatments and pesticide recommendations should be based on **verified agricultural guidance**.
 
--------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 
 ## 🔭 Horizon
 
@@ -459,7 +459,7 @@ Where AgriSense AI is headed:
 - [ ] 🔌 Introduce additional IoT sensors for environmental monitoring
 - [ ] 📴 Develop more comprehensive offline AI capabilities
 
----
+------------------------------------------------------------------------------------------------
 
 ## 🌾 Expected Impact
 
@@ -472,7 +472,7 @@ Where AgriSense AI is headed:
 | 🏡 | Easier access to agricultural guidance in rural areas |
 | 🗣️ | Greater accessibility through multilingual and offline-friendly features |
 
----
+-------------------------------------------------------------------------------------------------------
 
 <div align="center">
 
