@@ -152,21 +152,25 @@ def chat():
         messages = [messages[0]] + messages[-20:]
 
     payload = {
-        "model": "llama-3.1-8b-instant",
+        "model": getattr(llm_handler, 'GROQ_MODEL', 'qwen/qwen3.8-27b'),
         "messages": messages,
         "temperature": 0.6,
         "max_tokens": 600
     }
 
     try:
-        import requests as req
-        response = req.post(
-            llm_handler.GROQ_API_URL,
-            headers={"Authorization": f"Bearer {llm_handler.GROQ_API_KEY}"},
-            json=payload,
-            timeout=20
-        )
-        response.raise_for_status()
+        if hasattr(llm_handler, 'post_groq'):
+            response = llm_handler.post_groq(payload, timeout=20)
+        else:
+            import requests as req
+            response = req.post(
+                llm_handler.GROQ_API_URL,
+                headers={"Authorization": f"Bearer {llm_handler.GROQ_API_KEY}"},
+                json=payload,
+                timeout=20
+            )
+            response.raise_for_status()
+
         reply = response.json()['choices'][0]['message']['content'].strip()
         return jsonify({"reply": reply, "success": True})
 

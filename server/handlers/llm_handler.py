@@ -7,7 +7,11 @@ import requests
 import json
 try:
     from dotenv import load_dotenv
+    # Load from current directory and server/.env
     load_dotenv()
+    env_server = os.path.join(os.path.dirname(__file__), '..', '.env')
+    if os.path.exists(env_server):
+        load_dotenv(env_server)
 except ImportError:
     pass
 
@@ -16,6 +20,45 @@ GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 # --- SET YOUR API KEY HERE ---
 # You can also set it in a .env file as: GROQ_API_KEY=your_key_here
 GROQ_API_KEY = os.getenv("GROQ_API_KEY") 
+
+DEFAULT_GROQ_MODEL = "qwen/qwen3.8-27b"
+FALLBACK_GROQ_MODELS = ["openai/gpt-oss-120b", "openai/gpt-oss-20b"]
+GROQ_MODEL = os.getenv("GROQ_MODEL", DEFAULT_GROQ_MODEL)
+
+def post_groq(payload, timeout=15):
+    """
+    Sends request to Groq API with automatic fallback to secondary models
+    if the primary model is decommissioned or unavailable.
+    """
+    models_to_try = [GROQ_MODEL] + [m for m in FALLBACK_GROQ_MODELS if m != GROQ_MODEL]
+    last_err = None
+    
+    for model_name in models_to_try:
+        payload["model"] = model_name
+        try:
+            res = requests.post(
+                GROQ_API_URL,
+                headers={"Authorization": f"Bearer {GROQ_API_KEY}"},
+                json=payload,
+                timeout=timeout
+            )
+            if res.status_code == 200:
+                return res
+            if res.status_code in (400, 404):
+                last_err = res
+                continue
+            res.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            last_err = e
+            if isinstance(e, requests.exceptions.HTTPError) and e.response is not None and e.response.status_code in (400, 404):
+                continue
+            raise e
+            
+    if isinstance(last_err, requests.Response):
+        last_err.raise_for_status()
+    elif last_err:
+        raise last_err
+    raise RuntimeError("Failed to connect to Groq API.")
 
 def get_agricultural_guidance(disease_name, crop_type="plant", moisture=None, language="English"):
     """
@@ -28,7 +71,6 @@ def get_agricultural_guidance(disease_name, crop_type="plant", moisture=None, la
             "full_guidance": "⚠️ Your GROQ API Key is missing or invalid. Please update the GROQ_API_KEY in the 'server/.env' file to enable AI guidance.",
             "success": False
         }
-
 
     moisture_context = f"The current soil moisture level is {moisture}%." if moisture is not None else "Soil moisture data is unavailable."
     
@@ -45,7 +87,7 @@ Ensure the advice is specific to the detected disease and current moisture level
 CRITICAL: You MUST respond in {language}. All values in the JSON output MUST be in {language} (except keys which remain English)."""
 
     payload = {
-        "model": "llama-3.1-8b-instant",
+        "model": GROQ_MODEL,
         "messages": [
             {"role": "system", "content": "You are a professional agronomist. Output ONLY valid JSON."},
             {"role": "user", "content": prompt}
@@ -54,13 +96,8 @@ CRITICAL: You MUST respond in {language}. All values in the JSON output MUST be 
         "response_format": { "type": "json_object" }
     }
 
-
     try:
-        response = requests.post(GROQ_API_URL, 
-                                 headers={"Authorization": f"Bearer {GROQ_API_KEY}"}, 
-                                 json=payload, 
-                                 timeout=15)
-        response.raise_for_status()
+        response = post_groq(payload, timeout=15)
         guidance = response.json()['choices'][0]['message']['content']
         return {"full_guidance": guidance, "success": True}
         
@@ -93,7 +130,7 @@ Return the response in JSON format with these exact keys:
 CRITICAL: You MUST respond in {language}. All values in the JSON output MUST be in {language} (except keys which remain English)."""
 
     payload = {
-        "model": "llama-3.1-8b-instant",
+        "model": GROQ_MODEL,
         "messages": [
             {"role": "system", "content": "You are a professional agronomist. Output ONLY valid JSON."},
             {"role": "user", "content": prompt}
@@ -103,11 +140,7 @@ CRITICAL: You MUST respond in {language}. All values in the JSON output MUST be 
     }
 
     try:
-        response = requests.post(GROQ_API_URL, 
-                                 headers={"Authorization": f"Bearer {GROQ_API_KEY}"}, 
-                                 json=payload, 
-                                 timeout=15)
-        response.raise_for_status()
+        response = post_groq(payload, timeout=15)
         data = json.loads(response.json()['choices'][0]['message']['content'])
         return {"recommendation": data, "success": True}
         
@@ -116,4 +149,5 @@ CRITICAL: You MUST respond in {language}. All values in the JSON output MUST be 
             "recommendation": f"⚠️ AI Service Unavailable: {str(e)}.",
             "success": False
         }
+
 
