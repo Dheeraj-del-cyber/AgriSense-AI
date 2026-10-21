@@ -147,15 +147,15 @@ def chat():
 
     messages = data['messages']
 
-    # Validate and cap history to avoid token overflows
-    if len(messages) > 22:
-        messages = [messages[0]] + messages[-20:]
+    # Validate and cap history to stay safely under Groq's 8,000 TPM limit
+    if len(messages) > 8:
+        messages = [messages[0]] + messages[-6:]
 
     payload = {
         "model": getattr(llm_handler, 'GROQ_MODEL', 'qwen/qwen3.8-27b'),
         "messages": messages,
         "temperature": 0.6,
-        "max_tokens": 600
+        "max_tokens": 400
     }
 
     try:
@@ -176,7 +176,10 @@ def chat():
 
     except Exception as e:
         print(f"Chat API Error: {e}")
-        return jsonify({"error": str(e), "success": False}), 500
+        err_msg = str(e)
+        if "429" in err_msg or "Too Many Requests" in err_msg:
+            err_msg = "⚠️ AI is currently at capacity (rate limited for a few seconds). Please wait 15-30 seconds and try again, or add a secondary free API key."
+        return jsonify({"error": err_msg, "success": False}), 500
 
 # ---------------------------------------------------------------
 # IOT MONITORING - Moisture Sensor Integration
