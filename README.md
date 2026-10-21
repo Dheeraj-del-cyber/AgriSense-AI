@@ -25,13 +25,13 @@
 
 </div>
 
----
+-------------------------------------------------------------------------------------------------------------
 
 ## 🧭 Quick Navigation
 
 [🌾 Why AgriSense AI](#-why-agrisense-ai) · [🧬 Anatomy](#-the-anatomy-of-agrisense-ai) · [🍃 Journey of a Leaf](#-the-journey-of-a-leaf) · [✨ Features](#-features) · [🏗️ Architecture](#️-architecture) · [📴 Online vs Offline](#-works-when-the-network-doesnt) · [🛠️ Tech Stack](#️-tech-stack) · [📂 Repository Structure](#-repository-structure) · [📖 Glossary](#-plain-language-glossary) · [❓ FAQ](#-faq) · [🛡️ Responsible Use](#️-responsible-use) · [🔭 Horizon](#-horizon)
 
----
+---------------------------------------------------------------------------------------------------------------
 
 ## 🌾 Why AgriSense AI
 
@@ -51,7 +51,7 @@ AgriSense AI exists to help answer that question **earlier**, in **plain languag
 | 💬 | Support farmers through a multilingual chatbot |
 | 📱 | Stay usable on low-end smartphones and unreliable networks |
 
----
+--------------------------------------------------------------------------------------------------
 
 ## 🧬 The Anatomy of AgriSense AI
 
@@ -67,7 +67,8 @@ Think of AgriSense AI as a living system, where every part has a job.
 | 🗣️ **Voice** | Grok API (xAI) | Explains everything and answers questions in supported languages |
 | 🗃️ **Memory** | JSON / SQLite knowledge base | Keeps essential guidance available when the internet is gone |
 
----
+-----------------------------------------------------------
+-----------------------------------------------------------
 
 ## 🍃 The Journey of a Leaf
 
@@ -116,7 +117,7 @@ flowchart LR
     style F fill:#fff8e1,stroke:#f9a825
 ```
 
----
+---------------------------------------------------------------------
 
 ## 🔄 What Goes In, What Comes Out
 
@@ -128,7 +129,7 @@ flowchart LR
 | 🌍 Soil characteristics, season, and regional data | 🌾 Suitable crop options |
 | 💬 The farmer's questions | 🗣️ Chatbot answers in supported languages |
 
----
+--------------------------------------------------------------------
 
 ## ✨ Features
 
@@ -260,7 +261,7 @@ flowchart TB
     style ADV fill:#fff8e1,stroke:#f9a825
 ```
 
----
+--------------------------------------------------------------------------------------
 
 ## 📴 Works When the Network Doesn't
 
@@ -275,7 +276,7 @@ Rural connectivity is a design requirement, not an afterthought.
 
 > ℹ️ **Note:** Live weather updates, Grok API responses, and cloud-based AI predictions require internet connectivity unless suitable offline alternatives are implemented.
 
----
+-----------------------------------------------------------------------------------------
 
 ## 🛠️ Tech Stack
 
@@ -296,7 +297,7 @@ Rural connectivity is a design requirement, not an afterthought.
 | 🚀 Deployment | Vercel, Render | Hosting |
 | 🔧 Version Control | Git, GitHub | Collaboration |
 
----
+-------------------------------------------------------------------------------------------------
 
 ## 📂 Repository Structure
 
@@ -349,7 +350,7 @@ IPBL2/
 └── vercel.json                   # Vercel deployment & routing configuration
 ```
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 ## 📖 Plain-Language Glossary
 
@@ -372,7 +373,7 @@ IPBL2/
 
 </details>
 
----
+--------------------------------------------------------------------------------------------------------------
 
 ## ❓ FAQ
 
@@ -381,7 +382,7 @@ IPBL2/
 
 <br/>
 
-No. It is designed to support farming decisions, not replace experts. Predictions are estimates and should be validated against real-world conditions.
+No.It is designed to support farming decisions, not replace experts. Predictions are estimates and should be validated against real-world conditions.
 
 </details>
 
@@ -432,7 +433,7 @@ That is a core goal. The interface is optimized for low-end smartphones and slow
 
 ---
 
-## 🛡️ Responsible Use
+## 🛡️Responsible Use
 
 > **AgriSense AI is designed to support farming decisions, not replace agricultural experts.**
 
@@ -445,7 +446,7 @@ That is a core goal. The interface is optimized for low-end smartphones and slow
 - 🔎 AI predictions are **estimates** and should be validated against real-world conditions.
 - 💊 Disease-specific treatments and pesticide recommendations should be based on **verified agricultural guidance**.
 
----
+--------------------------------------------------------------------------------------
 
 ## 🔭 Horizon
 
@@ -458,7 +459,7 @@ Where AgriSense AI is headed:
 - [ ] 🔌 Introduce additional IoT sensors for environmental monitoring
 - [ ] 📴 Develop more comprehensive offline AI capabilities
 
----
+------------------------------------------------------------------------------------------------
 
 ## 🌾 Expected Impact
 
@@ -471,7 +472,7 @@ Where AgriSense AI is headed:
 | 🏡 | Easier access to agricultural guidance in rural areas |
 | 🗣️ | Greater accessibility through multilingual and offline-friendly features |
 
----
+-------------------------------------------------------------------------------------------------------
 
 <div align="center">
 
