@@ -152,3 +152,7 @@ void loop() {
     sendData(moisture);
   }
 }
+// connections 
+//AO-VP
+//GND-GND
+//VCC-3V3
