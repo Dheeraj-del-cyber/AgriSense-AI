@@ -1589,11 +1589,9 @@ ul, ol {
 }
 
 .moisture-gauge-track {
-    --liquid-bg: linear-gradient(180deg, #0284c7 0%, #0369a1 55%, #075985 100%);
-    --wave-front-color: #0284c7;
-    --wave-back-color: #38bdf8;
+    --liquid-bg: linear-gradient(180deg, #38bdf8 0%, #0284c7 45%, #0369a1 100%);
     --gauge-glow: rgba(2, 132, 199, 0.22);
-    --gauge-border: var(--border);
+    --gauge-border: #bae6fd;
 
     width: 148px;
     height: 148px;
@@ -1601,103 +1599,85 @@ ul, ol {
     border: 3px solid var(--gauge-border);
     position: relative;
     overflow: hidden;
-    background: radial-gradient(circle at 50% 35%, #ffffff 0%, #f1f5f9 100%);
+    background: var(--liquid-bg);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.08), 0 6px 18px var(--gauge-glow);
-    transition: box-shadow 0.8s ease, border-color 0.8s ease;
+    box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.12), 0 6px 18px var(--gauge-glow);
+    transition: background 0.8s ease, box-shadow 0.8s ease, border-color 0.8s ease;
 }
 
 /* Dynamic State Themes */
 .moisture-gauge-track.state-dry {
-    --liquid-bg: linear-gradient(180deg, #f59e0b 0%, #d97706 55%, #b45309 100%);
-    --wave-front-color: #f59e0b;
-    --wave-back-color: #fbbf24;
+    --liquid-bg: linear-gradient(180deg, #fbbf24 0%, #f59e0b 45%, #b45309 100%);
     --gauge-glow: rgba(245, 158, 11, 0.28);
     --gauge-border: #fde68a;
 }
 
 .moisture-gauge-track.state-opt {
-    --liquid-bg: linear-gradient(180deg, #0284c7 0%, #0369a1 55%, #075985 100%);
-    --wave-front-color: #0284c7;
-    --wave-back-color: #38bdf8;
+    --liquid-bg: linear-gradient(180deg, #38bdf8 0%, #0284c7 45%, #0369a1 100%);
     --gauge-glow: rgba(2, 132, 199, 0.25);
     --gauge-border: #bae6fd;
 }
 
 .moisture-gauge-track.state-wet {
-    --liquid-bg: linear-gradient(180deg, #2563eb 0%, #1d4ed8 55%, #1e40af 100%);
-    --wave-front-color: #2563eb;
-    --wave-back-color: #60a5fa;
+    --liquid-bg: linear-gradient(180deg, #60a5fa 0%, #2563eb 45%, #1e40af 100%);
     --gauge-glow: rgba(37, 99, 235, 0.28);
     --gauge-border: #bfdbfe;
 }
 
-/* Water Fill Container (Position Anchor) */
-.water-fill {
+/* Seamless Organic Fluid Wave Generator (Pure CSS, No SVG) */
+.wave-container {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: transparent;
-    overflow: visible;
-    transition: top 1s cubic-bezier(0.34, 1.25, 0.64, 1), opacity 0.4s ease;
-}
-
-/* Solid Liquid Body (Connects seamlessly below the wave trough) */
-.water-body {
-    position: absolute;
-    top: 8px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--liquid-bg);
-    transition: background 0.8s ease;
-}
-
-/* Undulating Fluid Waves */
-.water-wave {
-    position: absolute;
-    left: 0;
-    width: 320px;
-    height: 30px;
-    pointer-events: none;
-    will-change: transform;
-}
-
-.wave-front {
-    top: -16px;
-    fill: var(--wave-front-color);
+    left: 50%;
+    bottom: -10%;
+    width: 0;
+    height: 0;
+    transition: bottom 1s cubic-bezier(0.34, 1.25, 0.64, 1);
     z-index: 2;
-    animation: waveFrontFlow 3s linear infinite;
-    transition: fill 0.8s ease;
+    pointer-events: none;
 }
 
-.wave-back {
-    top: -20px;
-    fill: var(--wave-back-color);
-    opacity: 0.5;
+.wave-cover {
+    position: absolute;
+    width: 290px;
+    height: 290px;
+    left: -145px;
+    bottom: -10px;
+    transform-origin: 50% 50%;
+    will-change: transform;
+    pointer-events: none;
+}
+
+.wave-cover.wave-back {
+    border-radius: 41% 45% 42% 44%;
+    background: rgba(248, 250, 252, 0.62);
+    animation: waveSpin 7.5s linear infinite;
     z-index: 1;
-    animation: waveBackFlow 4.5s linear infinite;
-    transition: fill 0.8s ease;
 }
 
-@keyframes waveFrontFlow {
+.wave-cover.wave-front {
+    border-radius: 44% 42% 45% 41%;
+    background: #f8fafc;
+    animation: waveSpinReverse 5s linear infinite;
+    z-index: 2;
+}
+
+@keyframes waveSpin {
     0% {
-        transform: translate3d(0, 0, 0);
+        transform: rotate(0deg);
     }
     100% {
-        transform: translate3d(-160px, 0, 0);
+        transform: rotate(360deg);
     }
 }
 
-@keyframes waveBackFlow {
+@keyframes waveSpinReverse {
     0% {
-        transform: translate3d(-160px, 0, 0);
+        transform: rotate(360deg);
     }
     100% {
-        transform: translate3d(0, 0, 0);
+        transform: rotate(0deg);
     }
 }
 
@@ -1707,22 +1687,23 @@ ul, ol {
     inset: 0;
     overflow: hidden;
     pointer-events: none;
-    z-index: 2;
+    z-index: 1;
 }
 
 .bubble {
     position: absolute;
-    background: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.6);
     border-radius: 50%;
     pointer-events: none;
     animation: bubbleRise 3.6s infinite ease-in;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
 }
 
 .bubble.b1 {
     width: 6px;
     height: 6px;
-    left: 22%;
-    bottom: 4px;
+    left: 24%;
+    bottom: 6px;
     animation-delay: 0.2s;
     animation-duration: 3.2s;
 }
@@ -1730,8 +1711,8 @@ ul, ol {
 .bubble.b2 {
     width: 4px;
     height: 4px;
-    left: 65%;
-    bottom: 8px;
+    left: 68%;
+    bottom: 10px;
     animation-delay: 1.4s;
     animation-duration: 4s;
 }
@@ -1739,8 +1720,8 @@ ul, ol {
 .bubble.b3 {
     width: 5px;
     height: 5px;
-    left: 45%;
-    bottom: 2px;
+    left: 46%;
+    bottom: 4px;
     animation-delay: 2.2s;
     animation-duration: 3.6s;
 }
@@ -1751,13 +1732,13 @@ ul, ol {
         opacity: 0;
     }
     30% {
-        opacity: 0.8;
+        opacity: 0.9;
     }
     85% {
-        opacity: 0.6;
+        opacity: 0.65;
     }
     100% {
-        transform: translateY(-80px) scale(1.15);
+        transform: translateY(-90px) scale(1.15);
         opacity: 0;
     }
 }
@@ -1769,17 +1750,17 @@ ul, ol {
     border-radius: 50%;
     background: radial-gradient(circle at 35% 20%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.08) 45%, transparent 65%);
     pointer-events: none;
-    z-index: 5;
+    z-index: 12;
 }
 
 /* Center Readout */
 .gauge-center-reading {
     position: relative;
-    z-index: 6;
+    z-index: 10;
     display: flex;
     align-items: baseline;
     font-feature-settings: "tnum";
-    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.85), 0 0 10px rgba(255, 255, 255, 0.6);
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9), 0 0 10px rgba(255, 255, 255, 0.7);
     pointer-events: none;
     transition: transform var(--transition-fast);
 }
@@ -1807,7 +1788,7 @@ ul, ol {
     border: 2px solid #38bdf8;
     opacity: 0;
     pointer-events: none;
-    z-index: 7;
+    z-index: 15;
 }
 
 .gauge-pulse-ring.pulse-active {

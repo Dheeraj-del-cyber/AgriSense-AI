@@ -1459,8 +1459,7 @@ function setIoTOffline(lastUpdated = '--:--:--') {
     }
     if (scoreEl) scoreEl.textContent = '--';
     if (waterFill) {
-        waterFill.style.top = '108%';
-        waterFill.style.opacity = '0';
+        waterFill.style.bottom = '-10%';
     }
     const gaugeTrack = document.getElementById('moistureGaugeTrack');
     if (gaugeTrack) {
@@ -1534,12 +1533,11 @@ function updateIoTUI(data) {
     if (waterFill) {
         const clamped = Math.max(0, Math.min(100, moisture));
         if (clamped <= 0) {
-            waterFill.style.top = '108%';
-            waterFill.style.opacity = '0';
+            waterFill.style.bottom = '-10%';
+        } else if (clamped >= 100) {
+            waterFill.style.bottom = '110%';
         } else {
-            waterFill.style.opacity = '1';
-            const topValue = 100 - clamped;
-            waterFill.style.top = topValue + '%';
+            waterFill.style.bottom = clamped + '%';
         }
     }
 
