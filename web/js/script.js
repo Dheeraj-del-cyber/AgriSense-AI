@@ -19,185 +19,194 @@ const AppState = {
 /* --- Translations --- */
 const TRANSLATIONS = {
     en: {
-        navHome: 'Home', navDetect: 'Detect', navCrops: 'Crops', navScan: 'Start Scan',
-        heroBadge: '🚜 Farmer Support App',
-        heroTitle1: 'Healthy Crops', heroTitle2: 'Better Income',
-        heroDesc: 'Identify plant disease and get exact treatment steps quickly.',
-        heroBtn1: '📸 Scan Your Crop',
-        statCrops: 'Crops', statDiseases: 'Diseases', statLangs: 'Languages',
-        statAdvice: 'Advice', statFocus: 'Focus',
-        selectLang: 'Select Your Language',
-        doThisFirst: 'Do This First',
-        qaScanLeaf: 'Scan Leaf', qaScanSub: 'Detect diseases instantly',
-        qaIoT: 'IoT Monitor', qaIoTSub: 'Live soil metrics',
-        qaChat: 'AI Chat', qaChatSub: 'Ask an expert',
-        secFeaturesTitle: 'Smart Farming Tools',
-        secFeaturesDesc: 'Everything you need for better farming decisions — powered by AI.',
-        featDetect: 'Detect Disease', featDetectDesc: 'Scan leaves for instant AI diagnosis.',
-        featMonitor: 'Smart Monitor', featMonitorDesc: 'Live soil moisture tracking.',
-        todayTip: "Today's Tip",
-        workflowTitle: 'Simple 3-Step Workflow', workflowSubtitle: 'Start your journey to better farming in minutes',
-        step1Title: 'Upload Crop Photo', step1Desc: 'Take a clear leaf photo from your phone camera.',
-        step2Title: 'Check Disease Report', step2Desc: 'Get confidence score and treatment plan instantly.',
-        step3Title: 'Take Action', step3Desc: 'Use organic/chemical guidance and required products.',
-        back: '← Back', pageDetect: 'Disease Detection',
-        uploadTitle: 'Upload Leaf Image', uploadDrag: 'Drag & drop or click to browse',
-        uploadFormats: 'JPG / PNG supported', uploadHint: 'Use your camera or upload a leaf image from your device.',
-        btnTakePhoto: '📸 Take Photo', btnChoosePhoto: '📂 Choose Photo',
-        retake: 'Retake', analyze: 'Analyze Now',
-        scanStepsTitle: '🔍 Disease Scan Steps',
-        scanStep1: 'Click Choose File and upload crop leaf',
-        scanStep2: 'Tap Analyze Now for disease report',
-        scanStep3: 'Follow treatment and prevention tips',
-        photoTipsTitle: '📸 Good Photo Tips',
-        tip1: 'Good natural lighting', tip2: 'Fill frame with the leaf',
-        tip3: 'Avoid motion blur', tip4: 'Show the affected area clearly',
-        iotTitle: 'IoT Smart Monitor', iotSoilMoisture: 'Soil Moisture',
-        fetching: 'Fetching...', lastUpdated: 'Last Updated:',
-        iotAIRec: 'AI Recommendation', iotOptRange: 'Optimal Range',
-        iotConn: 'Connection', iotLive: 'Live', iotOffline: 'Offline', iotDisconnected: 'Sensor disconnected. Please check connection.',
-        iotMinToday: 'Min Today', iotMaxToday: 'Max Today',
-        iotAverage: 'Average', iotReadings: 'Readings',
-        iotChartTitle: 'Live Moisture History', iotLast20: 'Last 20 Readings',
-        iotWeather: 'Field Weather', iotDetectLoc: 'Detecting location...',
-        iotRefreshWeather: '🔄 Refresh Weather',
-        iotSoilHealth: 'Soil Health Score', iotWaiting: 'Waiting...',
-        iotConnectSensor: 'Connect sensor to get your soil health score.',
-        chatGreeting: "👋 Hi! I'm your AgriSense AI assistant. Ask me anything about crops, diseases, or farming!",
-        chatPlaceholder: 'Ask about diseases or farming...',
-        iotDry: 'Too Dry', iotDryRec: '🚨 Soil moisture is low! Start irrigation immediately to prevent crop wilting.',
-        iotOpt: 'Optimal', iotOptRec: '✅ Soil moisture is at an ideal level for most crops. No action needed.',
-        iotWet: 'Too Wet', iotWetRec: '⚠️ Soil is saturated. Stop irrigation and ensure proper drainage to avoid root rot.',
-        navRecommend: 'Recommend', featRecommend: 'Crop Recommend', featRecommendDesc: 'AI suggests the best crops for your location.',
-        recTitle: 'Crop Recommendation', recAutoFill: '📍 Auto-detect Location & Weather',
-        recLocation: 'Location', recTemp: 'Temperature (°C)', recHumid: 'Humidity (%)',
-        recSoil: 'Soil Type', recSeason: 'Season', recBtn: '🔍 Get Recommendations',
-        recResultTitle: '🌾 Recommended Crops', recReasoning: '💡 Reasoning', recPrep: '🚜 Preparation',
-        recEmpty: 'Enter your field details and let AI suggest the best crops for maximum yield and profit.',
-        qaRecommend: 'Recommend', qaRecommendSub: 'Find best crops'
+        navHome: 'Hub', navDetect: 'Diagnostics', navCrops: 'Crops', navScan: 'Start Scan',
+        navBottomHub: 'Hub', navBottomDetect: 'Detect', navBottomPlanner: 'Planner', navBottomIoT: 'Telemetry', navBottomAdvisor: 'Advisor', navBottomProfile: 'Profile',
+        heroBadge: 'Precision Agronomic Intelligence',
+        heroTitle1: 'Healthy Crops', heroTitle2: 'Predictable Yields',
+        heroDesc: 'Clinical foliar disease diagnosis, real-time root-zone telemetry, and verified agronomic protocols.',
+        heroBtn1: 'Analyze Leaf Specimen',
+        statCrops: 'Crops Supported', statDiseases: 'Pathogens Modeled', statLangs: 'Languages',
+        statAdvice: 'Advisory Engine', statFocus: 'Edge Field Ready',
+        selectLang: 'Platform Language',
+        doThisFirst: 'Primary Operations',
+        qaScanLeaf: 'Pathology Diagnostics', qaScanSub: 'Instant foliar classification',
+        qaIoT: 'Soil Telemetry', qaIoTSub: 'Real-time root-zone moisture',
+        qaChat: 'Agronomic Consultation', qaChatSub: 'Interactive crop advisory',
+        secFeaturesTitle: 'Operational Systems',
+        secFeaturesDesc: 'Integrated field intelligence combining neural diagnostics and hardware telematics.',
+        featDetect: 'Disease Diagnostics', featDetectDesc: 'Computer vision analysis across 38+ plant pathogens.',
+        featMonitor: 'Soil Telemetry', featMonitorDesc: 'Live root-zone moisture tracking with dynamic thresholds.',
+        todayTip: "Agronomic Bulletin",
+        workflowTitle: 'Diagnostic Protocol', workflowSubtitle: 'From field sample to actionable agronomic treatment in seconds',
+        step1Title: 'Capture Specimen', step1Desc: 'Photograph affected crop foliage under natural lighting.',
+        step2Title: 'Neural Analysis', step2Desc: 'CNN evaluates pathogen signature with confidence scoring.',
+        step3Title: 'Apply Treatment', step3Desc: 'Follow structured biological, chemical, and preventive protocols.',
+        back: 'Back', pageDetect: 'Pathology Diagnostics',
+        uploadTitle: 'Upload Foliage Specimen', uploadDrag: 'Drag and drop image or browse file system',
+        uploadFormats: 'JPEG / PNG formats supported (up to 8 MB)', uploadHint: 'Ensure foliage is flat, sharp, and in natural daylight.',
+        btnTakePhoto: 'Capture with Camera', btnChoosePhoto: 'Browse Image File',
+        retake: 'Discard Specimen', analyze: 'Run Diagnostic Analysis',
+        scanStepsTitle: 'Diagnostic Operating Procedure',
+        scanStep1: 'Mount or hold specimen flat with clear background',
+        scanStep2: 'Initiate diagnostic inference for pathology report',
+        scanStep3: 'Review targeted biological and chemical remediation',
+        photoTipsTitle: 'Imaging Best Practices',
+        tip1: 'Natural, diffused daylight without direct harsh glare',
+        tip2: 'Fill 70% or more of the frame with the target leaf',
+        tip3: 'Ensure macro focus is sharp and motionless',
+        tip4: 'Frame both healthy tissue and symptomatic lesions',
+        iotTitle: 'Field Telemetry & Soil Station', iotSoilMoisture: 'Soil Moisture Level',
+        fetching: 'Syncing telemetry...', lastUpdated: 'Last Packet:',
+        iotAIRec: 'Agronomic Assessment', iotOptRange: 'Target Range',
+        iotConn: 'Telemetry Link', iotLive: 'Active', iotOffline: 'Offline', iotDisconnected: 'Sensor telemetry interrupted. Verify hardware link.',
+        iotMinToday: '24h Minimum', iotMaxToday: '24h Maximum',
+        iotAverage: 'Moving Average', iotReadings: 'Packet Count',
+        iotChartTitle: 'Root-Zone Moisture Trendline', iotLast20: 'Last 20 Telemetry Samples',
+        iotWeather: 'Field Agrometeorology', iotDetectLoc: 'Querying station coordinates...',
+        iotRefreshWeather: 'Refresh Weather Feed',
+        iotSoilHealth: 'Soil Vigor Index', iotWaiting: 'Evaluating...',
+        iotConnectSensor: 'Awaiting live sensor telemetry to compute soil health score.',
+        chatGreeting: "Welcome to AgriSense AI. You can query pathogen management, chemical dosages, biological controls, or irrigation schedules.",
+        chatPlaceholder: 'Inquire about pathology, soil nutrients, or field management...',
+        iotDry: 'Deficit (Dry)', iotDryRec: 'Soil moisture is critically low. Initiate targeted irrigation to prevent plant dehydration and vascular stress.',
+        iotOpt: 'Optimal', iotOptRec: 'Root-zone moisture is balanced. Transpiration and nutrient uptake conditions are ideal.',
+        iotWet: 'Saturated (Wet)', iotWetRec: 'Soil is waterlogged. Suspend irrigation and verify field drainage to prevent root hypoxia and fungal proliferation.',
+        navRecommend: 'Crop Planner', featRecommend: 'Cultivar Recommendation', featRecommendDesc: 'Soil taxonomy and microclimate modeling for optimal crop selection.',
+        recTitle: 'Agronomic Crop Planner', recAutoFill: 'Auto-detect Microclimate & Coordinates',
+        recLocation: 'Field Region / Territory', recTemp: 'Ambient Temperature (°C)', recHumid: 'Relative Humidity (%)',
+        recSoil: 'Soil Classification', recSeason: 'Agro-Climatic Season', recBtn: 'Generate Cultivar Plan',
+        recResultTitle: 'Optimal Crop Selections', recReasoning: 'Agronomic Rationale', recPrep: 'Field & Seedbed Preparation',
+        recEmpty: 'Specify regional coordinates, climate metrics, and soil taxonomy to compute optimal crop recommendations.',
+        qaRecommend: 'Crop Planning', qaRecommendSub: 'Targeted cultivar selection'
     },
     hi: {
-        navHome: 'होम', navDetect: 'पहचानें', navCrops: 'फसलें', navScan: 'स्कैन करें',
-        heroBadge: '🌱 AI-संचालित कृषि',
-        heroTitle1: 'स्वस्थ फसलें', heroTitle2: 'बेहतर आमदनी',
-        heroDesc: 'पौधों की बीमारियों को तुरंत पहचानें और सटीक उपचार कदम जल्दी प्राप्त करें।',
-        heroBtn1: '📸 अपनी फसल स्कैन करें',
-        statCrops: 'फसलें', statDiseases: 'बीमारियाँ', statLangs: 'भाषाएं',
-        statAdvice: 'सलाह', statFocus: 'फोकस',
-        selectLang: 'अपनी भाषा चुनें',
-        doThisFirst: 'पहले यह करें',
-        qaScanLeaf: 'पत्ती स्कैन करें', qaScanSub: 'बीमारियाँ तुरंत पहचानें',
-        qaIoT: 'IoT मॉनिटर', qaIoTSub: 'लाइव मिट्टी डेटा',
-        qaChat: 'AI चैट', qaChatSub: 'किसी विशेषज्ञ से पूछें',
-        secFeaturesTitle: 'स्मार्ट खेती उपकरण',
-        secFeaturesDesc: 'बेहतर खेती के फैसलों के लिए सब कुछ — AI द्वारा संचालित।',
-        featDetect: 'बीमारी पहचानें', featDetectDesc: 'त्वरित AI निदान के लिए पत्तियाँ स्कैन करें।',
-        featMonitor: 'स्मार्ट मॉनिटर', featMonitorDesc: 'लाइव मिट्टी नमी ट्रैकिंग।',
-        todayTip: 'आज की टिप',
-        workflowTitle: 'सरल 3-चरण प्रक्रिया', workflowSubtitle: 'मिनटों में बेहतर खेती की ओर अपनी यात्रा शुरू करें',
-        step1Title: 'फसल फोटो अपलोड करें', step1Desc: 'अपने फोन कैमरे से एक स्पष्ट पत्ती की फोटो लें।',
-        step2Title: 'रोग रिपोर्ट देखें', step2Desc: 'विश्वास स्कोर और उपचार योजना तुरंत प्राप्त करें।',
-        step3Title: 'कदम उठाएं', step3Desc: 'जैविक/रासायनिक मार्गदर्शन और आवश्यक उत्पादों का उपयोग करें।',
-        back: '← वापस', pageDetect: 'बीमारी की पहचान',
-        uploadTitle: 'पत्ती की छवि अपलोड करें', uploadDrag: 'यहाँ खींचें और छोड़ें या ब्राउज़ करने के लिए क्लिक करें',
-        uploadFormats: 'JPG / PNG समर्थित', uploadHint: 'अपने कैमरे का उपयोग करें या डिवाइस से पत्ती की छवि अपलोड करें।',
-        btnTakePhoto: '📸 फोटो लें', btnChoosePhoto: '📂 फोटो चुनें',
-        retake: 'फिर से लें', analyze: 'अभी विश्लेषण करें',
-        scanStepsTitle: '🔍 रोग स्कैन चरण',
-        scanStep1: 'फ़ाइल चुनें पर क्लिक करें और फसल की पत्ती अपलोड करें',
-        scanStep2: 'रोग रिपोर्ट के लिए अभी विश्लेषण करें पर टैप करें',
-        scanStep3: 'उपचार और रोकथाम युक्तियों का पालन करें',
-        photoTipsTitle: '📸 अच्छी फोटो टिप्स',
-        tip1: 'अच्छी प्राकृतिक रोशनी', tip2: 'फ्रेम को पत्ती से भरें',
-        tip3: 'मोशन ब्लर से बचें', tip4: 'प्रभावित क्षेत्र को स्पष्ट रूप से दिखाएं',
-        iotTitle: 'IoT स्मार्ट मॉनिटर', iotSoilMoisture: 'मिट्टी की नमी',
-        fetching: 'प्राप्त हो रहा है...', lastUpdated: 'अंतिम अपडेट:',
-        iotAIRec: 'AI सिफारिश', iotOptRange: 'आदर्श सीमा',
-        iotConn: 'कनेक्शन', iotLive: 'लाइव', iotOffline: 'ऑफ़लाइन', iotDisconnected: 'सेंसर डिस्कनेक्ट हो गया। कृपया कनेक्शन जांचें।',
-        iotMinToday: 'आज का न्यूनतम', iotMaxToday: 'आज का अधिकतम',
-        iotAverage: 'औसत', iotReadings: 'रीडिंग',
-        iotChartTitle: 'लाइव नमी इतिहास', iotLast20: 'अंतिम 20 रीडिंग',
-        iotWeather: 'खेत का मौसम', iotDetectLoc: 'स्थान का पता लगाया जा रहा है...',
-        iotRefreshWeather: '🔄 मौसम रीफ्रेश करें',
-        iotSoilHealth: 'मिट्टी स्वास्थ्य स्कोर', iotWaiting: 'प्रतीक्षा कर रहे हैं...',
-        iotConnectSensor: 'मिट्टी स्वास्थ्य स्कोर पाने के लिए सेंसर कनेक्ट करें।',
-        chatGreeting: '👋 नमस्ते! मैं आपका कृषि AI सहायक हूँ। मुझसे फसल, बीमारी या खेती के बारे में कुछ भी पूछें!',
-        chatPlaceholder: 'बीमारियों या खेती के बारे में पूछें...',
-        iotDry: 'बहुत सूखा', iotDryRec: '🚨 मिट्टी की नमी कम है! फसल को सूखने से बचाने के लिए तुरंत सिंचाई शुरू करें।',
-        iotOpt: 'अनुकूल', iotOptRec: '✅ अधिकांश फसलों के लिए मिट्टी की नमी आदर्श स्तर पर है। किसी कार्रवाई की आवश्यकता नहीं।',
-        iotWet: 'बहुत गीला', iotWetRec: '⚠️ मिट्टी संतृप्त है। जड़ सड़न से बचने के लिए सिंचाई रोकें और उचित जल निकासी सुनिश्चित करें।',
-        navRecommend: 'सिफारिश', featRecommend: 'फसल की सिफारिश', featRecommendDesc: 'AI आपके स्थान के लिए सबसे अच्छी फसलों का सुझाव देता है।',
-        recTitle: 'फसल की सिफारिश', recAutoFill: '📍 स्थान और मौसम स्वतः-पहचानें',
-        recLocation: 'स्थान', recTemp: 'तापमान (°C)', recHumid: 'नमी (%)',
-        recSoil: 'मिट्टी का प्रकार', recSeason: 'मौसम', recBtn: '🔍 सिफारिशें प्राप्त करें',
-        recResultTitle: '🌾 अनुशंसित फसलें', recReasoning: '💡 तर्क', recPrep: '🚜 तैयारी',
-        recEmpty: 'अपने खेत का विवरण दर्ज करें और AI को अधिकतम उपज और लाभ के लिए सर्वोत्तम फसलों का सुझाव देने दें।',
-        qaRecommend: 'सिफारिश', qaRecommendSub: 'सबसे अच्छी फसलें खोजें'
+        navHome: 'हब', navDetect: 'रोग पहचान', navCrops: 'फसलें', navScan: 'स्कैन शुरू करें',
+        navBottomHub: 'हब', navBottomDetect: 'पहचान', navBottomPlanner: 'योजना', navBottomIoT: 'सेंसर', navBottomAdvisor: 'सलाहकार', navBottomProfile: 'प्रोफ़ाइल',
+        heroBadge: 'सटीक कृषि आसूचना',
+        heroTitle1: 'स्वस्थ फसलें', heroTitle2: 'स्थिर उत्पादन',
+        heroDesc: 'सटीक फसल रोग पहचान, वास्तविक समय मिट्टी नमी ट्रैकिंग, और सत्यापित कृषि उपचार।',
+        heroBtn1: 'पत्ती का नमूना विश्लेषित करें',
+        statCrops: 'फसलें', statDiseases: 'रोग वर्गीकरण', statLangs: 'भाषाएं',
+        statAdvice: 'सलाह इंजन', statFocus: 'फील्ड-तैयार',
+        selectLang: 'भाषा चुनें',
+        doThisFirst: 'प्रमुख कार्यप्रणाली',
+        qaScanLeaf: 'रोग निदान', qaScanSub: 'त्वरित रोग पहचान',
+        qaIoT: 'मिट्टी टेलीमेट्री', qaIoTSub: 'लाइव मिट्टी नमी डेटा',
+        qaChat: 'कृषि परामर्श', qaChatSub: 'विशेषज्ञ से प्रश्न पूछें',
+        secFeaturesTitle: 'स्मार्ट कृषि उपकरण',
+        secFeaturesDesc: 'कृषि में सटीक निर्णयों के लिए कृत्रिम बुद्धिमत्ता और IoT आधारित प्लेटफॉर्म।',
+        featDetect: 'रोग पहचान', featDetectDesc: 'पत्तियों की छवियों से तुरंत 38+ पादप रोगों का सटीक निदान।',
+        featMonitor: 'मिट्टी टेलीमेट्री', featMonitorDesc: 'लाइव रूट-ज़ोन नमी ट्रैकिंग और सिंचाई दिशानिर्देश।',
+        todayTip: 'कृषि बुलेटिन',
+        workflowTitle: 'मानक निदान प्रक्रिया', workflowSubtitle: 'नमूना कैप्चर से लेकर सटीक उपचार तक की त्वरित प्रक्रिया',
+        step1Title: 'नमूना कैप्चर करें', step1Desc: 'स्पष्ट प्राकृतिक प्रकाश में फसल की पत्ती की फोटो लें।',
+        step2Title: 'न्यूरल विश्लेषण', step2Desc: 'CNN मॉडल विश्वास स्कोर के साथ रोग की पहचान करता है।',
+        step3Title: 'उपचार लागू करें', step3Desc: 'प्रमाणित जैविक और रासायनिक नियंत्रण दिशानिर्देशों का पालन करें।',
+        back: 'वापस', pageDetect: 'पादप रोग निदान',
+        uploadTitle: 'पत्ती का नमूना अपलोड करें', uploadDrag: 'फ़ाइल खींचें या सिस्टम से चुनें',
+        uploadFormats: 'JPG / PNG प्रारूप (अधिकतम 8 MB)', uploadHint: 'पत्ती को प्राकृतिक प्रकाश में रखें।',
+        btnTakePhoto: 'कैमरे से फोटो लें', btnChoosePhoto: 'फ़ाइल ब्राउज़ करें',
+        retake: 'दूसरा फोटो लें', analyze: 'विश्लेषण शुरू करें',
+        scanStepsTitle: 'निदान कार्यप्रणाली',
+        scanStep1: 'पत्ती को केंद्र में रखकर फोटो चुनें',
+        scanStep2: 'विश्लेषण शुरू करें पर क्लिक करें',
+        scanStep3: 'सटीक जैविक व रासायनिक उपचार निर्देश देखें',
+        photoTipsTitle: 'उत्तम फोटोग्राफी दिशा-निर्देश',
+        tip1: 'पर्याप्त प्राकृतिक प्रकाश रखें',
+        tip2: 'पत्ती से फ्रेम का 70% हिस्सा भरें',
+        tip3: 'कैमरे को स्थिर रखें',
+        tip4: 'प्रभावित क्षेत्र स्पष्ट दिखना चाहिए',
+        iotTitle: 'IoT फील्ड स्टेशन', iotSoilMoisture: 'मिट्टी की नमी',
+        fetching: 'डेटा प्राप्त हो रहा है...', lastUpdated: 'अंतिम पैकेट:',
+        iotAIRec: 'कृषि मूल्यांकन', iotOptRange: 'आदर्श सीमा',
+        iotConn: 'सेंसर लिंक', iotLive: 'सक्रिय', iotOffline: 'ऑफ़लाइन', iotDisconnected: 'सेंसर डिस्कनेक्ट है। हार्डवेयर जांचें।',
+        iotMinToday: '24 घंटे का न्यूनतम', iotMaxToday: '24 घंटे का अधिकतम',
+        iotAverage: 'औसत नमी', iotReadings: 'रीडिंग गणना',
+        iotChartTitle: 'नमी रुझान रेखा', iotLast20: 'अंतिम 20 टेलीमेट्री नमूने',
+        iotWeather: 'खेत का मौसम', iotDetectLoc: 'स्थान की जानकारी खोजी जा रही है...',
+        iotRefreshWeather: 'मौसम अपडेट करें',
+        iotSoilHealth: 'मिट्टी स्वास्थ्य सूचकांक', iotWaiting: 'प्रतीक्षा...',
+        iotConnectSensor: 'मिट्टी स्वास्थ्य स्कोर के लिए सेंसर कनेक्ट करें।',
+        chatGreeting: 'AgriSense AI में आपका स्वागत है। आप फसल रोग, रासायनिक मात्रा, जैविक उपचार या सिंचाई के बारे में प्रश्न पूछ सकते हैं।',
+        chatPlaceholder: 'फसल स्वास्थ्य या खेती प्रबंधन के बारे में पूछें...',
+        iotDry: 'अति शुष्क', iotDryRec: 'मिट्टी में नमी अत्यधिक कम है। फसल को क्षति से बचाने हेतु तुरंत सिंचाई प्रारंभ करें।',
+        iotOpt: 'अनुकूल', iotOptRec: 'मिट्टी की नमी आदर्श स्तर पर है। फसल वृद्धि के लिए अनुकूल परिस्थिति है।',
+        iotWet: 'अत्यधिक गीला', iotWetRec: 'मिट्टी जलमग्न है। जड़ सड़न रोकने के लिए सिंचाई रोकें और जल निकासी सुनिश्चित करें।',
+        navRecommend: 'फसल योजना', featRecommend: 'फसल अनुशंसा', featRecommendDesc: 'मिट्टी और जलवायु के आधार पर सर्वश्रेष्ठ फसल का चयन।',
+        recTitle: 'फसल योजनाकार', recAutoFill: 'स्थान और मौसम स्वतः पहचानें',
+        recLocation: 'खेत का क्षेत्र', recTemp: 'तापमान (°C)', recHumid: 'सापेक्ष आर्द्रता (%)',
+        recSoil: 'मिट्टी का प्रकार', recSeason: 'ऋतु', recBtn: 'फसल योजना बनाएं',
+        recResultTitle: 'अनुशंसित फसलें', recReasoning: 'कृषि तर्क', recPrep: 'खेत की तैयारी',
+        recEmpty: 'खेत की मिट्टी और जलवायु विवरण दर्ज करके सर्वोत्तम फसलों की सिफारिश प्राप्त करें।',
+        qaRecommend: 'फसल योजना', qaRecommendSub: 'उत्कृष्ट फसल विकल्प'
     },
     kn: {
-        navHome: 'ಹೋಮ್', navDetect: 'ಗುರುತಿಸಿ', navCrops: 'ಬೆಳೆಗಳು', navScan: 'ಸ್ಕ್ಯಾನ್ ಮಾಡಿ',
-        heroBadge: '🌱 AI-ಚಾಲಿತ ಕೃಷಿ',
-        heroTitle1: 'ಆರೋಗ್ಯಕರ ಬೆಳೆಗಳು', heroTitle2: 'ಉತ್ತಮ ಆದಾಯ',
-        heroDesc: 'ಸಸ್ಯ ರೋಗಗಳನ್ನು ತಕ್ಷಣ ಪತ್ತೆಹಚ್ಚಿ ಮತ್ತು ಸರಿಯಾದ ಚಿಕಿತ್ಸೆಗಳನ್ನು ಬೇಗ ಪಡೆಯಿರಿ.',
-        heroBtn1: '📸 ನಿಮ್ಮ ಬೆಳೆ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ',
-        statCrops: 'ಬೆಳೆಗಳು', statDiseases: 'ರೋಗಗಳು', statLangs: 'ಭಾಷೆಗಳು',
-        statAdvice: 'ಸಲಹೆ', statFocus: 'ಗಮನ',
-        selectLang: 'ನಿಮ್ಮ ಭಾಷೆ ಆಯ್ಕೆ ಮಾಡಿ',
-        doThisFirst: 'ಮೊದಲು ಇದನ್ನು ಮಾಡಿ',
-        qaScanLeaf: 'ಎಲೆ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ', qaScanSub: 'ರೋಗಗಳನ್ನು ತಕ್ಷಣ ಪತ್ತೆಹಚ್ಚಿ',
-        qaIoT: 'IoT ಮಾನಿಟರ್', qaIoTSub: 'ಲೈವ್ ಮಣ್ಣಿನ ಡೇಟಾ',
-        qaChat: 'AI ಚಾಟ್', qaChatSub: 'ತಜ್ಞರನ್ನು ಕೇಳಿ',
-        secFeaturesTitle: 'ಸ್ಮಾರ್ಟ್ ಕೃಷಿ ಪರಿಕರಗಳು',
-        secFeaturesDesc: 'ಉತ್ತಮ ಕೃಷಿ ನಿರ್ಧಾರಗಳಿಗೆ ಎಲ್ಲವೂ — AI ಚಾಲಿತ.',
-        featDetect: 'ರೋಗ ಪತ್ತೆಹಚ್ಚಿ', featDetectDesc: 'ತಕ್ಷಣ AI ರೋಗ ನಿರ್ಣಯಕ್ಕಾಗಿ ಎಲೆಗಳನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ.',
-        featMonitor: 'ಸ್ಮಾರ್ಟ್ ಮಾನಿಟರ್', featMonitorDesc: 'ಲೈವ್ ಮಣ್ಣಿನ ತೇವಾಂಶ ಟ್ರ್ಯಾಕಿಂಗ್.',
-        todayTip: 'ಇಂದಿನ ಸಲಹೆ',
-        workflowTitle: 'ಸರಳ 3-ಹಂತದ ಕ್ರಮ', workflowSubtitle: 'ನಿಮಿಷಗಳಲ್ಲಿ ಉತ್ತಮ ಕೃಷಿಯತ್ತ ನಿಮ್ಮ ಪ್ರಯಾಣ ಪ್ರಾರಂಭಿಸಿ',
-        step1Title: 'ಬೆಳೆ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ', step1Desc: 'ನಿಮ್ಮ ಫೋನ್ ಕ್ಯಾಮೆರಾದಿಂದ ಸ್ಪಷ್ಟ ಎಲೆ ಫೋಟೋ ತೆಗೆಯಿರಿ.',
-        step2Title: 'ರೋಗ ವರದಿ ಪರಿಶೀಲಿಸಿ', step2Desc: 'ವಿಶ್ವಾಸ ಸ್ಕೋರ್ ಮತ್ತು ಚಿಕಿತ್ಸಾ ಯೋಜನೆ ತಕ್ಷಣ ಪಡೆಯಿರಿ.',
-        step3Title: 'ಕ್ರಮ ಕೈಗೊಳ್ಳಿ', step3Desc: 'ಸಾವಯವ/ರಾಸಾಯನಿಕ ಮಾರ್ಗದರ್ಶನ ಮತ್ತು ಉತ್ಪನ್ನಗಳನ್ನು ಬಳಸಿ.',
-        back: '← ಹಿಂದೆ', pageDetect: 'ರೋಗ ಪತ್ತೆಹಚ್ಚುವಿಕೆ',
-        uploadTitle: 'ಎಲೆ ಚಿತ್ರ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ', uploadDrag: 'ಇಲ್ಲಿ ಎಳೆದು ಬಿಡಿ ಅಥವಾ ಬ್ರೌಸ್ ಮಾಡಲು ಕ್ಲಿಕ್ ಮಾಡಿ',
-        uploadFormats: 'JPG / PNG ಬೆಂಬಲಿತ', uploadHint: 'ನಿಮ್ಮ ಕ್ಯಾಮೆರಾ ಬಳಸಿ ಅಥವಾ ಸಾಧನದಿಂದ ಎಲೆ ಚಿತ್ರ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.',
-        btnTakePhoto: '📸 ಫೋಟೋ ತೆಗೆಯಿರಿ', btnChoosePhoto: '📂 ಫೋಟೋ ಆಯ್ಕೆ ಮಾಡಿ',
-        retake: 'ಮತ್ತೆ ತೆಗೆಯಿರಿ', analyze: 'ಈಗ ವಿಶ್ಲೇಷಿಸಿ',
-        scanStepsTitle: '🔍 ರೋಗ ಸ್ಕ್ಯಾನ್ ಹಂತಗಳು',
-        scanStep1: 'ಫೈಲ್ ಆಯ್ಕೆ ಮಾಡಿ ಕ್ಲಿಕ್ ಮಾಡಿ ಮತ್ತು ಬೆಳೆ ಎಲೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ',
-        scanStep2: 'ರೋಗ ವರದಿಗಾಗಿ ಈಗ ವಿಶ್ಲೇಷಿಸಿ ಟ್ಯಾಪ್ ಮಾಡಿ',
-        scanStep3: 'ಚಿಕಿತ್ಸೆ ಮತ್ತು ತಡೆಗಟ್ಟುವಿಕೆ ಸಲಹೆಗಳನ್ನು ಅನುಸರಿಸಿ',
-        photoTipsTitle: '📸 ಉತ್ತಮ ಫೋಟೋ ಸಲಹೆಗಳು',
-        tip1: 'ಉತ್ತಮ ನೈಸರ್ಗಿಕ ಬೆಳಕು', tip2: 'ಎಲೆಯಿಂದ ಫ್ರೇಮ್ ತುಂಬಿಸಿ',
-        tip3: 'ಚಲನೆ ಮಸಕು ತಪ್ಪಿಸಿ', tip4: 'ಪ್ರಭಾವಿತ ಪ್ರದೇಶ ಸ್ಪಷ್ಟವಾಗಿ ತೋರಿಸಿ',
-        iotTitle: 'IoT ಸ್ಮಾರ್ಟ್ ಮಾನಿಟರ್', iotSoilMoisture: 'ಮಣ್ಣಿನ ತೇವಾಂಶ',
-        fetching: 'ಪಡೆಯಲಾಗುತ್ತಿದೆ...', lastUpdated: 'ಕೊನೆಯ ನವೀಕರಣ:',
-        iotAIRec: 'AI ಶಿಫಾರಸು', iotOptRange: 'ಸೂಕ್ತ ವ್ಯಾಪ್ತಿ',
-        iotConn: 'ಸಂಪರ್ಕ', iotLive: 'ಲೈವ್', iotOffline: 'ಆಫ್‌ಲೈನ್', iotDisconnected: 'ಸೆನ್ಸರ್ ಸಂಪರ್ಕ ಕಡಿತಗೊಂಡಿದೆ. ದಯವಿಟ್ಟು ಸಂಪರ್ಕವನ್ನು ಪರಿಶೀಲಿಸಿ.',
-        iotMinToday: 'ಇಂದಿನ ಕನಿಷ್ಠ', iotMaxToday: 'ಇಂದಿನ ಗರಿಷ್ಠ',
-        iotAverage: 'ಸರಾಸರಿ', iotReadings: 'ರೀಡಿಂಗ್‌ಗಳು',
-        iotChartTitle: 'ಲೈವ್ ತೇವಾಂಶ ಇತಿಹಾಸ', iotLast20: 'ಕಡೆಯ 20 ರೀಡಿಂಗ್‌ಗಳು',
-        iotWeather: 'ಹೊಲದ ಹವಾಮಾನ', iotDetectLoc: 'ಸ್ಥಳ ಪತ್ತೆಹಚ್ಚಲಾಗುತ್ತಿದೆ...',
-        iotRefreshWeather: '🔄 ಹವಾಮಾನ ರಿಫ್ರೆಶ್ ಮಾಡಿ',
-        iotSoilHealth: 'ಮಣ್ಣಿನ ಆರೋಗ್ಯ ಸ್ಕೋರ್', iotWaiting: 'ಕಾಯಲಾಗುತ್ತಿದೆ...',
+        navHome: 'ಹಬ್', navDetect: 'ರೋಗ ಪತ್ತೆ', navCrops: 'ಬೆಳೆಗಳು', navScan: 'ಸ್ಕ್ಯಾನ್ ಪ್ರಾರಂಭಿಸಿ',
+        navBottomHub: 'ಹಬ್', navBottomDetect: 'ಪತ್ತೆ', navBottomPlanner: 'ಯೋಜನೆ', navBottomIoT: 'ಸಂವೇದಕ', navBottomAdvisor: 'ಸಲಹೆಗಾರ', navBottomProfile: 'ಪ್ರೊಫೈಲ್',
+        heroBadge: 'ನಿಖರ ಕೃಷಿ ಮಾಹಿತಿ ವ್ಯವಸ್ಥೆ',
+        heroTitle1: 'ಆರೋಗ್ಯಕರ ಬೆಳೆಗಳು', heroTitle2: 'ಸುಸ್ಥಿರ ಆದಾಯ',
+        heroDesc: 'ಸಸ್ಯ ರೋಗಗಳ ನಿಖರ ಪತ್ತೆ, ನೈಜ ಸಮಯದ ಮಣ್ಣಿನ ತೇವಾಂಶ ಮೇಲ್ವಿಚಾರಣೆ ಮತ್ತು ಕೃಷಿ ಮಾರ್ಗದರ್ಶನ.',
+        heroBtn1: 'ಎಲೆಯ ಮಾದರಿ ವಿಶ್ಲೇಷಿಸಿ',
+        statCrops: 'ಬೆಳೆಗಳು', statDiseases: 'ರೋಗ ಮಾದರಿಗಳು', statLangs: 'ಭಾಷೆಗಳು',
+        statAdvice: 'ಸಲಹಾ ವ್ಯವಸ್ಥೆ', statFocus: 'ಕ್ಷೇತ್ರ-ಸಿದ್ಧ',
+        selectLang: 'ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ',
+        doThisFirst: 'ಪ್ರಮುಖ ಕಾರ್ಯಗಳು',
+        qaScanLeaf: 'ರೋಗ ಪತ್ತೆಹಚ್ಚುವಿಕೆ', qaScanSub: 'ತಕ್ಷಣದ ಎಲೆ ರೋಗ ಪತ್ತೆ',
+        qaIoT: 'ಮಣ್ಣಿನ ಟೆಲಿಮೆಟ್ರಿ', qaIoTSub: 'ಲೈವ್ ಮಣ್ಣಿನ ತೇವಾಂಶ ಡೇಟಾ',
+        qaChat: 'ಕೃಷಿ ಸಮಾಲೋಚನೆ', qaChatSub: 'ತಜ್ಞರೊಂದಿಗೆ ಚರ್ಚಿಸಿ',
+        secFeaturesTitle: 'ಕೃಷಿ ತಂತ್ರಜ್ಞಾನ ವ್ಯವಸ್ಥೆಗಳು',
+        secFeaturesDesc: 'ಕೃತಕ ಬುದ್ಧಿಮತ್ತೆ ಮತ್ತು IoT ಸಂಯೋಜಿತ ಆಧುನಿಕ ಕೃಷಿ ವೇದಿಕೆ.',
+        featDetect: 'ರೋಗ ಪತ್ತೆ', featDetectDesc: 'ಕಂಪ್ಯೂಟರ್ ದೃಷ್ಟಿ ತಂತ್ರಜ್ಞಾನದ ಮೂಲಕ 38+ ಸಸ್ಯ ರೋಗಗಳ ನಿಖರ ಪತ್ತೆ.',
+        featMonitor: 'ಮಣ್ಣಿನ ಟೆಲಿಮೆಟ್ರಿ', featMonitorDesc: 'ಮಣ್ಣಿನ ತೇವಾಂಶದ ನೈಜ ಸಮಯದ ಟ್ರ್ಯಾಕಿಂಗ್.',
+        todayTip: 'ಕೃಷಿ ಬುಲೆಟಿನ್',
+        workflowTitle: 'ರೋಗ ಪತ್ತೆ ವಿಧಾನ', workflowSubtitle: 'ಫೋಟೋದಿಂದ ನಿಖರ ಪರಿಹಾರದವರೆಗಿನ ಸರಳ ಪ್ರಕ್ರಿಯೆ',
+        step1Title: 'ಮಾದರಿ ಸೆರೆಹಿಡಿಯಿರಿ', step1Desc: 'ನೈಸರ್ಗಿಕ ಬೆಳಕಿನಲ್ಲಿ ಎಲೆಯ ಸ್ಪಷ್ಟ ಚಿತ್ರವನ್ನು ತೆಗೆದುಕೊಳ್ಳಿ.',
+        step2Title: 'ನ್ಯೂರಲ್ ವಿಶ್ಲೇಷಣೆ', step2Desc: 'CNN ಮಾದರಿಯು ರೋಗದ ನಿಖರ ಸ್ಕೋರ್ ನೀಡುತ್ತದೆ.',
+        step3Title: 'ಚಿಕಿತ್ಸೆ ಅನ್ವಯಿಸಿ', step3Desc: 'ಪ್ರಮಾಣಿತ ಸಾವಯವ ಮತ್ತು ರಾಸಾಯನಿಕ ಕ್ರಮಗಳನ್ನು ಅನುಸರಿಸಿ.',
+        back: 'ಹಿಂದೆ', pageDetect: 'ರೋಗ ಪತ್ತೆಹಚ್ಚುವಿಕೆ',
+        uploadTitle: 'ಎಲೆಯ ಚಿತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ', uploadDrag: 'ಚಿತ್ರವನ್ನು ಇಲ್ಲಿ ಎಳೆದುಬಿಡಿ ಅಥವಾ ಫೈಲ್ ಆಯ್ಕೆಮಾಡಿ',
+        uploadFormats: 'JPG / PNG ಬೆಂಬಲಿತವಾಗಿದೆ (ಗರಿಷ್ಠ 8 MB)', uploadHint: 'ಎಲೆಯನ್ನು ನೈಸರ್ಗಿಕ ಬೆಳಕಿನಲ್ಲಿ ಸ್ಪಷ್ಟವಾಗಿ ಇರಿಸಿ.',
+        btnTakePhoto: 'ಕ್ಯಾಮೆರಾದಿಂದ ಫೋಟೋ ತೆಗೆಯಿರಿ', btnChoosePhoto: 'ಚಿತ್ರವನ್ನು ಆಯ್ಕೆಮಾಡಿ',
+        retake: 'ಮತ್ತೆ ತೆಗೆಯಿರಿ', analyze: 'ವಿಶ್ಲೇಷಣೆ ಪ್ರಾರಂಭಿಸಿ',
+        scanStepsTitle: 'ಕಾರ್ಯಾಚರಣೆ ಹಂತಗಳು',
+        scanStep1: 'ಸ್ಪಷ್ಟ ಎಲೆಯ ಫೋಟೋವನ್ನು ಆಯ್ಕೆಮಾಡಿ',
+        scanStep2: 'ವಿಶ್ಲೇಷಣೆ ಪ್ರಾರಂಭಿಸಿ ಕ್ಲಿಕ್ ಮಾಡಿ',
+        scanStep3: 'ಚಿಕಿತ್ಸಾ ಮಾರ್ಗಸೂಚಿಗಳನ್ನು ಪರಿಶೀಲಿಸಿ',
+        photoTipsTitle: 'ಉತ್ತಮ ಫೋಟೋ ಸಲಹೆಗಳು',
+        tip1: 'ನೈಸರ್ಗಿಕ ಬೆಳಕಿನಲ್ಲಿ ಫೋಟೋ ತೆಗೆಯಿರಿ',
+        tip2: 'ಫ್ರೇಮ್‌ನ 70% ಭಾಗದಲ್ಲಿ ಎಲೆ ಇರಲಿ',
+        tip3: 'ಕ್ಯಾಮೆರಾ ಅಲುಗಾಡದಂತೆ ಹಿಡಿಯಿರಿ',
+        tip4: 'ಬಾಧಿತ ಭಾಗ ಸ್ಪಷ್ಟವಾಗಿ ಕಾಣಿಸಲಿ',
+        iotTitle: 'IoT ಕೃಷಿ ಕೇಂದ್ರ', iotSoilMoisture: 'ಮಣ್ಣಿನ ತೇವಾಂಶ ಮಟ್ಟ',
+        fetching: 'ಮಾಹಿತಿ ಪಡೆಯಲಾಗುತ್ತಿದೆ...', lastUpdated: 'ಕೊನೆಯ ಸಂದೇಶ:',
+        iotAIRec: 'ಕೃಷಿ ಶಿಫಾರಸು', iotOptRange: 'ಸೂಕ್ತ ವ್ಯಾಪ್ತಿ',
+        iotConn: 'ಸಂಪರ್ಕ ಸ್ಥಿತಿ', iotLive: 'ಸಕ್ರಿಯ', iotOffline: 'ಆಫ್‌ಲೈನ್', iotDisconnected: 'ಸೆಂನ್ಸರ್ ಸಂಪರ್ಕ ಕಡಿತಗೊಂಡಿದೆ.',
+        iotMinToday: '24 ಗಂಟೆಯ ಕನಿಷ್ಠ', iotMaxToday: '24 ಗಂಟೆಯ ಗರಿಷ್ಠ',
+        iotAverage: 'ಸರಾಸರಿ ತೇವಾಂಶ', iotReadings: 'ರೀಡಿಂಗ್‌ಗಳು',
+        iotChartTitle: 'ತೇವಾಂಶ ಇತಿಹಾಸ ಗ್ರಾಫ್', iotLast20: 'ಕಳೆದ 20 ನಮೂನೆಗಳು',
+        iotWeather: 'ಸ್ಥಳೀಯ ಹವಾಮಾನ', iotDetectLoc: 'ಸ್ಥಳ ಗುರುತಿಸಲಾಗುತ್ತಿದೆ...',
+        iotRefreshWeather: 'ಹವಾಮಾನ ನವೀಕರಿಸಿ',
+        iotSoilHealth: 'ಮಣ್ಣಿನ ಆರೋಗ್ಯ ಸೂಚ್ಯಂಕ', iotWaiting: 'ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ...',
         iotConnectSensor: 'ಮಣ್ಣಿನ ಆರೋಗ್ಯ ಸ್ಕೋರ್ ಪಡೆಯಲು ಸೆನ್ಸರ್ ಸಂಪರ್ಕಿಸಿ.',
-        chatGreeting: '👋 ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ ಕೃಷಿ AI ಸಹಾಯಕ. ಬೆಳೆ, ರೋಗ ಅಥವಾ ಕೃಷಿಯ ಬಗ್ಗೆ ಏನಾದರೂ ಕೇಳಿ!',
-        chatPlaceholder: 'ರೋಗ ಅಥವಾ ಕೃಷಿಯ ಬಗ್ಗೆ ಕೇಳಿ...',
-        iotDry: 'ತುಂಬಾ ಒಣಗಿದೆ', iotDryRec: '🚨 ಮಣ್ಣಿನ ತೇವಾಂಶ ಕಡಿಮೆಯಾಗಿದೆ! ಬೆಳೆ ಒಣಗುವುದನ್ನು ತಡೆಯಲು ತಕ್ಷಣ ನೀರಾವರಿ ಪ್ರಾರಂಭಿಸಿ.',
-        iotOpt: 'ಸೂಕ್ತ', iotOptRec: '✅ ಹೆಚ್ಚಿನ ಬೆಳೆಗಳಿಗೆ ಮಣ್ಣಿನ ತೇವಾಂಶವು ಆದರ್ಶ ಮಟ್ಟದಲ್ಲಿದೆ. ಯಾವುದೇ ಕ್ರಮದ ಅಗತ್ಯವಿಲ್ಲ.',
-        iotWet: 'ತುಂಬಾ ಒದ್ದೆ', iotWetRec: '⚠️ ಮಣ್ಣು ಸ್ಯಾಚುರೇಟೆಡ್ ಆಗಿದೆ. ಬೇರು ಕೊಳೆಯುವುದನ್ನು ತಡೆಯಲು ನೀರಾವರಿ ನಿಲ್ಲಿಸಿ ಮತ್ತು ಸರಿಯಾದ ಒಳಚರಂಡಿಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.',
-        navRecommend: 'ಶಿಫಾರಸು', featRecommend: 'ಬೆಳೆ ಶಿಫಾರಸು', featRecommendDesc: 'AI ನಿಮ್ಮ ಸ್ಥಳಕ್ಕಾಗಿ ಅತ್ಯುತ್ತಮ ಬೆಳೆಗಳನ್ನು ಸೂಚಿಸುತ್ತದೆ.',
-        recTitle: 'ಬೆಳೆ ಶಿಫಾರಸು', recAutoFill: '📍 ಸ್ಥಳ ಮತ್ತು ಹವಾಮಾನ ಸ್ವಯಂ-ಪತ್ತೆಹಚ್ಚಿ',
-        recLocation: 'ಸ್ಥಳ', recTemp: 'ತಾಪಮಾನ (°C)', recHumid: 'ತೇವಾಂಶ (%)',
-        recSoil: 'ಮಣ್ಣಿನ ಪ್ರಕಾರ', recSeason: 'ಋತು', recBtn: '🔍 ಶಿಫಾರಸುಗಳನ್ನು ಪಡೆಯಿರಿ',
-        recResultTitle: '🌾 ಶಿಫಾರಸು ಮಾಡಿದ ಬೆಳೆಗಳು', recReasoning: '💡 ಕಾರಣ', recPrep: '🚜 ತಯಾರಿ',
-        recEmpty: 'ನಿಮ್ಮ ಹೊಲದ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ ಮತ್ತು ಗರಿಷ್ಠ ಇಳುವರಿ ಮತ್ತು ಲಾಭಕ್ಕಾಗಿ ಅತ್ಯುತ್ತಮ ಬೆಳೆಗಳನ್ನು ಸೂಚಿಸಲು AI ಗೆ ಅವಕಾಶ ಮಾಡಿಕೊಡಿ.',
-        qaRecommend: 'ಶಿಫಾರಸು', qaRecommendSub: 'ಅತ್ಯುತ್ತಮ ಬೆಳೆಗಳನ್ನು ಹುಡುಕಿ'
+        chatGreeting: 'AgriSense AI ಗೆ ಸ್ವಾಗತ. ರೋಗ ನಿರ್ವಹಣೆ, ರಸಗೊಬ್ಬರ ಪ್ರಮಾಣ ಅಥವಾ ನೀರಾವರಿ ಬಗ್ಗೆ ಪ್ರಶ್ನಿಸಬಹುದು.',
+        chatPlaceholder: 'ಬೆಳೆ ಅಥವಾ ಕೃಷಿ ನಿರ್ವಹಣೆ ಬಗ್ಗೆ ಕೇಳಿ...',
+        iotDry: 'ಅತ್ಯಂತ ಒಣಗಿದೆ', iotDryRec: 'ಮಣ್ಣಿನಲ್ಲಿ ತೇವಾಂಶ ತೀರ ಕಡಿಮೆಯಾಗಿದೆ. ತಕ್ಷಣ ನೀರಾವರಿ ಪ್ರಾರಂಭಿಸಿ.',
+        iotOpt: 'ಸೂಕ್ತವಾಗಿದೆ', iotOptRec: 'ಮಣ್ಣಿನ ತೇವಾಂಶವು ಆದರ್ಶ ಮಟ್ಟದಲ್ಲಿದೆ. ಬೆಳೆ ಬೆಳವಣಿಗೆಗೆ ಉತ್ತಮವಾಗಿದೆ.',
+        iotWet: 'ಅತಿಯಾದ ತೇವಾಂಶ', iotWetRec: 'ಮಣ್ಣು ಜಲಾವೃತವಾಗಿದೆ. ಬೇರು ಕೊಳೆಯುವುದನ್ನು ತಪ್ಪಿಸಲು ನೀರಾವರಿ ನಿಲ್ಲಿಸಿ.',
+        navRecommend: 'ಬೆಳೆ ಯೋಜನೆ', featRecommend: 'ಬೆಳೆ ಶಿಫಾರಸು', featRecommendDesc: 'ಮಣ್ಣು ಮತ್ತು ಹವಾಮಾನಕ್ಕೆ ಸೂಕ್ತವಾದ ಬೆಳೆಯ ಆಯ್ಕೆ.',
+        recTitle: 'ಬೆಳೆ ಯೋಜನೆಗಾರ', recAutoFill: 'ಸ್ಥಳ ಮತ್ತು ಹವಾಮಾನ ಸ್ವಯಂ-ಗುರುತಿಸಿ',
+        recLocation: 'ಪ್ರದೇಶ / ಜಾಗ', recTemp: 'ತಾಪಮಾನ (°C)', recHumid: 'ಆರ್ದ್ರತೆ (%)',
+        recSoil: 'ಮಣ್ಣಿನ ವಿಧ', recSeason: 'ಋತುಮಾನ', recBtn: 'ಬೆಳೆ ಯೋಜನೆ ರಚಿಸಿ',
+        recResultTitle: 'ಶಿಫಾರಸು ಮಾಡಿದ ಬೆಳೆಗಳು', recReasoning: 'ಕೃಷಿ ಕಾರಣಗಳು', recPrep: 'ಭೂಮಿ ಸಿದ್ಧತೆ',
+        recEmpty: 'ನಿಮ್ಮ ಮಣ್ಣು ಮತ್ತು ಹವಾಮಾನದ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ ಉತ್ತಮ ಬೆಳೆಯ ಶಿಫಾರಸು ಪಡೆಯಿರಿ.',
+        qaRecommend: 'ಬೆಳೆ ಯೋಜನೆ', qaRecommendSub: 'ಉತ್ತಮ ಬೆಳೆ ಆಯ್ಕೆಗಳು'
     }
 };
 
 const LANG_META = {
-    en: { flag: '🌐', name: 'English' },
-    hi: { flag: '🇮🇳', name: 'हिन्दी (Hindi)' },
-    kn: { flag: '🇮🇳', name: 'ಕನ್ನಡ (Kannada)' }
+    en: { code: 'EN', name: 'English' },
+    hi: { code: 'HI', name: 'हिन्दी' },
+    kn: { code: 'KN', name: 'ಕನ್ನಡ' }
 };
 
 /* --- Core Initialization --- */
@@ -233,7 +242,7 @@ function attachProfileButtons() {
 function navigateTo(screenId) {
     const screens = document.querySelectorAll('.screen');
     const target = document.getElementById(screenId);
-    
+
     if (!target) return;
 
     // Scroll to top
@@ -241,7 +250,7 @@ function navigateTo(screenId) {
 
     // Cleanup current
     if (AppState.currentScreen === 'screenDiseaseDetect' && screenId !== 'screenResult') {
-        if(typeof stopCamera === 'function') stopCamera();
+        if (typeof stopCamera === 'function') stopCamera();
     }
 
     screens.forEach(s => {
@@ -286,14 +295,14 @@ function setLanguage(lang) {
     applyLanguage(lang);
     closeLangMenu();
     updateChatSystemPrompt(lang);
-    
+
     // Auto-refresh disease result if currently shown to trigger translation in new language
     // We cannot automatically re-run AI inference without the user knowing, so we just clear it or let it be.
     // However, updating the chat greeting is a good idea.
     if (typeof chatHistory !== 'undefined' && chatHistory.length <= 1) {
         clearChat();
     }
-    
+
     // Refresh dynamic content instantly
     if (AppState.currentScreen === 'screenIoT' && typeof fetchIoTData === 'function') {
         fetchIoTData();
@@ -302,7 +311,7 @@ function setLanguage(lang) {
 
 function applyLanguage(lang) {
     const dict = TRANSLATIONS[lang] || TRANSLATIONS.en;
-    
+
     // Elements with data-i18n
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -337,9 +346,9 @@ function applyLanguage(lang) {
     if (meta) {
         const langCodeEl = document.getElementById('langCode');
         if (langCodeEl) langCodeEl.textContent = meta.name;
-        
+
         const langIconEl = document.querySelector('.lang-icon');
-        if (langIconEl) langIconEl.textContent = meta.flag;
+        // keep svg icon intact
     }
 
     // Update active dropdown item
@@ -455,9 +464,9 @@ function resetDetection() {
     ===================================================== */
 // Resolve API base from (in order): injected runtime config, meta tag, or same-origin
 const API_BASE = (typeof window.API_BASE !== 'undefined' && window.API_BASE) ||
-     (typeof window.__API_BASE__ !== 'undefined' && window.__API_BASE__) ||
-     document.querySelector('meta[name="api-base"]')?.content ||
-     (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:5000' : '');
+    (typeof window.__API_BASE__ !== 'undefined' && window.__API_BASE__) ||
+    document.querySelector('meta[name="api-base"]')?.content ||
+    (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:5000' : '');
 
 
 
@@ -493,18 +502,18 @@ async function analyzeImage() {
         const file = await getCurrentImageFile();
         const fd = new FormData();
         fd.append('image', file);
-        
+
         // ADD LANGUAGE
         const plainLangName = AppState.currentLang === 'hi' ? 'Hindi' : AppState.currentLang === 'kn' ? 'Kannada' : 'English';
         fd.append('language', plainLangName);
 
-        const res = await fetch(`${API_BASE}/detect`, { method:'POST', body:fd });
+        const res = await fetch(`${API_BASE}/detect`, { method: 'POST', body: fd });
         const data = await res.json();
         hideLoading();
 
         AppState.resultSource = 'disease';
         if (res.ok && data.status === 'clear' && data.prediction_results) {
-            
+
             // Update scan count
             const userStr = localStorage.getItem('agri_active_user');
             if (userStr) {
@@ -517,7 +526,7 @@ async function analyzeImage() {
                         users[user.phone].scanCount = user.scanCount;
                         localStorage.setItem('agri_users_db', JSON.stringify(users));
                     }
-                } catch(e) {}
+                } catch (e) { }
             }
 
             renderRealDiseaseResult(data);
@@ -527,7 +536,7 @@ async function analyzeImage() {
             renderErrorResult(data.error || 'Analysis failed. Please try again.');
         }
         navigateTo('screenResult');
-    } catch(err) {
+    } catch (err) {
         hideLoading();
         renderErrorResult('Server unreachable. Please check your connection and try again.');
     }
@@ -539,7 +548,6 @@ function renderRealDiseaseResult(data) {
     const disease = pr.disease;
     const conf = pr.confidence;
     const isHealthy = disease === 'Healthy';
-    const emoji = isHealthy ? '✅' : '🍂';
     const type = isHealthy ? 'success' : 'danger';
 
     let advisoryHtml = '';
@@ -548,113 +556,148 @@ function renderRealDiseaseResult(data) {
         advisoryHtml = `
             <div class="advisory-grid">
                 <div class="advisory-card advisory-recovery">
-                    <div class="advisory-icon">⚡</div>
-                    <h4>Quick Recovery</h4>
+                    <div class="advisory-card-header">
+                        <span class="advisory-icon-svg">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        </span>
+                        <h4>Immediate Recovery</h4>
+                    </div>
                     <ul>${g.recovery.map(i => `<li>${i}</li>`).join('')}</ul>
                 </div>
                 <div class="advisory-card advisory-organic">
-                    <div class="advisory-icon">🌿</div>
-                    <h4>Organic Cure</h4>
+                    <div class="advisory-card-header">
+                        <span class="advisory-icon-svg">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"></path><path d="M10 20c5.5-2.5.8-6.4 3-10"></path><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4.1 5.5.8z"></path><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"></path></svg>
+                        </span>
+                        <h4>Biological & Organic Controls</h4>
+                    </div>
                     <ul>${g.organic.map(i => `<li>${i}</li>`).join('')}</ul>
                 </div>
                 <div class="advisory-card advisory-chemical">
-                    <div class="advisory-icon">🧪</div>
-                    <h4>Chemical Info</h4>
+                    <div class="advisory-card-header">
+                        <span class="advisory-icon-svg">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31L4.69 18.5a2 2 0 0 0 1.74 3h11.14a2 2 0 0 0 1.74-3L14 9.31V2"></path><line x1="8.5" y1="2" x2="15.5" y2="2"></line><line x1="7" y1="14" x2="17" y2="14"></line></svg>
+                        </span>
+                        <h4>Chemical Therapeutics</h4>
+                    </div>
                     <ul>${g.chemical.map(i => `<li>${i}</li>`).join('')}</ul>
                 </div>
                 <div class="advisory-card advisory-prevention">
-                    <div class="advisory-icon">🛡️</div>
-                    <h4>Prevention</h4>
+                    <div class="advisory-card-header">
+                        <span class="advisory-icon-svg">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </span>
+                        <h4>Field Hygiene & Prevention</h4>
+                    </div>
                     <ul>${g.prevention.map(i => `<li>${i}</li>`).join('')}</ul>
                 </div>
             </div>
         `;
     } catch (e) {
-        // Fallback to plain text if JSON parsing fails
-        advisoryHtml = `<div class="result-card"><div class="result-card-header">🌿 AI Advisory</div><div class="result-card-body" style="white-space:pre-wrap">${data.guidance}</div></div>`;
+        advisoryHtml = `<div class="result-card"><div class="result-card-header">Agronomic Advisory</div><div class="result-card-body" style="white-space:pre-wrap">${data.guidance}</div></div>`;
     }
 
     const body = document.getElementById('resultBody');
     const title = document.getElementById('resultTitle');
-    title.textContent = isHealthy ? 'Analysis Complete' : 'Disease Detected';
+    title.textContent = isHealthy ? 'Specimen Evaluation' : 'Diagnostic Report';
+
+    const statusIcon = isHealthy
+        ? `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`
+        : `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
 
     body.innerHTML = `
         <div class="result-hero result-${type}">
-            <div class="result-emoji">${emoji}</div>
-            <div class="result-name">${disease}</div>
-            <div class="result-confidence">${conf}% Confidence</div>
+            <div class="result-icon-ring">${statusIcon}</div>
+            <div class="result-meta-block">
+                <span class="result-status-tag">${isHealthy ? 'Pathogen Negative' : 'Pathogen Detected'}</span>
+                <h3 class="result-name">${disease}</h3>
+                <span class="result-confidence-badge">${conf}% Neural Confidence</span>
+            </div>
         </div>
         
-        <div class="result-card" style="margin:1rem 0">
-            <div class="result-card-header">📊 Analysis Metrics</div>
+        <div class="result-card" style="margin:1.25rem 0">
+            <div class="result-card-header">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <span>Diagnostic Metrics & Field Telemetry</span>
+            </div>
             <div class="result-card-body">
-                <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem">
-                    <span>AI Confidence:</span>
-                    <span style="font-weight:700; color:var(--g-600)">${conf}%</span>
+                <div class="metric-line">
+                    <span class="metric-label">Neural Confidence Score</span>
+                    <span class="metric-val" style="color:var(--g-700)">${conf}%</span>
                 </div>
-                <div style="background:rgba(0,0,0,0.05); border-radius:10px; height:8px; overflow:hidden; margin-bottom:1rem">
-                    <div style="height:100%; width:${conf}%; background:var(--g-500)"></div>
+                <div class="metric-bar-track">
+                    <div class="metric-bar-fill" style="width:${conf}%; background:var(--g-700)"></div>
                 </div>
                 
-                <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem">
-                    <span>Soil Moisture (IoT):</span>
-                    <span style="font-weight:700; color:var(--accent-sky)">${(AppState.lastMoisture || 0).toFixed(2)}%</span>
+                <div class="metric-line" style="margin-top:1rem">
+                    <span class="metric-label">Live Soil Moisture (IoT Station)</span>
+                    <span class="metric-val" style="color:var(--accent-sky)">${(AppState.lastMoisture || 0).toFixed(2)}%</span>
                 </div>
-                <div style="background:rgba(0,0,0,0.05); border-radius:10px; height:8px; overflow:hidden">
-                    <div style="height:100%; width:${AppState.lastMoisture || 0}%; background:var(--accent-sky)"></div>
+                <div class="metric-bar-track">
+                    <div class="metric-bar-fill" style="width:${AppState.lastMoisture || 0}%; background:var(--accent-sky)"></div>
                 </div>
             </div>
         </div>
 
-        <h3 style="margin: 2rem 0 1rem; color: var(--n-900); font-weight: 800;">Expert Treatment Plan</h3>
+        <h3 class="section-subheading">Agronomic Treatment Protocol</h3>
         ${advisoryHtml}
 
-        <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 0.75rem;">
-            <button class="btn-glow btn-full" style="width:100%" onclick="navigateTo('screenDiseaseDetect')">Scan Another Leaf</button>
-            <button class="btn-ghost btn-full" style="width:100%" onclick="navigateTo('screenHome')">Back to Home</button>
+        <div class="result-actions-strip">
+            <button class="btn-primary" onclick="navigateTo('screenDiseaseDetect')">Scan Another Foliage Specimen</button>
+            <button class="btn-secondary" onclick="navigateTo('screenHome')">Return to Station Hub</button>
         </div>
     `;
 }
-
 
 function renderBlurryResult(msg) {
     const body = document.getElementById('resultBody');
     document.getElementById('resultTitle').textContent = 'Image Quality Issue';
     body.innerHTML = `
         <div class="result-hero result-danger">
-            <div class="result-emoji">⚠️</div>
-            <div class="result-name">Image Too Blurry</div>
-            <div class="result-confidence">${msg}</div>
+            <div class="result-icon-ring">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            </div>
+            <div class="result-meta-block">
+                <span class="result-status-tag" style="background:#fef2f2;color:#b91c1c;">Quality Rejected</span>
+                <h3 class="result-name">Image Resolution Defect</h3>
+                <p class="result-confidence">${msg}</p>
+            </div>
         </div>
-        <div class="result-card">
-            <div class="result-card-header">💡 Tips for a better photo</div>
-            <div class="result-card-body"><ul>
-                <li>Hold your phone steady</li>
-                <li>Ensure good lighting</li>
-                <li>Get close to the leaf (15-20 cm)</li>
-                <li>Tap on the leaf to focus before shooting</li>
-            </ul></div>
+        <div class="result-card" style="margin-top:1.25rem;">
+            <div class="result-card-header">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>Imaging Best Practices</span>
+            </div>
+            <div class="result-card-body">
+                <ul class="sop-list">
+                    <li>Hold camera steady with both hands or rest on a surface.</li>
+                    <li>Utilize diffused natural daylight; avoid deep shadows.</li>
+                    <li>Frame the specimen at 15–20 cm distance to fill the sensor.</li>
+                    <li>Ensure macro focal point is centered on symptomatic foliage lesions.</li>
+                </ul>
+            </div>
         </div>
-        <button class="btn-glow btn-full" style="margin-top:1.5rem;width:100%" onclick="navigateTo('screenDiseaseDetect')">Try Again</button>
+        <button class="btn-primary btn-full" style="margin-top:1.5rem;width:100%" onclick="navigateTo('screenDiseaseDetect')">Re-capture Specimen</button>
     `;
 }
 
 function renderErrorResult(msg) {
     const body = document.getElementById('resultBody');
-    document.getElementById('resultTitle').textContent = 'Error';
+    document.getElementById('resultTitle').textContent = 'Analysis Interrupted';
     body.innerHTML = `
         <div class="result-hero result-danger">
-            <div class="result-emoji">❌</div>
-            <div class="result-name">Analysis Failed</div>
-            <div class="result-confidence">${msg}</div>
+            <div class="result-icon-ring">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+            </div>
+            <div class="result-meta-block">
+                <span class="result-status-tag" style="background:#fef2f2;color:#b91c1c;">Service Exception</span>
+                <h3 class="result-name">Analysis Failed</h3>
+                <p class="result-confidence">${msg}</p>
+            </div>
         </div>
-        <button class="btn-glow btn-full" style="margin-top:1.5rem;width:100%" onclick="navigateTo('screenDiseaseDetect')">Try Again</button>
+        <button class="btn-primary btn-full" style="margin-top:1.5rem;width:100%" onclick="navigateTo('screenDiseaseDetect')">Try Again</button>
     `;
 }
-
-
-
-/* --- Crop recommendation feature removed --- */
 
 function updateTempDisplay(v) {
     const el = document.getElementById('tempValue');
@@ -690,12 +733,12 @@ function initVoiceAssistant() {
     if (window.recognition) {
         window.recognition.stop();
     }
-    
+
     // Only reset elements if they exist (screen is active)
     const transcriptEl = document.getElementById('voiceTranscript');
     const responseEl = document.getElementById('voiceResponse');
     const voiceBtnEl = document.getElementById('voiceBtn');
-    
+
     if (transcriptEl) transcriptEl.textContent = 'Click the microphone to start speaking...';
     if (responseEl) responseEl.textContent = '';
     if (voiceBtnEl) voiceBtnEl.classList.remove('active');
@@ -758,7 +801,7 @@ const VOICE_LANGUAGES = {
 // Initialize voice assistant when navigating to voice screen
 if (typeof navigateTo !== 'undefined') {
     const originalNavigateTo2 = navigateTo;
-    navigateTo = function(screenId) {
+    navigateTo = function (screenId) {
         originalNavigateTo2(screenId);
         if (screenId === 'screenVoiceAssistant') {
             initializeVoiceAssistant();
@@ -779,7 +822,7 @@ function changeVoiceLanguage() {
     const langSelect = document.getElementById('voiceLangSelect');
     currentVoiceLang = langSelect.value;
     updateVoiceSuggestions();
-    
+
     // Stop current recognition if running
     if (isListening) {
         stopVoiceRecognition();
@@ -790,9 +833,9 @@ function updateVoiceSuggestions() {
     const suggestions = document.getElementById('voiceSuggestions');
     if (!suggestions) return;
     const lang = VOICE_LANGUAGES[currentVoiceLang];
-    
+
     let suggestionTexts = [];
-    
+
     if (currentVoiceLang === 'en-US') {
         suggestionTexts = [
             'What diseases affect tomato plants?',
@@ -815,8 +858,8 @@ function updateVoiceSuggestions() {
             'ಮಣ್ಣಿನ ಆರೋಗ್ಯವನ್ನು ಹೇಗೆ ಸುಧಾರಿಸಬಹುದು?'
         ];
     }
-    
-    suggestions.innerHTML = suggestionTexts.map(text => 
+
+    suggestions.innerHTML = suggestionTexts.map(text =>
         `<button class="suggestion-btn" onclick="speakSuggestion('${text}')">${text}</button>`
     ).join('');
 }
@@ -824,7 +867,7 @@ function updateVoiceSuggestions() {
 function speakSuggestion(text) {
     // Set the transcript
     document.getElementById('userTranscript').textContent = text;
-    
+
     // Process the query
     processVoiceQuery(text);
 }
@@ -851,34 +894,34 @@ function startVoiceRecognition() {
     // Create new recognition instance
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     voiceRecognition = new SpeechRecognition();
-    
+
     // Configure recognition
     voiceRecognition.lang = currentVoiceLang;
     voiceRecognition.continuous = false;
     voiceRecognition.interimResults = false;
     voiceRecognition.maxAlternatives = 1;
 
-    voiceRecognition.onstart = function() {
+    voiceRecognition.onstart = function () {
         isListening = true;
         updateVoiceUI();
         document.getElementById('voiceStatus').textContent = 'Listening... Speak now';
     };
 
-    voiceRecognition.onresult = function(event) {
+    voiceRecognition.onresult = function (event) {
         const transcript = event.results[0][0].transcript;
         document.getElementById('userTranscript').textContent = transcript;
-        
+
         // Process the voice query
         processVoiceQuery(transcript);
     };
 
-    voiceRecognition.onerror = function(event) {
+    voiceRecognition.onerror = function (event) {
         console.error('Speech recognition error:', event.error);
         document.getElementById('voiceStatus').textContent = 'Error: ' + event.error;
         stopVoiceRecognition();
     };
 
-    voiceRecognition.onend = function() {
+    voiceRecognition.onend = function () {
         isListening = false;
         updateVoiceUI();
         if (!document.getElementById('userTranscript').textContent) {
@@ -907,7 +950,7 @@ function updateVoiceUI() {
     const voiceAnim = document.getElementById('voiceAnim');
     const voiceBtnIcon = document.getElementById('voiceBtnIcon');
     const voiceBtnText = document.getElementById('voiceBtnText');
-    
+
     if (isListening) {
         voiceBtn.classList.add('listening');
         voiceAnim.classList.add('listening');
@@ -916,7 +959,7 @@ function updateVoiceUI() {
     } else {
         voiceBtn.classList.remove('listening');
         voiceAnim.classList.remove('listening');
-        voiceBtnIcon.textContent = '🎤';
+        // voice mic icon
         voiceBtnText.textContent = 'Start Listening';
     }
 }
@@ -924,12 +967,12 @@ function updateVoiceUI() {
 function processVoiceQuery(query) {
     const responseElement = document.getElementById('aiResponse');
     responseElement.textContent = 'Processing your question...';
-    
+
     // Convert query to lowercase for easier matching
     const lowerQuery = query.toLowerCase();
-    
+
     let response = '';
-    
+
     // Disease-related queries
     if (lowerQuery.includes('disease') || lowerQuery.includes('बीमारी') || lowerQuery.includes('ರೋಗ')) {
         if (lowerQuery.includes('tomato') || lowerQuery.includes('टमाटर') || lowerQuery.includes('ಟೊಮೆಟೊ')) {
@@ -940,8 +983,8 @@ function processVoiceQuery(query) {
             response = 'I can help you identify diseases in tomato, potato, and other crops. Please specify which crop you\'re asking about.';
         }
     }
-    
-    
+
+
     // Treatment queries
     else if (lowerQuery.includes('treat') || lowerQuery.includes('treatment') || lowerQuery.includes('इलाज') || lowerQuery.includes('ಚಿಕಿತ್ಸೆ')) {
         if (lowerQuery.includes('mildew') || lowerQuery.includes('powdery') || lowerQuery.includes('मिल्ड्यू') || lowerQuery.includes('ಮಿಲ್ಡ್ಯೂ')) {
@@ -952,20 +995,20 @@ function processVoiceQuery(query) {
             response = 'I can provide treatment advice for common plant diseases. Please specify the disease you\'re dealing with.';
         }
     }
-    
+
     // Weather queries
     else if (lowerQuery.includes('weather') || lowerQuery.includes('मौसम') || lowerQuery.includes('ಹವಾಮಾನ')) {
         response = 'I can help you understand weather impacts on farming. For current weather data, please check your local weather service or use our weather integration feature.';
     }
-    
+
     // Default response
     else {
         response = 'I\'m here to help with farming questions! You can ask me about plant diseases, treatments, weather, or general farming advice.';
     }
-    
+
     // Speak the response
     speakResponse(response);
-    
+
     // Display the response
     responseElement.textContent = response;
 }
@@ -975,7 +1018,7 @@ function getDiseaseInfo(crop) {
         tomato: 'Common tomato diseases include: 1) Bacterial Spot - treat with copper fungicide, 2) Early Blight - use fungicide sprays, 3) Fusarium Wilt - improve drainage and use resistant varieties.',
         potato: 'Common potato diseases include: 1) Late Blight - apply copper fungicide, 2) Early Blight - use preventive fungicide sprays, 3) Potato Scab - maintain proper soil pH.'
     };
-    
+
     return diseases[crop] || 'I have information about diseases affecting various crops. Please specify the crop.';
 }
 
@@ -987,30 +1030,30 @@ function speakResponse(text) {
 
     // Stop any ongoing speech
     speechSynthesis.cancel();
-    
+
     const utterance = new SpeechSynthesisUtterance(text);
-    
+
     // Set language for speech synthesis
     utterance.lang = currentVoiceLang;
-    
+
     // Adjust voice settings
     utterance.rate = 0.9;
     utterance.pitch = 1;
     utterance.volume = 0.8;
-    
+
     // Try to find a suitable voice for the language
     const voices = speechSynthesis.getVoices();
     const suitableVoice = voices.find(voice => voice.lang.startsWith(currentVoiceLang.split('-')[0]));
     if (suitableVoice) {
         utterance.voice = suitableVoice;
     }
-    
+
     speechSynthesis.speak(utterance);
 }
 
 // Load voices when they become available
 if ('speechSynthesis' in window) {
-    speechSynthesis.onvoiceschanged = function() {
+    speechSynthesis.onvoiceschanged = function () {
         console.log('Voices loaded:', speechSynthesis.getVoices().length);
     };
 }
@@ -1045,7 +1088,7 @@ Rules:
 3. STRUCTURE: Use markdown-like formatting (bullet points, bold text) for readability.
 4. LANGUAGE: You MUST ALWAYS respond entirely in English.
 5. LIMITS: STRICTLY DECLINE ANY non-agricultural, non-rural, or programming/coding topics. If asked to write code or about unrelated subjects, refuse and remind the user that you only answer agriculture-related questions.
-6. VISUALS: Always start with a relevant emoji. Use '🌿' for general farming, '📸' for detection, '🐮' for livestock, etc.`
+6. STYLE: Maintain a precise, professional agronomic tone with bullet points for readability.`
     }
 ];
 
@@ -1071,9 +1114,12 @@ Rules:
 3. STRUCTURE: Use markdown-like formatting (bullet points, bold text) for readability.
 4. LANGUAGE: You MUST ALWAYS respond entirely in ${langName}. Do not use English unless the selected language is English.
 5. LIMITS: STRICTLY DECLINE ANY non-agricultural, non-rural, or programming/coding topics. If asked to write code or about unrelated subjects, refuse and remind the user that you only answer agriculture-related questions.
-6. VISUALS: Always start with a relevant emoji. Use '🌿' for general farming, '📸' for detection, '🐮' for livestock, etc.`;
+6. STYLE: Maintain a precise, professional agronomic tone with bullet points for readability.`;
     }
 }
+
+const CHAT_ICON_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
+const CHAT_CLOSE_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
 
 let chatOpen = false;
 let chatIsLoading = false;
@@ -1091,9 +1137,9 @@ function toggleChatbot() {
         panel.classList.add('chat-open');
         panel.style.display = 'flex';
         if (btn) {
-            btn.textContent = '✕';
+            btn.innerHTML = CHAT_CLOSE_SVG;
             btn.setAttribute('aria-expanded', 'true');
-            btn.style.fontSize = '1.2rem';
+            btn.setAttribute('title', 'Close Consultation');
         }
         const input = document.getElementById('chatInput');
         if (input) input.focus({ preventScroll: true });
@@ -1106,9 +1152,9 @@ function toggleChatbot() {
         // keep a short timeout before hiding to allow animation
         setTimeout(() => { panel.style.display = 'none'; }, 260);
         if (btn) {
-            btn.textContent = '💬';
+            btn.innerHTML = CHAT_ICON_SVG;
             btn.setAttribute('aria-expanded', 'false');
-            btn.style.fontSize = '1.6rem';
+            btn.setAttribute('title', 'Open Agronomic Consultation');
         }
     }
 }
@@ -1131,8 +1177,8 @@ function clearChat() {
     // Clear messages UI
     const container = document.getElementById('chatMessages');
     const dict = TRANSLATIONS[AppState.currentLang] || TRANSLATIONS.en;
-    const greetingMsg = dict.chatGreeting || "👋 Hi! I'm your AgriSense AI assistant. Ask me anything about crops, diseases, or farming!";
-    
+    const greetingMsg = dict.chatGreeting || "Welcome to AgriSense AI. How may I assist your crop diagnostics or field management today?";
+
     if (container) {
         container.innerHTML = `
             <div class="chat-msg ai-msg">
@@ -1155,7 +1201,7 @@ function sendChatSuggestion(text) {
 async function sendChatMessage() {
     if (chatIsLoading) return;
     const input = document.getElementById('chatInput');
-    const msg   = input.value.trim();
+    const msg = input.value.trim();
     if (!msg) return;
     input.value = '';
 
@@ -1255,7 +1301,7 @@ function appendChatMsg(text, role, isTyping = false) {
 
     const div = document.createElement('div');
     div.id = id;
-    
+
     if (role === 'user') {
         div.className = 'chat-msg user-msg';
         div.style.cssText = 'background:var(--g-600); color:white; border-radius:18px 18px 4px 18px; padding:12px 16px; font-size:0.95rem; max-width:85%; align-self:flex-end; box-shadow:var(--sh-md);';
@@ -1330,22 +1376,21 @@ function getLocalFallback(q, isApiError = false) {
 
     for (const [disease, info] of Object.entries(LOCAL_ADVISORY)) {
         if (lower.includes(disease.toLowerCase())) {
-            return `🌿 ${disease}:\n• Recovery: ${info.recovery}\n• Organic: ${info.organic}\n• Chemical: ${info.chemical}\n• Prevention: ${info.prevention}`;
+            return `${disease} Management:\n• Immediate Recovery: ${info.recovery}\n• Biological & Organic: ${info.organic}\n• Chemical Therapeutics: ${info.chemical}\n• Cultural Prevention: ${info.prevention}`;
         }
     }
-    if (lower.includes('organic') || lower.includes('pest')) return '🌿 Organic pest control: Neem oil, garlic spray, yellow sticky traps, Bacillus subtilis, companion planting.';
-    if (lower.includes('fertilizer') || lower.includes('npk')) return '🧪 NPK Guide:\n• N (Urea): leaf growth\n• P (DAP): root development\n• K (MOP): fruit quality & disease resistance';
-    if (lower.includes('irrigat') || lower.includes('water')) return '💧 Best irrigation: Drip (most efficient), Sprinkler (vegetables), Furrow (row crops). Water early morning.';
-    if (lower.match(/^(hi|hello|hey|namaste)/)) return '👋 Hello! I\'m AgriBot — your farming assistant. Ask me anything about crops, diseases, soil, fertilizers, or irrigation!';
+    if (lower.includes('organic') || lower.includes('pest')) return 'Organic Pest Management: Cold-pressed neem oil (0.5%), Bacillus thuringiensis, yellow bio-traps, and beneficial predator conservation.';
+    if (lower.includes('fertilizer') || lower.includes('npk')) return 'NPK Agronomic Guidelines:\n• N (Nitrogen/Urea): Vegetative canopy growth\n• P (Phosphorus/DAP): Root-zone establishment and flowering\n• K (Potassium/MOP): Fruit sizing, brix value, and drought resistance';
+    if (lower.includes('irrigat') || lower.includes('water')) return 'Irrigation Standards: Drip emitters at root crown offer >90% water efficiency. Water during early morning to minimize foliar wetness and fungal sporulation.';
+    if (lower.match(/^(hi|hello|hey|namaste)/)) return 'Welcome to AgriSense Agronomic Intelligence. How can I assist with your crop diagnostics, soil telemetry, or integrated pest management today?';
 
-    // Default — different message depending on context
     if (!navigator.onLine) {
-        return '📴 You\'re offline. Try asking about diseases or treatments — I have some local knowledge available!';
+        return 'System is offline. Local diagnostic references for supported pathogens remain accessible.';
     }
     if (isApiError) {
-        return '⚠️ AI service is temporarily unavailable. Try asking about a specific disease name — I can answer from local knowledge!';
+        return 'The cloud inference service is momentarily rate-limited. Local agronomic references are active.';
     }
-    return '🌱 I didn\'t catch that. Try asking something like:\n• "How to treat late blight?"\n• "Organic pest control tips?"\n• "How to improve soil health?"';
+    return 'Please state your agronomic inquiry. For example:\n• "How to treat late blight in tomatoes?"\n• "Biological pest control for whiteflies"\n• "Recommended soil moisture for orchard crops"';
 }
 
 /* =====================================================
@@ -1382,7 +1427,7 @@ async function fetchIoTData() {
 function setIoTOffline(lastUpdated = '--:--:--') {
     const dict = TRANSLATIONS[AppState.currentLang] || TRANSLATIONS.en;
     const offlineText = dict.iotOffline || 'Offline';
-    
+
     const valEl = document.getElementById('moistureValue');
     const updateEl = document.getElementById('lastUpdated');
     const connStatus = document.getElementById('connectionStatus');
@@ -1414,7 +1459,12 @@ function setIoTOffline(lastUpdated = '--:--:--') {
     }
     if (scoreEl) scoreEl.textContent = '--';
     if (waterFill) {
-        waterFill.style.top = '100%';
+        waterFill.style.top = '108%';
+        waterFill.style.opacity = '0';
+    }
+    const gaugeTrack = document.getElementById('moistureGaugeTrack');
+    if (gaugeTrack) {
+        gaugeTrack.classList.remove('state-dry', 'state-opt', 'state-wet');
     }
     if (ring) {
         const circ = 2 * Math.PI * 34;
@@ -1423,7 +1473,7 @@ function setIoTOffline(lastUpdated = '--:--:--') {
         ring.style.stroke = 'var(--n-300)';
     }
     if (banner) banner.classList.add('hidden');
-    
+
     // Clear history and stats to prevent showing old data
     if (typeof IoTHistory !== 'undefined') {
         IoTHistory = [];
@@ -1436,12 +1486,12 @@ function formatLocalTime(utcTimeStr) {
     if (!utcTimeStr || utcTimeStr === '--:--:--' || utcTimeStr === 'Never') return utcTimeStr;
     const parts = utcTimeStr.split(':');
     if (parts.length !== 3) return utcTimeStr;
-    
+
     const d = new Date();
     d.setUTCHours(parseInt(parts[0], 10));
     d.setUTCMinutes(parseInt(parts[1], 10));
     d.setUTCSeconds(parseInt(parts[2], 10));
-    
+
     let h = d.getHours();
     const m = String(d.getMinutes()).padStart(2, '0');
     const s = String(d.getSeconds()).padStart(2, '0');
@@ -1449,7 +1499,7 @@ function formatLocalTime(utcTimeStr) {
     h = h % 12;
     h = h ? h : 12;
     const hStr = String(h).padStart(2, '0');
-    
+
     return `${hStr}:${m}:${s} ${ampm}`;
 }
 
@@ -1457,20 +1507,20 @@ function updateIoTUI(data) {
     const moisture = isNaN(parseFloat(data.moisture)) ? 0 : parseFloat(data.moisture);
     const rawLastUpdated = data.last_updated || '--:--:--';
     const dict = TRANSLATIONS[AppState.currentLang] || TRANSLATIONS.en;
-    
+
     if (rawLastUpdated === 'Never' || data.status === 'offline') {
         setIoTOffline(rawLastUpdated);
         return;
     }
-    
+
     const lastUpdated = formatLocalTime(rawLastUpdated);
-    
-    // Update Value & Last Updated
-    const valEl = document.getElementById('moistureValue');
+
+    // Update Value with Smooth Count-Up Animation
+    animateMoistureNumber(moisture);
+
     const updateEl = document.getElementById('lastUpdated');
     const connStatus = document.getElementById('connectionStatus');
-    
-    if (valEl) valEl.textContent = Math.round(moisture);
+
     if (updateEl) updateEl.textContent = lastUpdated;
     if (connStatus) {
         connStatus.textContent = dict.iotLive || 'Live';
@@ -1478,34 +1528,56 @@ function updateIoTUI(data) {
         connStatus.style.color = 'var(--g-600)';
     }
 
-    // Update Gauge
+    // Update Fluid Gauge & Dynamic State Theme
     const waterFill = document.getElementById('moistureWaterFill');
+    const gaugeTrack = document.getElementById('moistureGaugeTrack');
     if (waterFill) {
-        const topValue = 100 - moisture;
-        waterFill.style.top = topValue + '%';
+        const clamped = Math.max(0, Math.min(100, moisture));
+        if (clamped <= 0) {
+            waterFill.style.top = '108%';
+            waterFill.style.opacity = '0';
+        } else {
+            waterFill.style.opacity = '1';
+            const topValue = 100 - clamped;
+            waterFill.style.top = topValue + '%';
+        }
     }
+
+    if (gaugeTrack) {
+        gaugeTrack.classList.remove('state-dry', 'state-opt', 'state-wet');
+        if (moisture < 30) {
+            gaugeTrack.classList.add('state-dry');
+        } else if (moisture <= 75) {
+            gaugeTrack.classList.add('state-opt');
+        } else {
+            gaugeTrack.classList.add('state-wet');
+        }
+    }
+
+    // Trigger Telemetry Synchronize Ping Ring
+    triggerGaugePulse();
 
     // Update Status Badge & Recommendation
     const badge = document.getElementById('moistureStatusBadge');
     const recBox = document.getElementById('iotRecommendation');
-    
+
     if (badge) {
         badge.className = 'status-badge'; // reset
         if (moisture < 30) {
             badge.classList.add('status-dry');
             badge.textContent = dict.iotDry || 'Too Dry';
-            if (recBox) recBox.textContent = dict.iotDryRec || '🚨 Soil moisture is low! Start irrigation immediately to prevent crop wilting.';
+            if (recBox) recBox.textContent = dict.iotDryRec || 'Soil moisture is critically low. Initiate irrigation immediately.';
         } else if (moisture >= 30 && moisture <= 75) {
             badge.classList.add('status-good');
             badge.textContent = dict.iotOpt || 'Optimal';
-            if (recBox) recBox.textContent = dict.iotOptRec || '✅ Soil moisture is at an ideal level for most crops. No action needed.';
+            if (recBox) recBox.textContent = dict.iotOptRec || 'Soil moisture is at an ideal level for most crops. No action needed.';
         } else {
             badge.classList.add('status-wet');
             badge.textContent = dict.iotWet || 'Too Wet';
-            if (recBox) recBox.textContent = dict.iotWetRec || '⚠️ Soil is saturated. Stop irrigation and ensure proper drainage to avoid root rot.';
+            if (recBox) recBox.textContent = dict.iotWetRec || 'Soil is saturated. Stop irrigation and ensure proper drainage to avoid root rot.';
         }
     }
-    
+
     AppState.lastMoisture = moisture;
 
     // Enhanced features
@@ -1515,6 +1587,47 @@ function updateIoTUI(data) {
     drawMoistureChart();
     updateHealthScore(moisture);
     updateIoTAlert(moisture);
+}
+
+let moistureAnimFrame = null;
+
+function animateMoistureNumber(target) {
+    const valEl = document.getElementById('moistureValue');
+    if (!valEl) return;
+
+    if (moistureAnimFrame) cancelAnimationFrame(moistureAnimFrame);
+
+    const start = typeof AppState.lastMoisture === 'number' && !isNaN(AppState.lastMoisture) 
+        ? AppState.lastMoisture 
+        : (parseFloat(valEl.textContent) || 0);
+    const targetVal = Math.round(target);
+    const duration = 750;
+    const startTime = performance.now();
+
+    function step(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(start + (targetVal - start) * ease);
+        valEl.textContent = current;
+
+        if (progress < 1) {
+            moistureAnimFrame = requestAnimationFrame(step);
+        } else {
+            valEl.textContent = targetVal;
+            moistureAnimFrame = null;
+        }
+    }
+    moistureAnimFrame = requestAnimationFrame(step);
+}
+
+function triggerGaugePulse() {
+    const ring = document.getElementById('gaugePulseRing');
+    if (ring) {
+        ring.classList.remove('pulse-active');
+        void ring.offsetWidth; // Force reflow to re-trigger keyframe
+        ring.classList.add('pulse-active');
+    }
 }
 
 /* =====================================================
@@ -1529,7 +1642,7 @@ function updateIoTStats() {
     const maxEl = document.getElementById('moistureMax');
     const avgEl = document.getElementById('moistureAvg');
     const countEl = document.getElementById('moistureCount');
-    
+
     if (IoTHistory.length === 0) {
         if (minEl) minEl.textContent = '--';
         if (maxEl) maxEl.textContent = '--';
@@ -1540,7 +1653,7 @@ function updateIoTStats() {
     const min = Math.min(...IoTHistory);
     const max = Math.max(...IoTHistory);
     const avg = IoTHistory.reduce((a, b) => a + b, 0) / IoTHistory.length;
-    
+
     if (minEl) minEl.textContent = min.toFixed(2);
     if (maxEl) maxEl.textContent = max.toFixed(2);
     if (avgEl) avgEl.textContent = avg.toFixed(2);
@@ -1557,22 +1670,22 @@ function drawMoistureChart() {
     canvas.height = H;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, W, H);
-    
+
     if (IoTHistory.length < 2) return;
 
-    const dryY  = H - (30 / 100) * H;
-    const wetY  = H - (75 / 100) * H;
+    const dryY = H - (30 / 100) * H;
+    const wetY = H - (75 / 100) * H;
 
     // Zone backgrounds
-    ctx.fillStyle = 'rgba(239,68,68,0.07)';  ctx.fillRect(0, dryY, W, H - dryY);
-    ctx.fillStyle = 'rgba(34,197,94,0.07)';  ctx.fillRect(0, wetY, W, dryY - wetY);
+    ctx.fillStyle = 'rgba(239,68,68,0.07)'; ctx.fillRect(0, dryY, W, H - dryY);
+    ctx.fillStyle = 'rgba(34,197,94,0.07)'; ctx.fillRect(0, wetY, W, dryY - wetY);
     ctx.fillStyle = 'rgba(14,165,233,0.07)'; ctx.fillRect(0, 0, W, wetY);
 
     // Threshold lines
     ctx.setLineDash([5, 5]);
     ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(239,68,68,0.35)';  ctx.beginPath(); ctx.moveTo(0,dryY); ctx.lineTo(W,dryY); ctx.stroke();
-    ctx.strokeStyle = 'rgba(14,165,233,0.35)'; ctx.beginPath(); ctx.moveTo(0,wetY); ctx.lineTo(W,wetY); ctx.stroke();
+    ctx.strokeStyle = 'rgba(239,68,68,0.35)'; ctx.beginPath(); ctx.moveTo(0, dryY); ctx.lineTo(W, dryY); ctx.stroke();
+    ctx.strokeStyle = 'rgba(14,165,233,0.35)'; ctx.beginPath(); ctx.moveTo(0, wetY); ctx.lineTo(W, wetY); ctx.stroke();
     ctx.setLineDash([]);
 
     const stepX = (IoTHistory.length > 1) ? W / (IoTHistory.length - 1) : W;
@@ -1615,26 +1728,26 @@ function updateHealthScore(moisture) {
     let score, grade, tip;
     if (moisture >= 40 && moisture <= 65) {
         score = 90 + Math.round(Math.random() * 9);
-        grade = '🌟 Excellent'; tip = 'Perfect moisture balance. Crops are thriving in ideal conditions!';
+        grade = 'Optimal'; tip = 'Perfect moisture balance. Crops are thriving in ideal conditions!';
     } else if (moisture >= 30 && moisture < 40) {
         score = 65 + Math.round((moisture - 30) * 2.5);
-        grade = '✅ Good'; tip = 'Slightly low. Consider a light irrigation soon.';
+        grade = 'Adequate'; tip = 'Slightly low. Consider a light irrigation soon.';
     } else if (moisture > 65 && moisture <= 75) {
         score = 70 + Math.round((75 - moisture) * 2);
-        grade = '✅ Good'; tip = 'Slightly above optimal. Ensure good drainage is in place.';
+        grade = 'Adequate'; tip = 'Slightly above optimal. Ensure good drainage is in place.';
     } else if (moisture < 30) {
         score = Math.max(10, moisture * 2);
-        grade = '🔴 Critical'; tip = 'Soil is very dry! Irrigate immediately to prevent crop stress.';
+        grade = 'Critical Deficit'; tip = 'Soil is very dry! Irrigate immediately to prevent crop stress.';
     } else {
         score = Math.max(20, 100 - moisture);
-        grade = '⚠️ Poor'; tip = 'Soil oversaturated. Stop watering and check drainage channels.';
+        grade = 'Saturated / Waterlogged'; tip = 'Soil oversaturated. Stop watering and check drainage channels.';
     }
     score = Math.min(100, score);
 
     const scoreEl = document.getElementById('healthScore');
     const gradeEl = document.getElementById('healthGrade');
-    const tipEl   = document.getElementById('healthTip');
-    const ring    = document.getElementById('healthRingFill');
+    const tipEl = document.getElementById('healthTip');
+    const ring = document.getElementById('healthRingFill');
 
     if (scoreEl) scoreEl.textContent = score;
     if (gradeEl) {
@@ -1648,7 +1761,7 @@ function updateHealthScore(moisture) {
     if (tipEl) tipEl.textContent = tip;
     if (ring) {
         const circ = 2 * Math.PI * 34;
-        ring.style.strokeDasharray  = circ;
+        ring.style.strokeDasharray = circ;
         ring.style.strokeDashoffset = circ - (score / 100) * circ;
         ring.style.stroke = score >= 80 ? '#22c55e' : score >= 60 ? '#f59e0b' : '#ef4444';
     }
@@ -1656,22 +1769,22 @@ function updateHealthScore(moisture) {
 
 function updateIoTAlert(moisture) {
     const banner = document.getElementById('iotAlertBanner');
-    const icon   = document.getElementById('iotAlertIcon');
-    const title  = document.getElementById('iotAlertTitle');
-    const msg    = document.getElementById('iotAlertMsg');
+    const icon = document.getElementById('iotAlertIcon');
+    const title = document.getElementById('iotAlertTitle');
+    const msg = document.getElementById('iotAlertMsg');
     if (!banner) return;
     if (moisture < 20) {
         banner.classList.remove('hidden', 'alert-wet');
         banner.classList.add('alert-dry');
-        if (icon)  icon.textContent  = '🚨';
-        if (title) title.textContent = 'Critical: Soil Dangerously Dry!';
-        if (msg)   msg.textContent   = `Moisture at ${moisture}%. Immediate irrigation required. Crops may wilt within hours.`;
+        if (icon) icon.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+        if (title) title.textContent = 'Critical Soil Water Deficit';
+        if (msg) msg.textContent = `Root-zone moisture is at ${moisture}%. Immediate irrigation is required to avoid irreversible wilting.`;
     } else if (moisture > 85) {
         banner.classList.remove('hidden', 'alert-dry');
         banner.classList.add('alert-wet');
-        if (icon)  icon.textContent  = '🌊';
-        if (title) title.textContent = 'Warning: Soil Waterlogged!';
-        if (msg)   msg.textContent   = `Moisture at ${moisture}%. Risk of root rot. Stop irrigation and check drainage.`;
+        if (icon) icon.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>';
+        if (title) title.textContent = 'Soil Saturation & Hypoxia Risk';
+        if (msg) msg.textContent = `Root-zone moisture is at ${moisture}%. Halt irrigation immediately and verify trench drainage.`;
     } else {
         banner.classList.add('hidden');
     }
@@ -1680,40 +1793,62 @@ function updateIoTAlert(moisture) {
 async function fetchIoTWeather() {
     const content = document.getElementById('iotWeatherContent');
     if (!content) return;
-    content.innerHTML = '<p style="color:var(--n-400);font-size:0.9rem;text-align:center;padding:1rem 0;">📡 Detecting location...</p>';
+    content.innerHTML = '<p class="text-muted" style="text-align:center;padding:1rem 0;">Querying local weather telemetry...</p>';
     if (!navigator.geolocation) {
-        content.innerHTML = '<p style="color:var(--accent-warning);">Geolocation not supported.</p>';
+        content.innerHTML = '<p class="text-warn">Geolocation unavailable on this device.</p>';
         return;
     }
     navigator.geolocation.getCurrentPosition(async (pos) => {
         const { latitude: lat, longitude: lon } = pos.coords;
         try {
-            const res  = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,apparent_temperature&timezone=auto`);
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,apparent_temperature&timezone=auto`);
             const data = await res.json();
             if (!data.current) throw new Error();
-            const c    = data.current;
+            const c = data.current;
             const temp = Math.round(c.temperature_2m);
             const feels = Math.round(c.apparent_temperature);
-            const hum  = c.relative_humidity_2m;
+            const hum = c.relative_humidity_2m;
             const wind = Math.round(c.wind_speed_10m);
-            const icons = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'⛈️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️'};
-            const wIcon = icons[c.weather_code] || '🌍';
+
+            const weatherDescMap = {
+                0: 'Clear Sky', 1: 'Mainly Clear', 2: 'Partly Cloudy', 3: 'Overcast',
+                45: 'Foggy', 48: 'Depositing Rime Fog', 51: 'Light Drizzle', 53: 'Moderate Drizzle',
+                55: 'Dense Drizzle', 61: 'Slight Rain', 63: 'Moderate Rain', 65: 'Heavy Rain',
+                80: 'Rain Showers', 81: 'Heavy Showers', 82: 'Violent Showers', 95: 'Thunderstorm'
+            };
+            const wDesc = weatherDescMap[c.weather_code] || 'Current Microclimate';
+
             content.innerHTML = `
                 <div class="iot-weather-main">
-                    <div class="weather-big-icon">${wIcon}</div>
-                    <div><div class="weather-temp">${temp}°C</div><div class="weather-feels">Feels like ${feels}°C</div></div>
+                    <div class="weather-temp-block">
+                        <div class="weather-temp">${temp}°C</div>
+                        <div class="weather-desc">${wDesc}</div>
+                        <div class="weather-feels">Apparent: ${feels}°C</div>
+                    </div>
                 </div>
                 <div class="iot-weather-stats">
-                    <div class="iot-weather-stat"><span>💧</span><span>${hum}%</span><small>Humidity</small></div>
-                    <div class="iot-weather-stat"><span>💨</span><span>${wind} km/h</span><small>Wind</small></div>
-                    <div class="iot-weather-stat"><span>📍</span><span>${lat.toFixed(2)}°N</span><small>Location</small></div>
+                    <div class="iot-weather-stat">
+                        <span class="stat-glyph"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg></span>
+                        <span class="stat-number">${hum}%</span>
+                        <small>Humidity</small>
+                    </div>
+                    <div class="iot-weather-stat">
+                        <span class="stat-glyph"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path></svg></span>
+                        <span class="stat-number">${wind} km/h</span>
+                        <small>Wind Velocity</small>
+                    </div>
+                    <div class="iot-weather-stat">
+                        <span class="stat-glyph"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
+                        <span class="stat-number">${lat.toFixed(2)}°N</span>
+                        <small>Coordinates</small>
+                    </div>
                 </div>`;
             IoTWeatherLoaded = true;
         } catch (e) {
-            content.innerHTML = '<p style="color:var(--accent-warning);">⚠️ Could not load weather.</p>';
+            content.innerHTML = '<p class="text-warn">Unable to query Open-Meteo telemetry.</p>';
         }
     }, () => {
-        content.innerHTML = '<p style="color:var(--accent-warning);">⚠️ Location access denied.</p>';
+        content.innerHTML = '<p class="text-warn">Location permissions declined.</p>';
     });
 }
 
@@ -1729,7 +1864,7 @@ function toggleAuthMode(mode) {
     const authSubmitBtn = document.getElementById('authSubmitBtn');
     const forgotLink = document.getElementById('forgotPasswordLink');
     const authPassword = document.getElementById('authPassword');
-    
+
     document.getElementById('btnSignup').classList.toggle('active', mode === 'signup');
     document.getElementById('btnLogin').classList.toggle('active', mode === 'login');
     document.getElementById('authError').textContent = '';
@@ -1765,7 +1900,7 @@ function checkAuth() {
     const userStr = localStorage.getItem('agri_active_user') || localStorage.getItem('agri_user');
     const overlay = document.getElementById('authOverlay');
     if (!overlay) return;
-    
+
     if (!userStr) {
         overlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
@@ -1781,12 +1916,12 @@ function handleAuth(e) {
     const phone = document.getElementById('authPhone').value.trim();
     const password = document.getElementById('authPassword').value.trim();
     const errorEl = document.getElementById('authError');
-    
+
     if (phone.length !== 10 || isNaN(phone)) {
         errorEl.textContent = 'Please enter a valid 10-digit phone number.';
         return;
     }
-    
+
     if (password.length < 4) {
         errorEl.textContent = 'Password must be at least 4 characters.';
         return;
@@ -1804,7 +1939,7 @@ function handleAuth(e) {
             errorEl.textContent = 'An account with this phone number already exists. Please login.';
             return;
         }
-        
+
         const joinDate = new Date().toLocaleDateString();
         users[phone] = { name, phone, password, joinDate };
         localStorage.setItem('agri_users_db', JSON.stringify(users));
@@ -1835,9 +1970,9 @@ function handleAuth(e) {
         }
         localStorage.setItem('agri_active_user', JSON.stringify(users[phone]));
     }
-    
+
     errorEl.textContent = '';
-    
+
     // Close overlay
     const overlay = document.getElementById('authOverlay');
     if (overlay) {
@@ -1860,8 +1995,8 @@ function openProfile() {
     try {
         const user = JSON.parse(userStr);
         document.getElementById('profileName').textContent = (user.name || 'User').toUpperCase();
-        document.getElementById('profilePhone').textContent = '📱 ' + (user.phone || '');
-        
+        document.getElementById('profilePhone').textContent = user.phone || '';
+
         // Profile photo logic
         const photoEmoji = document.getElementById('profilePhotoEmoji');
         const photoImg = document.getElementById('profilePhotoImg');
@@ -1878,24 +2013,24 @@ function openProfile() {
                 photoImg.style.display = 'none';
             }
         }
-        
+
         // Extra info
         const elLang = document.getElementById('profileLanguage');
         if (elLang) {
             const langNames = { 'en': 'English', 'hi': 'Hindi', 'kn': 'Kannada' };
             elLang.textContent = langNames[AppState.currentLang] || 'English';
         }
-        
+
         const elDate = document.getElementById('profileDate');
         if (elDate) elDate.textContent = user.joinDate || 'Unknown';
-        
+
         const elScans = document.getElementById('profileScans');
         if (elScans) elScans.textContent = user.scanCount || 0;
-        
+
         const elMoisture = document.getElementById('profileMoisture');
         if (elMoisture) elMoisture.textContent = AppState.lastMoisture ? AppState.lastMoisture.toFixed(2) + '%' : '--';
-        
-    } catch(e) {}
+
+    } catch (e) { }
 
     // Use style.display directly — most reliable on mobile
     modal.classList.remove('hidden');
@@ -1924,7 +2059,7 @@ function handleProfilePhotoUpload(e) {
     const reader = new FileReader();
     reader.onload = (event) => {
         const base64Data = event.target.result;
-        
+
         // Update DOM
         const photoEmoji = document.getElementById('profilePhotoEmoji');
         const photoImg = document.getElementById('profilePhotoImg');
@@ -1933,7 +2068,7 @@ function handleProfilePhotoUpload(e) {
             photoImg.src = base64Data;
             photoImg.style.display = 'block';
         }
-        
+
         // Update local storage
         const userStr = localStorage.getItem('agri_active_user');
         if (userStr) {
@@ -1941,7 +2076,7 @@ function handleProfilePhotoUpload(e) {
                 const user = JSON.parse(userStr);
                 user.photo = base64Data;
                 localStorage.setItem('agri_active_user', JSON.stringify(user));
-                
+
                 // Update users DB as well
                 let users = JSON.parse(localStorage.getItem('agri_users_db') || '{}');
                 if (users[user.phone]) {
@@ -1964,12 +2099,12 @@ function autoFillLocationData() {
         alert("Geolocation is not supported by your browser");
         return;
     }
-    
+
     // Show some loading indication on the button
     const btn = document.querySelector('#screenRecommend .tip-card button');
     const oldText = btn.textContent;
-    btn.textContent = "⏳ Fetching Location & Weather...";
-    
+    btn.textContent = "Detecting Location & Weather...";
+
     navigator.geolocation.getCurrentPosition(async (pos) => {
         const { latitude: lat, longitude: lon } = pos.coords;
         try {
@@ -1984,7 +2119,7 @@ function autoFillLocationData() {
                 }
                 if (locName) document.getElementById('recLocation').value = locName;
             }
-            
+
             // Fetch Weather
             const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m&timezone=auto`);
             if (weatherRes.ok) {
@@ -1994,7 +2129,7 @@ function autoFillLocationData() {
                     document.getElementById('recHumid').value = weatherData.current.relative_humidity_2m;
                 }
             }
-            
+
             // Guess season based on month (India focused roughly)
             const month = new Date().getMonth(); // 0-11
             const seasonSelect = document.getElementById('recSeason');
@@ -2002,9 +2137,9 @@ function autoFillLocationData() {
             else if (month >= 10 || month <= 2) seasonSelect.value = "Rabi"; // Nov-Mar
             else seasonSelect.value = "Zaid"; // Apr-May
 
-            btn.textContent = "✅ Auto-filled Successfully";
+            btn.textContent = "Telemetry Populated";
             setTimeout(() => { btn.textContent = oldText; }, 3000);
-            
+
         } catch (error) {
             console.error("Auto-fill error:", error);
             alert("Failed to auto-fetch data. Please fill manually.");
@@ -2028,10 +2163,10 @@ async function fetchCropRecommendation() {
         alert("Please fill all required fields");
         return;
     }
-    
+
     const submitBtn = document.querySelector('#recommendForm button[type="submit"]');
     const oldBtnText = submitBtn.innerHTML;
-    submitBtn.innerHTML = "⏳ Analyzing...";
+    submitBtn.innerHTML = "Analyzing Cultivar Suitability...";
     submitBtn.disabled = true;
 
     try {
@@ -2047,26 +2182,26 @@ async function fetchCropRecommendation() {
                 language: language
             })
         });
-        
+
         const data = await res.json();
-        
+
         submitBtn.innerHTML = oldBtnText;
         submitBtn.disabled = false;
-        
+
         if (res.ok && data.success) {
             const rec = data.recommendation;
             document.getElementById('recommendEmpty').style.display = 'none';
             document.getElementById('recommendResult').style.display = 'block';
-            
+
             // Format recommended crops
-            const cropsHtml = rec.recommended_crops.map(c => 
-                `<div style="display:inline-block; background:rgba(245,158,11,0.1); color:var(--g-700); padding:0.4rem 0.8rem; border-radius:20px; font-weight:700; font-size:0.9rem; margin:0 0.5rem 0.5rem 0;">🌱 ${c}</div>`
+            const cropsHtml = rec.recommended_crops.map(c =>
+                `<div style="display:inline-block; background:rgba(245,158,11,0.1); color:var(--g-700); padding:0.4rem 0.8rem; border-radius:20px; font-weight:700; font-size:0.9rem; margin:0 0.5rem 0.5rem 0;">${c}</div>`
             ).join('');
-            
+
             document.getElementById('recCropsList').innerHTML = cropsHtml;
             document.getElementById('recReasoning').textContent = rec.reasoning;
             document.getElementById('recPrep').textContent = rec.preparation;
-            
+
             // Scroll to the result (important for mobile phones)
             document.getElementById('recommendResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         } else {
@@ -2089,7 +2224,7 @@ function updateFarmLighting() {
     if (!overlay) return;
 
     const hour = new Date().getHours();
-    
+
     // Remove existing classes
     overlay.className = 'farm-lighting-overlay';
 
@@ -2115,7 +2250,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // To be safe, we will override navigateTo slightly to include lighting update.
 const originalNavigateTo = window.navigateTo;
 if (typeof originalNavigateTo === "function") {
-    window.navigateTo = function(screenId) {
+    window.navigateTo = function (screenId) {
         originalNavigateTo(screenId);
         if (screenId === "screenHome") {
             updateFarmLighting();

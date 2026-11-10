@@ -1,63 +1,61 @@
-<!-- AgriSense AI Frontend Application -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriSense AI — IOT based Farming Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>AgriSense AI — Precision Agronomic & Telemetry System</title>
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <meta name="description"
-        content="AI-powered smart farming assistant. Detect plant diseases and access farming knowledge.">
+        content="Professional precision agronomic intelligence platform. Automated foliar pathogen diagnostics, root-zone IoT telemetry, and integrated pest management advisory.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
-    <!-- Styles -->
+    <!-- Production Stylesheet -->
     <link rel="stylesheet" href="css/style.css">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#4caf50">
+    <meta name="theme-color" content="#164e35">
 </head>
 
 <body>
 
-    <!-- Animated Background -->
-    <div class="ag-cosmos">
-        <div class="ag-orb ag-orb-1"></div>
-        <div class="ag-orb ag-orb-2"></div>
-        <div class="ag-orb ag-orb-3"></div>
-        <div class="hero-bg-layer"></div>
-        <div class="ag-grain"></div>
-    </div>
-
-    <!-- Navigation -->
+    <!-- Header Navigation -->
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
-            <a href="#" class="nav-brand" onclick="navigateTo('screenHome'); return false;">
+            <a href="#" class="nav-brand" onclick="navigateTo('screenHome'); return false;" aria-label="AgriSense AI Hub">
                 <img src="assets/images/logo2.png" class="nav-logo-img" alt="AgriSense AI Logo">
+                <div class="nav-brand-text">
+                    <span class="nav-brand-title">AgriSense</span>
+                    <span class="nav-brand-tag">INTELLIGENCE</span>
+                </div>
             </a>
             <div class="nav-links">
                 <a href="#" class="nav-link active" data-screen="screenHome"
-                    onclick="navigateTo('screenHome'); return false;" data-i18n="navHome">Home</a>
+                    onclick="navigateTo('screenHome'); return false;" data-i18n="navHome">Hub</a>
                 <a href="#" class="nav-link" data-screen="screenDiseaseDetect"
-                    onclick="navigateTo('screenDiseaseDetect'); return false;" data-i18n="navDetect">Detect</a>
+                    onclick="navigateTo('screenDiseaseDetect'); return false;" data-i18n="navDetect">Diagnostics</a>
                 <a href="#" class="nav-link" data-screen="screenRecommend"
-                    onclick="navigateTo('screenRecommend'); return false;" data-i18n="navRecommend">Recommend</a>
+                    onclick="navigateTo('screenRecommend'); return false;" data-i18n="navRecommend">Crop Planner</a>
                 <a href="#" class="nav-link" data-screen="screenIoT"
-                    onclick="navigateTo('screenIoT'); return false;">IoT Monitor</a>
-
+                    onclick="navigateTo('screenIoT'); return false;">IoT Telemetry</a>
             </div>
             <div class="nav-right">
+                <button class="nav-cta" onclick="navigateTo('screenDiseaseDetect')" data-i18n="navScan">Start Scan</button>
                 <div class="lang-selector">
-                    <button class="lang-btn-main" onclick="toggleLangMenu()">
-                        <span class="lang-icon">🌐</span>
+                    <button class="lang-btn-main" onclick="toggleLangMenu()" aria-haspopup="true" aria-expanded="false" title="Change Language">
+                        <span class="lang-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                        </span>
                         <span id="langCode">English</span>
-                        <span class="lang-arrow">▾</span>
+                        <span class="lang-arrow">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </span>
                     </button>
                     <div id="langDropdown" class="lang-menu">
                         <button class="lang-opt" onclick="setLanguage('en')">English</button>
@@ -65,305 +63,381 @@
                         <button class="lang-opt" onclick="setLanguage('kn')">ಕನ್ನಡ (Kannada)</button>
                     </div>
                 </div>
-                <button class="nav-profile-btn" type="button" title="Profile">👤</button>
-                <button class="nav-cta" onclick="navigateTo('screenDiseaseDetect')" data-i18n="navScan">Start
-                    Scan</button>
-                <button class="nav-burger" onclick="toggleMobileMenu()">
-                    <span></span><span></span><span></span>
-                </button>
             </div>
         </div>
     </nav>
 
-    <!-- Bottom Navigation (Mobile Only) -->
-    <nav class="bottom-nav">
+    <!-- Bottom Navigation (Mobile Native Form Factor) -->
+    <nav class="bottom-nav" aria-label="Mobile Navigation">
         <a href="#" class="bottom-nav-link active" data-screen="screenHome"
-            onclick="navigateTo('screenHome'); return false;">
-            <span class="bottom-nav-icon">🏠</span>
-            <span class="bottom-nav-text">Home</span>
+            onclick="navigateTo('screenHome'); return false;" aria-label="Hub">
+            <span class="bottom-nav-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </span>
+            <span class="bottom-nav-text" data-i18n="navBottomHub">Hub</span>
         </a>
         <a href="#" class="bottom-nav-link" data-screen="screenDiseaseDetect"
-            onclick="navigateTo('screenDiseaseDetect'); return false;">
-            <span class="bottom-nav-icon">📸</span>
-            <span class="bottom-nav-text">Detect</span>
+            onclick="navigateTo('screenDiseaseDetect'); return false;" aria-label="Diagnostics">
+            <span class="bottom-nav-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            </span>
+            <span class="bottom-nav-text" data-i18n="navBottomDetect">Detect</span>
         </a>
         <a href="#" class="bottom-nav-link" data-screen="screenRecommend"
-            onclick="navigateTo('screenRecommend'); return false;">
-            <span class="bottom-nav-icon">🌾</span>
-            <span class="bottom-nav-text" data-i18n="navRecommend">Recommend</span>
+            onclick="navigateTo('screenRecommend'); return false;" aria-label="Crop Planner">
+            <span class="bottom-nav-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"></path><path d="M10 20c5.5-2.5.8-6.4 3-10"></path><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4.1 5.5.8z"></path><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"></path></svg>
+            </span>
+            <span class="bottom-nav-text" data-i18n="navBottomPlanner">Planner</span>
         </a>
-        <a href="#" class="bottom-nav-link" data-screen="screenIoT" onclick="navigateTo('screenIoT'); return false;">
-            <span class="bottom-nav-icon">📊</span>
-            <span class="bottom-nav-text">IoT</span>
+        <a href="#" class="bottom-nav-link" data-screen="screenIoT" onclick="navigateTo('screenIoT'); return false;" aria-label="IoT Telemetry">
+            <span class="bottom-nav-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            </span>
+            <span class="bottom-nav-text" data-i18n="navBottomIoT">Telemetry</span>
         </a>
-        <a href="#" class="bottom-nav-link" onclick="toggleChatbot(); return false;">
-            <span class="bottom-nav-icon">💬</span>
-            <span class="bottom-nav-text">Chat</span>
-        </a>
-        <a href="#" class="bottom-nav-link mobile-profile-btn" onclick="openProfile(); return false;">
-            <span class="bottom-nav-icon">👤</span>
-            <span class="bottom-nav-text">Profile</span>
+        <a href="#" class="bottom-nav-link mobile-profile-btn" onclick="openProfile(); return false;" aria-label="User Profile">
+            <span class="bottom-nav-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </span>
+            <span class="bottom-nav-text" data-i18n="navBottomProfile">Profile</span>
         </a>
     </nav>
 
-    <!-- Mobile Drawer removed: bottom nav handles mobile navigation -->
+    <!-- Main Screens Viewport -->
 
-    <!-- Home Screen -->
+    <!-- SCREEN 1: Operations Hub -->
     <main class="screen active" id="screenHome">
-        <section class="hero container">
-            <div class="glass-sm hero-badge" data-i18n="heroBadge">🚜 Farmer Support App</div>
-            <div class="hero-logo-wrap">
-                <img src="assets/images/logo.png" class="hero-logo" alt="AgriSense AI Logo">
-            </div>
-            <div class="hero-btns">
-                <button class="btn-glow hero-primary" onclick="navigateTo('screenDiseaseDetect')"
-                    data-i18n="heroBtn1">📸 Scan Your Crop</button>
+        <section class="container station-overview">
+            
+            <!-- Live Operational Header -->
+            <div class="station-meta-bar">
+                <div class="station-status-pill">
+                    <span class="status-indicator-dot"></span>
+                    <span>Field Telemetry Station: Online</span>
+                </div>
+                <div class="station-platform-tag" data-i18n="heroBadge">Precision Agronomic Intelligence</div>
             </div>
 
-            <!-- Language Quick Pick -->
-            <div class="lang-quick-pick">
-                <p data-i18n="selectLang">Select Your Language</p>
-                <div class="lang-grid-mini">
-                    <button class="lang-pill" onclick="setLanguage('en')"><span>🇬🇧</span> English</button>
-                    <button class="lang-pill" onclick="setLanguage('hi')"><span>🇮🇳</span> हिन्दी</button>
-                    <button class="lang-pill" onclick="setLanguage('kn')"><span>🇮🇳</span> ಕನ್ನಡ</button>
-                </div>
-            </div>
-            <div class="quick-actions glass">
-                <h3 data-i18n="doThisFirst">Do This First</h3>
-                <div class="quick-actions-grid">
-                    <button class="quick-action-btn action-primary" onclick="navigateTo('screenDiseaseDetect')">
-                        <span class="action-icon">📸</span>
-                        <div class="action-info">
-                            <span class="action-text" data-i18n="qaScanLeaf">Scan Leaf</span>
-                            <span class="action-subtext" data-i18n="qaScanSub">Detect diseases instantly</span>
-                        </div>
-                    </button>
-                    <button class="quick-action-btn" onclick="navigateTo('screenRecommend')">
-                        <span class="action-icon">🌾</span>
-                        <div class="action-info">
-                            <span class="action-text" data-i18n="qaRecommend">Recommend</span>
-                            <span class="action-subtext" data-i18n="qaRecommendSub">Find best crops</span>
-                        </div>
-                    </button>
-                    <button class="quick-action-btn" onclick="navigateTo('screenIoT')">
-                        <span class="action-icon">📊</span>
-                        <div class="action-info">
-                            <span class="action-text" data-i18n="qaIoT">IoT Monitor</span>
-                            <span class="action-subtext" data-i18n="qaIoTSub">Live soil metrics</span>
-                        </div>
-                    </button>
-                    <button class="quick-action-btn" onclick="toggleChatbot()">
-                        <span class="action-icon">💬</span>
-                        <div class="action-info">
-                            <span class="action-text" data-i18n="qaChat">AI Chat</span>
-                            <span class="action-subtext" data-i18n="qaChatSub">Ask an expert</span>
-                        </div>
-                    </button>
-                </div>
-            </div>
-
-            <div class="hero-stats">
-                <div class="hero-stat"><strong>3</strong><span data-i18n="statLangs">Languages</span></div>
-                <div class="hero-stat"><strong>24/7</strong><span data-i18n="statAdvice">Advice</span></div>
-                <div class="hero-stat"><strong>Local</strong><span data-i18n="statFocus">Focus</span></div>
-            </div>
-        </section>
-
-        <section class="container workflow-section">
-            <div class="section-card">
-                <div class="workflow-header">
-                    <h3 data-i18n="workflowTitle">Simple 3-Step Workflow</h3>
-                    <p data-i18n="workflowSubtitle">Start your journey to better farming in minutes</p>
-                </div>
-                <div class="workflow-grid">
-                    <div class="workflow-item">
-                        <div class="workflow-number">1</div>
-                        <div class="workflow-icon">📤</div>
-                        <h4 data-i18n="step1Title">Upload Crop Photo</h4>
-                        <p data-i18n="step1Desc">Take a clear leaf photo from your phone camera.</p>
+            <!-- Hub Hero Section -->
+            <div class="hub-hero">
+                <div class="hub-hero-content">
+                    <h1 class="hub-headline">
+                        <span class="headline-primary" data-i18n="heroTitle1">Healthy Crops</span>
+                        <span class="headline-secondary" data-i18n="heroTitle2">Predictable Yields</span>
+                    </h1>
+                    
+                    <div class="hub-cta-strip">
+                        <button class="btn-primary" onclick="navigateTo('screenDiseaseDetect')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                            <span data-i18n="heroBtn1">Analyze Leaf Specimen</span>
+                        </button>
+                        <button class="btn-secondary" onclick="navigateTo('screenIoT')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                            <span>Inspect Telemetry</span>
+                        </button>
                     </div>
-                    <div class="workflow-item">
-                        <div class="workflow-number">2</div>
-                        <div class="workflow-icon">📋</div>
-                        <h4 data-i18n="step2Title">Check Disease Report</h4>
-                        <p data-i18n="step2Desc">Get confidence score and treatment plan instantly.</p>
+
+                    <!-- Language Quick Switcher -->
+                    <div class="lang-segmented-control">
+                        <span class="lang-control-label" data-i18n="selectLang">Platform Language:</span>
+                        <div class="lang-pills-row">
+                            <button class="lang-pill-item" onclick="setLanguage('en')">English</button>
+                            <button class="lang-pill-item" onclick="setLanguage('hi')">हिन्दी</button>
+                            <button class="lang-pill-item" onclick="setLanguage('kn')">ಕನ್ನಡ</button>
+                        </div>
                     </div>
-                    <div class="workflow-item">
-                        <div class="workflow-number">3</div>
-                        <div class="workflow-icon">⚡</div>
-                        <h4 data-i18n="step3Title">Take Action</h4>
-                        <p data-i18n="step3Desc">Use organic/chemical guidance and required products.</p>
+                </div>
+
+                <div class="hub-hero-card">
+                    <div class="hub-card-header">
+                        <span class="hub-card-kicker">STATION TELEMETRY SUMMARY</span>
+                        <span class="badge-live">LIVE BUFFER</span>
+                    </div>
+                    <div class="hub-card-metrics">
+                        <div class="hub-metric-tile">
+                            <span class="metric-number">38+</span>
+                            <span class="metric-caption" data-i18n="statDiseases">Pathogens Modeled</span>
+                        </div>
+                        <div class="hub-metric-tile">
+                            <span class="metric-number">3</span>
+                            <span class="metric-caption" data-i18n="statLangs">Languages</span>
+                        </div>
+                        <div class="hub-metric-tile">
+                            <span class="metric-number">24/7</span>
+                            <span class="metric-caption" data-i18n="statAdvice">Advisory Engine</span>
+                        </div>
+                    </div>
+                    <div class="hub-card-advisory">
+                        <div class="advisory-bulletin-header">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+                            <strong data-i18n="todayTip">Agronomic Bulletin</strong>
+                        </div>
+                        <p id="dailyTip">Rotate solanaceous crops every 2-3 cycles to break bacterial pathogen lifecycles and preserve soil nitrogen reserves.</p>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <section class="container" style="margin-top:4rem">
-            <div class="section-head">
-                <h2 style="font-size:2.5rem; font-weight:800; margin-bottom:1rem" data-i18n="secFeaturesTitle">Smart
-                    Farming Tools</h2>
-                <p data-i18n="secFeaturesDesc">Everything you need for better farming decisions.</p>
+            <!-- Operational Modules Grid -->
+            <div class="operations-grid-section">
+                <div class="section-title-strip">
+                    <h2 class="section-title" data-i18n="secFeaturesTitle">Operational Systems</h2>
+                    <p class="section-subtitle" data-i18n="secFeaturesDesc">Integrated field intelligence combining neural diagnostics and hardware telematics.</p>
+                </div>
+
+                <div class="operations-cards-grid">
+                    <div class="op-card" onclick="navigateTo('screenDiseaseDetect')">
+                        <div class="op-card-icon op-icon-diagnostics">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                        </div>
+                        <div class="op-card-body">
+                            <h3 class="op-card-title" data-i18n="qaScanLeaf">Pathology Diagnostics</h3>
+                            <p class="op-card-desc" data-i18n="qaScanSub">Instant foliar classification and confidence grading.</p>
+                        </div>
+                        <span class="op-card-arrow">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </span>
+                    </div>
+
+                    <div class="op-card" onclick="navigateTo('screenRecommend')">
+                        <div class="op-card-icon op-icon-planner">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"></path><path d="M10 20c5.5-2.5.8-6.4 3-10"></path><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4.1 5.5.8z"></path><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"></path></svg>
+                        </div>
+                        <div class="op-card-body">
+                            <h3 class="op-card-title" data-i18n="qaRecommend">Crop Planning</h3>
+                            <p class="op-card-desc" data-i18n="qaRecommendSub">Targeted cultivar selection based on soil taxonomy and microclimate.</p>
+                        </div>
+                        <span class="op-card-arrow">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </span>
+                    </div>
+
+                    <div class="op-card" onclick="navigateTo('screenIoT')">
+                        <div class="op-card-icon op-icon-telemetry">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        </div>
+                        <div class="op-card-body">
+                            <h3 class="op-card-title" data-i18n="qaIoT">Soil Telemetry</h3>
+                            <p class="op-card-desc" data-i18n="qaIoTSub">Real-time root-zone moisture metrics and dynamic thresholds.</p>
+                        </div>
+                        <span class="op-card-arrow">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </span>
+                    </div>
+
+                    <div class="op-card" onclick="toggleChatbot()">
+                        <div class="op-card-icon op-icon-advisor">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        </div>
+                        <div class="op-card-body">
+                            <h3 class="op-card-title" data-i18n="qaChat">Agronomic Consultation</h3>
+                            <p class="op-card-desc" data-i18n="qaChatSub">Interactive advisory for pest management and chemical dosage.</p>
+                        </div>
+                        <span class="op-card-arrow">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </span>
+                    </div>
+                </div>
             </div>
-            <div class="feat-grid">
-                <div class="feat-card glass float-card" onclick="navigateTo('screenDiseaseDetect')">
-                    <div class="feat-icon-wrap feat-amber">📸</div>
-                    <h3 data-i18n="featDetect">Detect Disease</h3>
-                    <p data-i18n="featDetectDesc">Scan leaves for instant AI diagnosis.</p>
+
+            <!-- Diagnostic Standard Workflow -->
+            <div class="workflow-protocol-panel">
+                <div class="workflow-header-block">
+                    <span class="workflow-tag">STANDARD OPERATING PROCEDURE</span>
+                    <h3 class="workflow-title" data-i18n="workflowTitle">Diagnostic Protocol</h3>
+                    <p class="workflow-subtitle" data-i18n="workflowSubtitle">From field sample to actionable agronomic treatment in seconds</p>
                 </div>
-                <div class="feat-card glass float-card" onclick="navigateTo('screenRecommend')">
-                    <div class="feat-icon-wrap" style="color: #f59e0b; background: rgba(245,158,11,0.1)">🌾</div>
-                    <h3 data-i18n="featRecommend">Crop Recommend</h3>
-                    <p data-i18n="featRecommendDesc">AI suggests the best crops for your location.</p>
-                </div>
-                <div class="feat-card glass float-card" onclick="navigateTo('screenIoT')">
-                    <div class="feat-icon-wrap feat-blue">📊</div>
-                    <h3 data-i18n="featMonitor">Smart Monitor</h3>
-                    <p data-i18n="featMonitorDesc">Live soil moisture tracking.</p>
+                
+                <div class="workflow-steps-layout">
+                    <div class="workflow-step-card">
+                        <div class="step-badge">PHASE 01</div>
+                        <div class="step-icon-wrap">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        </div>
+                        <h4 class="step-title" data-i18n="step1Title">Capture Specimen</h4>
+                        <p class="step-description" data-i18n="step1Desc">Photograph affected crop foliage under natural lighting with sharp macro focus.</p>
+                    </div>
+
+                    <div class="workflow-step-card">
+                        <div class="step-badge">PHASE 02</div>
+                        <div class="step-icon-wrap">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                        </div>
+                        <h4 class="step-title" data-i18n="step2Title">Neural Analysis</h4>
+                        <p class="step-description" data-i18n="step2Desc">CNN evaluates pathogen signature with confidence scoring and green index filtering.</p>
+                    </div>
+
+                    <div class="workflow-step-card">
+                        <div class="step-badge">PHASE 03</div>
+                        <div class="step-icon-wrap">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        </div>
+                        <h4 class="step-title" data-i18n="step3Title">Apply Treatment</h4>
+                        <p class="step-description" data-i18n="step3Desc">Follow structured biological, chemical, and preventive protocols tailored to soil moisture.</p>
+                    </div>
                 </div>
             </div>
-        </section>
 
-
-
-        <section class="container" style="margin-top:4rem">
-
-            <div class="glass-sm tip-card">
-                <div style="font-size:2rem">💡</div>
-                <div>
-                    <h4 style="font-weight:700" data-i18n="todayTip">Today's Tip</h4>
-                    <p id="dailyTip">Rotate crops to maintain soil health.</p>
-                </div>
-            </div>
         </section>
     </main>
 
-    <!-- Disease Detection Screen -->
+    <!-- SCREEN 2: Disease Detection Laboratory -->
     <main class="screen" id="screenDiseaseDetect">
         <div class="container">
-            <div style="display:flex; align-items:center; gap:1rem; margin-bottom:2rem">
-                <button class="btn-back" onclick="navigateTo('screenHome')" data-i18n="back">← Back</button>
-                <h2 style="color:var(--n-950); font-size:1.75rem; font-weight:900;" data-i18n="pageDetect">Disease
-                    Detection</h2>
+            <div class="screen-header-bar">
+                <button class="btn-back" onclick="navigateTo('screenHome')" data-i18n="back">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <span>Back</span>
+                </button>
+                <div class="screen-title-group">
+                    <span class="screen-kicker">PATHOLOGY WORKBENCH</span>
+                    <h2 class="screen-heading" data-i18n="pageDetect">Disease Detection</h2>
+                </div>
             </div>
 
             <div class="detect-grid">
+                <!-- Left: Viewfinder & Ingestion Station -->
                 <div class="detect-main">
-                    <!-- Upload Drop Zone -->
                     <div class="upload-drop-zone" id="uploadZone" onclick="triggerUpload(false)">
                         <div class="camera-ph" id="cameraPlaceholder">
-                            <div class="camera-ph-icon">📂</div>
-                            <p style="font-size:1.1rem; font-weight:700; color:var(--n-700); margin-bottom:0.5rem"
-                                data-i18n="uploadTitle">
-                                Upload Leaf Image</p>
-                            <p style="color:var(--n-400); font-size:0.9rem" data-i18n="uploadDrag">Drag & drop or click
-                                to browse</p>
-                            <p style="color:var(--n-500); font-size:0.8rem; margin-top:0.5rem"
-                                data-i18n="uploadFormats">JPG / PNG supported</p>
+                            <div class="camera-ph-icon">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            </div>
+                            <h3 class="upload-title" data-i18n="uploadTitle">Upload Foliage Specimen</h3>
+                            <p class="upload-drag-hint" data-i18n="uploadDrag">Drag and drop image or browse file system</p>
+                            <span class="upload-formats-badge" data-i18n="uploadFormats">JPEG / PNG formats supported (up to 8 MB)</span>
                         </div>
-                        <img id="imagePreview" class="cam-img" alt="Preview">
+                        <img id="imagePreview" class="cam-img" alt="Specimen Preview" style="display:none;">
                     </div>
 
-                    <!-- Upload Button -->
-                    <div class="cam-controls" id="uploadControls"
-                        style="display:flex; flex-direction:column; gap:1rem; align-items:center;">
-                        <button class="btn-glow hero-primary" id="takePhotoBtn"
-                            onclick="document.getElementById('cameraInput').click()"
-                            style="padding:1.25rem 3rem; width: 100%; max-width: 400px; font-size: 1.2rem;"
-                            data-i18n="btnTakePhoto">📸 Take Photo</button>
-                        <button class="btn-glow" id="choosePhotoBtn" onclick="triggerUpload(false)"
-                            style="padding:1.25rem 3rem; width: 100%; max-width: 400px; font-size: 1.2rem; background: var(--g-600);"
-                            data-i18n="btnChoosePhoto">📂 Choose Photo</button>
-                        <p id="uploadHintText"
-                            style="margin-top:0.75rem; color:var(--n-500); font-size:0.9rem; text-align:center;"
-                            data-i18n="uploadHint">Use your camera or upload a leaf image from your device.</p>
+                    <!-- Hidden helper anchor for script drag listener -->
+                    <div id="cameraArea" style="display:none;"></div>
+
+                    <!-- Ingestion Controls -->
+                    <div class="cam-controls" id="uploadControls">
+                        <div class="button-action-pair">
+                            <button class="btn-primary" id="takePhotoBtn"
+                                onclick="document.getElementById('cameraInput').click()" data-i18n="btnTakePhoto">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                                <span>Capture with Camera</span>
+                            </button>
+                            <button class="btn-secondary" id="choosePhotoBtn" onclick="triggerUpload(false)" data-i18n="btnChoosePhoto">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                                <span>Browse Image File</span>
+                            </button>
+                        </div>
+                        <p id="uploadHintText" class="upload-footnote" data-i18n="uploadHint">Ensure foliage is flat, sharp, and in natural daylight.</p>
                     </div>
 
-                    <!-- Analyze / Retake -->
-                    <div class="analyze-ctrls hidden" id="analyzeControls"
-                        style="text-align:center; margin-top:1.5rem; display:flex; justify-content:center; gap:1rem;">
-                        <button class="btn-ghost" onclick="retakePhoto()" data-i18n="retake">Retake</button>
-                        <button class="btn-glow" onclick="analyzeImage()" data-i18n="analyze">Analyze Now</button>
+                    <!-- Analysis Controls -->
+                    <div class="analyze-ctrls hidden" id="analyzeControls">
+                        <button class="btn-secondary" onclick="retakePhoto()" data-i18n="retake">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                            <span>Discard Specimen</span>
+                        </button>
+                        <button class="btn-primary" onclick="analyzeImage()" data-i18n="analyze">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                            <span>Run Diagnostic Analysis</span>
+                        </button>
                     </div>
                 </div>
 
+                <!-- Right: Standard Operating Procedures (SOP) -->
                 <aside class="detect-side">
-                    <div class="detect-info-card" style="margin-bottom:1rem;">
-                        <h3 style="margin-bottom:1rem; font-size:1.2rem; font-weight:800; color:var(--soil-900);"
-                            data-i18n="scanStepsTitle">🔍 Disease Scan Steps</h3>
-                        <ol style="padding-left:1.25rem; color:var(--n-700); line-height:2.2; font-size:0.97rem;">
-                            <li data-i18n="scanStep1">Click <b style="color:var(--g-700);">Choose File</b> and upload
-                                crop leaf</li>
-                            <li data-i18n="scanStep2">Tap <b style="color:var(--g-700);">Analyze Now</b> for disease
-                                report</li>
-                            <li data-i18n="scanStep3">Follow treatment and prevention tips</li>
+                    <div class="sop-card">
+                        <div class="sop-header">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                            <h3 data-i18n="scanStepsTitle">Diagnostic Operating Procedure</h3>
+                        </div>
+                        <ol class="sop-steps-list">
+                            <li><strong data-i18n="scanStep1">Mount or hold specimen flat with clear background</strong></li>
+                            <li><strong data-i18n="scanStep2">Initiate diagnostic inference for pathology report</strong></li>
+                            <li><strong data-i18n="scanStep3">Review targeted biological and chemical remediation</strong></li>
                         </ol>
                     </div>
-                    <div class="detect-info-card">
-                        <h4 style="margin-bottom:0.75rem; color:var(--g-700); font-size:1rem; font-weight:800;"
-                            data-i18n="photoTipsTitle">📸 Good Photo Tips</h4>
-                        <ul style="padding-left:1.25rem; color:var(--n-600); font-size:0.9rem; line-height:2;">
-                            <li data-i18n="tip1">Good natural lighting</li>
-                            <li data-i18n="tip2">Fill frame with the leaf</li>
-                            <li data-i18n="tip3">Avoid motion blur</li>
-                            <li data-i18n="tip4">Show the affected area clearly</li>
+
+                    <div class="sop-card">
+                        <div class="sop-header">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                            <h4 data-i18n="photoTipsTitle">Imaging Best Practices</h4>
+                        </div>
+                        <ul class="sop-tips-list">
+                            <li data-i18n="tip1">Natural, diffused daylight without direct harsh glare</li>
+                            <li data-i18n="tip2">Fill 70% or more of the frame with the target leaf</li>
+                            <li data-i18n="tip3">Ensure macro focus is sharp and motionless</li>
+                            <li data-i18n="tip4">Frame both healthy tissue and symptomatic lesions</li>
                         </ul>
                     </div>
                 </aside>
             </div>
         </div>
+
+        <!-- Hidden Ingestion Inputs -->
         <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFileSelect(event)">
-        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none"
-            onchange="handleFileSelect(event)">
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleFileSelect(event)">
     </main>
 
-    <!-- Result Screen -->
+    <!-- SCREEN 3: Diagnostic Pathology Report -->
     <main class="screen" id="screenResult">
         <div class="container">
-            <div style="display:flex; align-items:center; gap:1rem; margin-bottom:2rem">
-                <button class="btn-back" onclick="goBackFromResult()" data-i18n="back">← Back</button>
-                <h2 id="resultTitle" style="color:var(--n-950); font-size:1.75rem; font-weight:900;">Results</h2>
+            <div class="screen-header-bar">
+                <button class="btn-back" onclick="goBackFromResult()" data-i18n="back">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <span>Back</span>
+                </button>
+                <div class="screen-title-group">
+                    <span class="screen-kicker">INSPECTION ARCHIVE</span>
+                    <h2 id="resultTitle" class="screen-heading">Diagnostic Report</h2>
+                </div>
             </div>
             <div id="resultBody" class="result-wrap"></div>
         </div>
     </main>
 
-    <!-- Crop Recommendation Screen -->
+    <!-- SCREEN 4: Crop Recommendation Engine -->
     <main class="screen" id="screenRecommend">
         <div class="container">
-            <div style="display:flex; align-items:center; gap:1rem; margin-bottom:2rem">
-                <button class="btn-back" onclick="navigateTo('screenHome')" data-i18n="back">← Back</button>
-                <h2 style="color:var(--n-950); font-size:1.75rem; font-weight:900;" data-i18n="recTitle">Crop
-                    Recommendation</h2>
+            <div class="screen-header-bar">
+                <button class="btn-back" onclick="navigateTo('screenHome')" data-i18n="back">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <span>Back</span>
+                </button>
+                <div class="screen-title-group">
+                    <span class="screen-kicker">AGRONOMIC PLANNING</span>
+                    <h2 class="screen-heading" data-i18n="recTitle">Agronomic Crop Planner</h2>
+                </div>
             </div>
+
             <div class="detect-grid">
                 <div class="detect-main">
-                    <div class="glass tip-card" style="margin-bottom: 1.5rem">
-                        <button class="btn-glow" style="width: 100%" onclick="autoFillLocationData()"
-                            data-i18n="recAutoFill">📍 Auto-detect Location & Weather</button>
+                    <div class="autofill-banner-card tip-card">
+                        <button class="btn-secondary" style="width: 100%; justify-content:center;" onclick="autoFillLocationData()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            <span data-i18n="recAutoFill">Auto-detect Microclimate & Coordinates</span>
+                        </button>
                     </div>
-                    <form id="recommendForm" class="auth-form"
-                        onsubmit="event.preventDefault(); fetchCropRecommendation();"
-                        style="background: white; padding: 2rem; border-radius: 20px; box-shadow: var(--sh-sm);">
+
+                    <form id="recommendForm" class="parameter-form-card" onsubmit="event.preventDefault(); fetchCropRecommendation();">
                         <div class="input-group">
-                            <label data-i18n="recLocation">Location</label>
+                            <label for="recLocation" data-i18n="recLocation">Field Region / Territory</label>
                             <input type="text" id="recLocation" placeholder="e.g. Pune, Maharashtra" required>
                         </div>
-                        <div style="display: flex; gap: 1rem;">
-                            <div class="input-group" style="flex: 1">
-                                <label data-i18n="recTemp">Temperature (°C)</label>
-                                <input type="number" step="0.1" id="recTemp" placeholder="25" required>
+                        
+                        <div class="form-row-pair">
+                            <div class="input-group">
+                                <label for="recTemp" data-i18n="recTemp">Ambient Temperature (°C)</label>
+                                <input type="number" step="0.1" id="recTemp" placeholder="25.0" required>
                             </div>
-                            <div class="input-group" style="flex: 1">
-                                <label data-i18n="recHumid">Humidity (%)</label>
-                                <input type="number" step="0.1" id="recHumid" placeholder="60" required>
+                            <div class="input-group">
+                                <label for="recHumid" data-i18n="recHumid">Relative Humidity (%)</label>
+                                <input type="number" step="0.1" id="recHumid" placeholder="60.0" required>
                             </div>
                         </div>
-                        <div style="display: flex; gap: 1rem;">
-                            <div class="input-group" style="flex: 1">
-                                <label data-i18n="recSoil">Soil Type</label>
-                                <select id="recSoil" required
-                                    style="width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 8px;">
+
+                        <div class="form-row-pair">
+                            <div class="input-group">
+                                <label for="recSoil" data-i18n="recSoil">Soil Classification</label>
+                                <select id="recSoil" required>
                                     <option value="Loamy">Loamy</option>
                                     <option value="Clay">Clay</option>
                                     <option value="Sandy">Sandy</option>
@@ -372,176 +446,249 @@
                                     <option value="Saline">Saline</option>
                                 </select>
                             </div>
-                            <div class="input-group" style="flex: 1">
-                                <label data-i18n="recSeason">Season</label>
-                                <select id="recSeason" required
-                                    style="width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 8px;">
-                                    <option value="Kharif">Kharif (Monsoon)</option>
-                                    <option value="Rabi">Rabi (Winter)</option>
-                                    <option value="Zaid">Zaid (Summer)</option>
+                            <div class="input-group">
+                                <label for="recSeason" data-i18n="recSeason">Agro-Climatic Season</label>
+                                <select id="recSeason" required>
+                                    <option value="Kharif">Kharif (Monsoon Cycle)</option>
+                                    <option value="Rabi">Rabi (Winter Cycle)</option>
+                                    <option value="Zaid">Zaid (Summer Cycle)</option>
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn-glow"
-                            style="width: 100%; margin-top: 1rem; font-size: 1.1rem; padding: 1rem;"
-                            data-i18n="recBtn">🔍 Get Recommendations</button>
+
+                        <button type="submit" class="btn-primary btn-full" style="margin-top:1.25rem;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                            <span data-i18n="recBtn">Generate Cultivar Plan</span>
+                        </button>
                     </form>
                 </div>
-                <aside class="detect-side" style="display: block;">
-                    <div class="detect-info-card" id="recommendResult" style="display: none;">
-                        <h3 style="margin-bottom:1rem; font-size:1.2rem; font-weight:800; color:var(--g-700);"
-                            data-i18n="recResultTitle">🌾 Recommended Crops</h3>
-                        <div id="recCropsList" style="margin-bottom: 1rem;"></div>
-                        <h4 style="margin-bottom:0.5rem; color:var(--n-800); font-size:1rem; font-weight:700;"
-                            data-i18n="recReasoning">💡 Reasoning</h4>
-                        <p id="recReasoning"
-                            style="color:var(--n-600); font-size:0.9rem; line-height:1.6; margin-bottom: 1rem;"></p>
-                        <h4 style="margin-bottom:0.5rem; color:var(--n-800); font-size:1rem; font-weight:700;"
-                            data-i18n="recPrep">🚜 Preparation</h4>
-                        <p id="recPrep" style="color:var(--n-600); font-size:0.9rem; line-height:1.6;"></p>
+
+                <aside class="detect-side">
+                    <!-- Results Card -->
+                    <div class="rec-result-card" id="recommendResult" style="display: none;">
+                        <div class="rec-result-header">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"></path><path d="M10 20c5.5-2.5.8-6.4 3-10"></path><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4.1 5.5.8z"></path><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"></path></svg>
+                            <h3 data-i18n="recResultTitle">Optimal Crop Selections</h3>
+                        </div>
+                        <div id="recCropsList" class="crops-tag-container"></div>
+                        
+                        <div class="rec-section-block">
+                            <h4 class="rec-subhead" data-i18n="recReasoning">Agronomic Rationale</h4>
+                            <p id="recReasoning" class="rec-body-text"></p>
+                        </div>
+
+                        <div class="rec-section-block">
+                            <h4 class="rec-subhead" data-i18n="recPrep">Field & Seedbed Preparation</h4>
+                            <p id="recPrep" class="rec-body-text"></p>
+                        </div>
                     </div>
-                    <div class="detect-info-card" id="recommendEmpty"
-                        style="margin-bottom:1rem; text-align: center; padding: 2rem 1rem;">
-                        <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🌱</span>
-                        <p style="color: var(--n-500); font-size: 0.95rem;" data-i18n="recEmpty">Enter your field
-                            details and let AI suggest the best crops for maximum yield and profit.</p>
+
+                    <!-- Empty State -->
+                    <div class="rec-empty-state-card" id="recommendEmpty">
+                        <div class="empty-state-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"></path><path d="M10 20c5.5-2.5.8-6.4 3-10"></path><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4.1 5.5.8z"></path><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"></path></svg>
+                        </div>
+                        <h4 class="empty-state-title">Awaiting Field Specifications</h4>
+                        <p class="empty-state-desc" data-i18n="recEmpty">Specify regional coordinates, climate metrics, and soil taxonomy to compute optimal crop recommendations.</p>
                     </div>
                 </aside>
             </div>
         </div>
     </main>
 
-    <!-- IoT Monitor Screen -->
+    <!-- SCREEN 5: IoT Field Telemetry Station -->
     <main class="screen" id="screenIoT">
         <div class="container">
-            <div style="display:flex; align-items:center; gap:1rem; margin-bottom:2rem">
-                <button class="btn-back" onclick="navigateTo('screenHome')" data-i18n="back">← Back</button>
-                <h2 style="color:var(--n-950); font-size:1.75rem; font-weight:900;" data-i18n="iotTitle">IoT Smart
-                    Monitor</h2>
+            <div class="screen-header-bar">
+                <button class="btn-back" onclick="navigateTo('screenHome')" data-i18n="back">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <span>Back</span>
+                </button>
+                <div class="screen-title-group">
+                    <span class="screen-kicker">SENSOR TELEMETRY</span>
+                    <h2 class="screen-heading" data-i18n="iotTitle">Field Telemetry & Soil Station</h2>
+                </div>
             </div>
 
+            <!-- Primary Telemetry Dashboard -->
             <div class="iot-dashboard">
-                <!-- Moisture Gauge Card -->
-                <div class="iot-card glass">
-                    <div class="iot-card-header">
-                        <span class="iot-icon">💧</span>
-                        <h3 data-i18n="iotSoilMoisture">Soil Moisture</h3>
+                <!-- Moisture Meter Card -->
+                <div class="telemetry-card">
+                    <div class="telemetry-card-header">
+                        <div class="telemetry-header-title">
+                            <span class="telemetry-icon-wrap icon-water">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+                            </span>
+                            <h3 data-i18n="iotSoilMoisture">Soil Moisture Level</h3>
+                        </div>
+                        <span id="moistureStatusBadge" class="status-badge status-unknown" data-i18n="fetching">Syncing telemetry...</span>
                     </div>
-                    <div class="moisture-display">
-                        <div class="moisture-gauge">
-                            <div class="water-fill" id="moistureWaterFill" style="top: 100%;"></div>
-                            <div class="gauge-value">
-                                <span id="moistureValue">0</span>%
+
+                    <div class="moisture-meter-display">
+                        <div class="moisture-gauge-track" id="moistureGaugeTrack">
+                            <div class="water-fill" id="moistureWaterFill" style="top: 108%; opacity: 0;">
+                                <svg class="water-wave wave-back" viewBox="0 0 320 30" preserveAspectRatio="none" aria-hidden="true">
+                                    <path d="M 0 10 Q 40 18 80 10 T 160 10 Q 200 18 240 10 T 320 10 L 320 30 L 0 30 Z" />
+                                </svg>
+                                <svg class="water-wave wave-front" viewBox="0 0 320 30" preserveAspectRatio="none" aria-hidden="true">
+                                    <path d="M 0 12 Q 40 2 80 12 T 160 12 Q 200 2 240 12 T 320 12 L 320 30 L 0 30 Z" />
+                                </svg>
+                                <div class="water-body"></div>
+                                <div class="water-bubbles" aria-hidden="true">
+                                    <span class="bubble b1"></span>
+                                    <span class="bubble b2"></span>
+                                    <span class="bubble b3"></span>
+                                </div>
                             </div>
+                            <div class="gauge-glass-sheen" aria-hidden="true"></div>
+                            <div class="gauge-center-reading">
+                                <span id="moistureValue" class="gauge-number">0</span>
+                                <span class="gauge-unit">%</span>
+                            </div>
+                            <div class="gauge-pulse-ring" id="gaugePulseRing" aria-hidden="true"></div>
+                        </div>
+                        <div class="moisture-scale-legend">
+                            <div class="scale-item scale-dry"><span>&lt; 30%</span><small>Deficit</small></div>
+                            <div class="scale-item scale-opt"><span>30–75%</span><small>Optimal</small></div>
+                            <div class="scale-item scale-wet"><span>&gt; 75%</span><small>Saturated</small></div>
                         </div>
                     </div>
-                    <div class="iot-status">
-                        <span id="moistureStatusBadge" class="status-badge status-unknown"
-                            data-i18n="fetching">Fetching...</span>
-                        <p class="last-update"><span data-i18n="lastUpdated">Last Updated:</span> <span
-                                id="lastUpdated">--:--:--</span></p>
+
+                    <div class="telemetry-card-footer">
+                        <span class="telemetry-subtext" data-i18n="lastUpdated">Last Packet:</span>
+                        <strong id="lastUpdated" class="telemetry-timestamp">--:--:--</strong>
                     </div>
                 </div>
 
-                <!-- Recommendation Card -->
-                <div class="iot-card glass">
-                    <div class="iot-card-header">
-                        <span class="iot-icon">💡</span>
-                        <h3 data-i18n="iotAIRec">AI Recommendation</h3>
+                <!-- Recommendation & Hardware Status Card -->
+                <div class="telemetry-card">
+                    <div class="telemetry-card-header">
+                        <div class="telemetry-header-title">
+                            <span class="telemetry-icon-wrap icon-advisor">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                            </span>
+                            <h3 data-i18n="iotAIRec">Agronomic Assessment</h3>
+                        </div>
+                        <span class="telemetry-tag-pill">DYNAMIC ADVISORY</span>
                     </div>
+
                     <div class="iot-recommendation-box">
-                        <p id="iotRecommendation">Please wait for sensor data...</p>
+                        <p id="iotRecommendation">Awaiting live telemetry packet from ESP32 station...</p>
                     </div>
-                    <div class="iot-info-grid">
-                        <div class="iot-info-item">
-                            <span class="info-label" data-i18n="iotOptRange">Optimal Range</span>
-                            <span class="info-value">40% - 70%</span>
+
+                    <div class="telemetry-specs-grid">
+                        <div class="spec-tile">
+                            <span class="spec-label" data-i18n="iotOptRange">Target Range</span>
+                            <span class="spec-value">40% – 70%</span>
                         </div>
-                        <div class="iot-info-item">
-                            <span class="info-label" data-i18n="iotConn">Connection</span>
-                            <span class="info-value" id="connectionStatus" style="color:var(--g-600)"
-                                data-i18n="iotLive">Live</span>
+                        <div class="spec-tile">
+                            <span class="spec-label" data-i18n="iotConn">Telemetry Link</span>
+                            <span class="spec-value" id="connectionStatus" style="color:var(--g-700);" data-i18n="iotLive">Active</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Stats Row -->
+            <!-- 4-Stat Strip -->
             <div class="iot-stats-row">
-                <div class="iot-stat-pill glass">
-                    <span class="iot-stat-icon">📉</span>
-                    <div>
-                        <span class="iot-stat-label" data-i18n="iotMinToday">Min Today</span>
-                        <span class="iot-stat-val" id="moistureMin">--</span><span
-                            style="font-size:0.8rem;color:var(--n-400);">%</span>
+                <div class="stat-pill-card">
+                    <span class="stat-pill-glyph glyph-down">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+                    </span>
+                    <div class="stat-pill-data">
+                        <span class="stat-pill-label" data-i18n="iotMinToday">24h Minimum</span>
+                        <div class="stat-pill-number-wrap">
+                            <span class="stat-pill-val" id="moistureMin">--</span><small>%</small>
+                        </div>
                     </div>
                 </div>
-                <div class="iot-stat-pill glass">
-                    <span class="iot-stat-icon">📈</span>
-                    <div>
-                        <span class="iot-stat-label" data-i18n="iotMaxToday">Max Today</span>
-                        <span class="iot-stat-val" id="moistureMax">--</span><span
-                            style="font-size:0.8rem;color:var(--n-400);">%</span>
+
+                <div class="stat-pill-card">
+                    <span class="stat-pill-glyph glyph-up">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                    </span>
+                    <div class="stat-pill-data">
+                        <span class="stat-pill-label" data-i18n="iotMaxToday">24h Maximum</span>
+                        <div class="stat-pill-number-wrap">
+                            <span class="stat-pill-val" id="moistureMax">--</span><small>%</small>
+                        </div>
                     </div>
                 </div>
-                <div class="iot-stat-pill glass">
-                    <span class="iot-stat-icon">≈</span>
-                    <div>
-                        <span class="iot-stat-label" data-i18n="iotAverage">Average</span>
-                        <span class="iot-stat-val" id="moistureAvg">--</span><span
-                            style="font-size:0.8rem;color:var(--n-400);">%</span>
+
+                <div class="stat-pill-card">
+                    <span class="stat-pill-glyph glyph-avg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    </span>
+                    <div class="stat-pill-data">
+                        <span class="stat-pill-label" data-i18n="iotAverage">Moving Average</span>
+                        <div class="stat-pill-number-wrap">
+                            <span class="stat-pill-val" id="moistureAvg">--</span><small>%</small>
+                        </div>
                     </div>
                 </div>
-                <div class="iot-stat-pill glass">
-                    <span class="iot-stat-icon">📡</span>
-                    <div>
-                        <span class="iot-stat-label" data-i18n="iotReadings">Readings</span>
-                        <span class="iot-stat-val" id="moistureCount">0</span>
+
+                <div class="stat-pill-card">
+                    <span class="stat-pill-glyph glyph-radio">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.93 19.07a10 10 0 0 1 0-14.14"></path><path d="M7.76 16.24a6 6 0 0 1 0-8.48"></path><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.48"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                    </span>
+                    <div class="stat-pill-data">
+                        <span class="stat-pill-label" data-i18n="iotReadings">Packet Count</span>
+                        <div class="stat-pill-number-wrap">
+                            <span class="stat-pill-val" id="moistureCount">0</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Live History Chart -->
-            <div class="iot-chart-card glass">
-                <div class="iot-card-header" style="width:100%;">
-                    <span class="iot-icon">📊</span>
-                    <h3 data-i18n="iotChartTitle">Live Moisture History</h3>
-                    <span style="margin-left:auto;font-size:0.75rem;color:var(--n-400);font-weight:600;"
-                        data-i18n="iotLast20">Last 20 Readings</span>
+            <!-- Historical Moisture Trendline Chart -->
+            <div class="iot-chart-card">
+                <div class="chart-header-row">
+                    <div class="chart-title-block">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                        <h3 data-i18n="iotChartTitle">Root-Zone Moisture Trendline</h3>
+                    </div>
+                    <span class="chart-sample-badge" data-i18n="iotLast20">Last 20 Telemetry Samples</span>
                 </div>
                 <div class="iot-chart-wrap">
                     <canvas id="moistureChart"></canvas>
                 </div>
                 <div class="chart-legend">
-                    <span><span class="legend-dot" style="background:#ef4444;"></span> Dry &lt;30%</span>
-                    <span><span class="legend-dot" style="background:#22c55e;"></span> Optimal 30–75%</span>
-                    <span><span class="legend-dot" style="background:#0ea5e9;"></span> Wet &gt;75%</span>
+                    <span class="legend-item"><span class="legend-dot dot-dry"></span> Deficit (&lt;30%)</span>
+                    <span class="legend-item"><span class="legend-dot dot-opt"></span> Optimal (30–75%)</span>
+                    <span class="legend-item"><span class="legend-dot dot-wet"></span> Saturated (&gt;75%)</span>
                 </div>
             </div>
 
-            <!-- Weather + Health Row -->
+            <!-- Field Agrometeorology + Soil Vigor Index -->
             <div class="iot-bottom-grid">
-                <!-- Field Weather -->
-                <div class="iot-card glass field-weather-card" style="align-items:flex-start;">
-                    <div class="iot-card-header">
-                        <span class="iot-icon">🌤️</span>
-                        <h3 data-i18n="iotWeather">Field Weather</h3>
+                <!-- Weather Station -->
+                <div class="telemetry-card">
+                    <div class="telemetry-card-header">
+                        <div class="telemetry-header-title">
+                            <span class="telemetry-icon-wrap icon-weather">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+                            </span>
+                            <h3 data-i18n="iotWeather">Field Agrometeorology</h3>
+                        </div>
                     </div>
                     <div id="iotWeatherContent" class="iot-weather-content">
-                        <p style="color:var(--n-400);font-size:0.9rem;text-align:center;width:100%;padding:1rem 0;"
-                            data-i18n="iotDetectLoc">
-                            Detecting location...</p>
+                        <p class="text-muted" data-i18n="iotDetectLoc">Querying station coordinates...</p>
                     </div>
-                    <button class="btn-ghost" onclick="fetchIoTWeather()"
-                        style="margin-top:auto;width:100%;padding:0.75rem;font-size:0.9rem;"
-                        data-i18n="iotRefreshWeather">🔄 Refresh Weather</button>
+                    <button class="btn-secondary btn-full" onclick="fetchIoTWeather()" style="margin-top:auto;" data-i18n="iotRefreshWeather">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                        <span>Refresh Weather Feed</span>
+                    </button>
                 </div>
 
-                <!-- Soil Health Score -->
-                <div class="iot-card glass" style="align-items:flex-start;">
-                    <div class="iot-card-header">
-                        <span class="iot-icon">🌱</span>
-                        <h3 data-i18n="iotSoilHealth">Soil Health Score</h3>
+                <!-- Soil Vigor Index -->
+                <div class="telemetry-card">
+                    <div class="telemetry-card-header">
+                        <div class="telemetry-header-title">
+                            <span class="telemetry-icon-wrap icon-health">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            </span>
+                            <h3 data-i18n="iotSoilHealth">Soil Vigor Index</h3>
+                        </div>
                     </div>
                     <div class="iot-health-display">
                         <div class="health-ring-wrap">
@@ -556,114 +703,122 @@
                             </div>
                         </div>
                         <div class="health-details">
-                            <div id="healthGrade" class="health-grade" data-i18n="iotWaiting">Waiting...</div>
-                            <p id="healthTip"
-                                style="font-size:0.85rem;color:var(--n-600);margin-top:0.5rem;line-height:1.5;"
-                                data-i18n="iotConnectSensor">Connect sensor to get your soil health score.</p>
+                            <div id="healthGrade" class="health-grade" data-i18n="iotWaiting">Evaluating...</div>
+                            <p id="healthTip" class="health-tip-text" data-i18n="iotConnectSensor">Awaiting live sensor telemetry to compute soil health score.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Alert Banner -->
+            <!-- Telemetry Threshold Alert Banner -->
             <div id="iotAlertBanner" class="iot-alert-banner hidden">
-                <span id="iotAlertIcon" style="font-size:1.5rem;">⚠️</span>
-                <div style="flex:1;">
-                    <strong id="iotAlertTitle" style="display:block;font-size:1rem;">Alert</strong>
-                    <p id="iotAlertMsg" style="font-size:0.875rem;color:var(--n-100);margin-top:0.25rem;">--</p>
+                <span id="iotAlertIcon" class="alert-icon-wrap">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </span>
+                <div class="alert-text-body">
+                    <strong id="iotAlertTitle" class="alert-title">Agronomic Alert</strong>
+                    <p id="iotAlertMsg" class="alert-message">--</p>
                 </div>
-                <button onclick="document.getElementById('iotAlertBanner').classList.add('hidden')"
-                    style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:rgba(255,255,255,0.7);">✕</button>
+                <button onclick="document.getElementById('iotAlertBanner').classList.add('hidden')" class="btn-dismiss-alert" aria-label="Dismiss Alert">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
             </div>
 
         </div>
     </main>
 
-
-    <!-- Floating Chatbot Widget -->
+    <!-- Floating AI Agronomist Consultation Drawer -->
     <div id="chatbotWidget">
-
-        <!-- Chat Panel -->
         <div id="chatPanel" class="chat-hidden">
-            <!-- Header -->
             <div class="chat-header">
                 <div class="chat-header-info">
-                    <div class="chat-avatar">
-                        <img src="assets/images/logo2.png" alt="AI"
-                            style="width: 24px; height: 24px; object-fit: contain;">
+                    <div class="chat-avatar-badge">
+                        <img src="assets/images/logo2.png" alt="AI" style="width: 20px; height: 20px; object-fit: contain;">
                     </div>
                     <div>
-                        <div class="chat-title">AgriSense AI Assistant</div>
-                        <div class="chat-status">● Online</div>
+                        <div class="chat-title">AgriSense Agronomist</div>
+                        <div class="chat-status-indicator">
+                            <span class="status-indicator-dot"></span>
+                            <span>Model: Active</span>
+                        </div>
                     </div>
                 </div>
                 <div class="chat-header-actions">
-                    <button onclick="clearChat()" title="Clear chat" class="chat-action-btn">🗑️</button>
-                    <button onclick="toggleChatbot()" class="chat-action-btn">✕</button>
+                    <button onclick="clearChat()" title="Reset Session" class="chat-action-btn" aria-label="Clear chat">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                    <button onclick="toggleChatbot()" class="chat-action-btn" aria-label="Close chat">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
                 </div>
             </div>
 
-            <!-- Messages -->
+            <!-- Messages Thread -->
             <div id="chatMessages" class="chat-messages-area">
                 <div class="chat-msg ai-msg">
-                    👋 Hi! I'm your AgriSense AI assistant. Ask me anything about diseases, treatment, or farming!
+                    Welcome to AgriSense AI. You can query pathogen management, chemical dosages, biological controls, or irrigation schedules.
                 </div>
             </div>
 
-            <!-- Quick Suggestions -->
+            <!-- Clinical Suggestions -->
             <div id="chatSuggestions" class="chat-suggestions-list">
-                <button class="chat-sugg" onclick="sendChatSuggestion('How to treat late blight?')">🍅 Late blight
-                    cure</button>
-                <button class="chat-sugg" onclick="sendChatSuggestion('Organic pest control tips?')">🌿 Organic pest
-                    control</button>
-                <button class="chat-sugg" onclick="sendChatSuggestion('How to improve soil health?')">🌱 Improve soil
-                    health</button>
+                <button class="chat-sugg" onclick="sendChatSuggestion('How to treat late blight in tomatoes?')">Late blight protocol</button>
+                <button class="chat-sugg" onclick="sendChatSuggestion('Organic pest control tips?')">Biological pest control</button>
+                <button class="chat-sugg" onclick="sendChatSuggestion('How to improve soil health?')">Soil health improvement</button>
             </div>
 
-            <!-- Input -->
+            <!-- Input Bar -->
             <div class="chat-input-area">
-                <input id="chatInput" type="text" placeholder="Ask about diseases or farming..."
-                    onkeypress="if(event.key==='Enter')sendChatMessage()">
-                <button class="chat-send-btn" onclick="sendChatMessage()">➤</button>
+                <input id="chatInput" type="text" placeholder="Inquire about pathology, soil nutrients, or field management..."
+                    onkeypress="if(event.key==='Enter')sendChatMessage()" data-i18n-placeholder="chatPlaceholder">
+                <button class="chat-send-btn" onclick="sendChatMessage()" aria-label="Send Message">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
             </div>
         </div>
 
-        <!-- Toggle Bubble -->
-        <button id="chatToggleBtn" onclick="toggleChatbot()" title="Open AgriSense AI Chat">
-            <img src="assets/images/logo2.png" alt="Chat"
-                style="width: 36px; height: 36px; object-fit: contain; filter: brightness(0) invert(1);">
+        <!-- Toggle Button -->
+        <button id="chatToggleBtn" onclick="toggleChatbot()" title="Open Agronomic Consultation" aria-label="Open Chat">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
         </button>
     </div>
 
-    <!-- Loading Overlay -->
+    <!-- Processing Overlay -->
     <div id="loadingOverlay" class="loading-overlay hidden">
-        <div style="text-align:center">
-            <div class="voice-anim">🚜</div>
-            <p id="loadingText" style="margin-top:1rem; font-weight:700">Loading...</p>
+        <div class="loading-card">
+            <div class="radar-spinner"></div>
+            <p id="loadingText" class="loading-caption">Processing Diagnostic Inference...</p>
         </div>
     </div>
 
+    <!-- Farm Footer -->
     <footer class="farm-footer">
-        <div class="container farm-footer-inner"
-            style="justify-content: center; flex-direction: column; align-items: center; gap: 1rem;">
-            <img src="assets/images/logo.png" class="footer-logo" alt="AgriSense AI Logo">
+        <div class="container farm-footer-inner">
+            <div class="footer-brand-wrap">
+                <img src="assets/images/logo.png" class="footer-logo" alt="AgriSense AI Logo">
+                <p class="footer-motto">From a single leaf to smarter field decisions.</p>
+            </div>
+            <div class="footer-compliance">
+                <span>AgriSense Precision AI v2.4</span>
+                <span class="compliance-separator">·</span>
+                <span>MobileNet-V2 Pathology Engine</span>
+                <span class="compliance-separator">·</span>
+                <span>IoT Telemetry Link Active</span>
+            </div>
         </div>
     </footer>
 
-    <!-- Authentication Overlay -->
+    <!-- Operator Authentication Dialog -->
     <div id="authOverlay" class="auth-overlay hidden">
-        <div class="auth-card glass">
+        <div class="auth-card">
             <div class="auth-header">
-                <span class="auth-icon">🌱</span>
-                <h2 id="authTitle">Create Account</h2>
-                <p id="authSubtitle">Join AgriSense AI to continue.</p>
+                <h2 id="authTitle" class="auth-heading">Operator Access</h2>
+                <p id="authSubtitle" class="auth-subheading">Sign in to sync your diagnostic archive and field telemetry.</p>
             </div>
 
             <div class="auth-toggle">
-                <button type="button" class="auth-toggle-btn active" id="btnSignup"
-                    onclick="toggleAuthMode('signup')">Sign Up</button>
-                <button type="button" class="auth-toggle-btn" id="btnLogin"
-                    onclick="toggleAuthMode('login')">Login</button>
+                <button type="button" class="auth-toggle-btn active" id="btnSignup" onclick="toggleAuthMode('signup')">Create Account</button>
+                <button type="button" class="auth-toggle-btn" id="btnLogin" onclick="toggleAuthMode('login')">Sign In</button>
             </div>
 
             <form id="authForm" class="auth-form" onsubmit="handleAuth(event)">
@@ -673,74 +828,99 @@
                 </div>
                 <div class="input-group">
                     <label for="authPhone">Phone Number</label>
-                    <input type="tel" id="authPhone" placeholder="Enter your 10-digit number" pattern="[0-9]{10}"
-                        required>
+                    <input type="tel" id="authPhone" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
                 </div>
                 <div class="input-group">
                     <label for="authPassword">Password</label>
-                    <input type="password" id="authPassword" placeholder="Enter your password" required>
-                    <a href="#" id="forgotPasswordLink" onclick="toggleAuthMode('reset'); return false;"
-                        style="font-size:0.8rem; color:var(--g-600); text-align:right; display:block; margin-top:0.25rem; display:none;">Forgot
-                        Password?</a>
+                    <input type="password" id="authPassword" placeholder="Enter account password" required>
+                    <a href="#" id="forgotPasswordLink" onclick="toggleAuthMode('reset'); return false;" class="forgot-link">Forgot Password?</a>
                 </div>
                 <p id="authError" class="auth-error"></p>
-                <button type="submit" id="authSubmitBtn" class="btn-glow auth-btn" style="width:100%">Sign Up</button>
+                <button type="submit" id="authSubmitBtn" class="btn-primary btn-full">Create Account</button>
             </form>
         </div>
     </div>
 
-    <!-- Profile Modal -->
+    <!-- Operator Profile Sheet -->
     <div id="profileModal" class="profile-overlay hidden">
-        <div class="profile-card-premium glass">
+        <div class="profile-card-premium">
             <div class="profile-banner"></div>
 
             <div class="profile-header-premium">
-                <label for="profilePhotoInput" class="profile-photo-wrap" title="Upload Photo">
+                <label for="profilePhotoInput" class="profile-photo-wrap" title="Upload Operator Photo">
                     <div id="profilePhotoContainer" class="profile-photo-container">
-                        <span id="profilePhotoEmoji">👤</span>
+                        <span id="profilePhotoEmoji">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        </span>
                         <img id="profilePhotoImg" src="" alt="Profile Photo" style="display:none;">
                     </div>
-                    <div class="profile-photo-edit-badge">📷</div>
+                    <div class="profile-photo-edit-badge" title="Change Photo">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                    </div>
                 </label>
-                <input type="file" id="profilePhotoInput" accept="image/*" style="display:none"
-                    onchange="handleProfilePhotoUpload(event)">
+                <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="handleProfilePhotoUpload(event)">
 
-                <h2 id="profileName" class="profile-name-premium">User Name</h2>
-                <p id="profilePhone" class="profile-phone-premium">Phone</p>
-                <div class="profile-member-since">Member Since <span id="profileDate">2026</span></div>
+                <h2 id="profileName" class="profile-name-premium">Operator</h2>
+                <p id="profilePhone" class="profile-phone-premium">--</p>
+                <div class="profile-member-since">Active Since <span id="profileDate">2026</span></div>
             </div>
 
             <div class="profile-stats-premium">
                 <div class="stat-badge stat-scans">
-                    <span class="stat-icon">🍃</span>
+                    <span class="stat-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                    </span>
                     <div class="stat-info">
                         <span class="stat-value" id="profileScans">0</span>
-                        <span class="stat-label">Leaf Scans</span>
+                        <span class="stat-label">Diagnostic Scans</span>
                     </div>
                 </div>
                 <div class="stat-badge stat-moisture">
-                    <span class="stat-icon">💧</span>
+                    <span class="stat-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+                    </span>
                     <div class="stat-info">
                         <span class="stat-value" id="profileMoisture">--</span>
-                        <span class="stat-label">Moisture</span>
+                        <span class="stat-label">Last Moisture</span>
                     </div>
                 </div>
                 <div class="stat-badge stat-lang">
-                    <span class="stat-icon">🌐</span>
+                    <span class="stat-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    </span>
                     <div class="stat-info">
                         <span class="stat-value" id="profileLanguage">English</span>
-                        <span class="stat-label">Language</span>
+                        <span class="stat-label">Dialect</span>
                     </div>
                 </div>
             </div>
 
             <div class="profile-actions-premium">
-                <button class="btn-ghost profile-btn" onclick="closeProfile()">Close</button>
-                <button class="btn-glow profile-btn-danger" onclick="logout()">Logout</button>
+                <button class="btn-secondary" onclick="closeProfile()">Close</button>
+                <button class="btn-danger-outline" onclick="logout()">Sign Out</button>
             </div>
         </div>
     </div>
 
+    <!-- Hidden safety anchors for script compatibility -->
+    <div id="farmLightingOverlay" style="display:none;"></div>
+    <div id="voiceAnim" style="display:none;"></div>
+    <div id="voiceBtn" style="display:none;"><span id="voiceBtnIcon"></span><span id="voiceBtnText"></span></div>
+    <div id="voiceStatus" style="display:none;"></div>
+    <div id="voiceTranscript" style="display:none;"></div>
+    <div id="voiceResponse" style="display:none;"></div>
+    <div id="voiceSuggestions" style="display:none;"></div>
+    <div id="voiceLangSelect" style="display:none;"></div>
+    <div id="aiResponse" style="display:none;"></div>
+    <div id="userTranscript" style="display:none;"></div>
+    <div id="tempValue" style="display:none;"></div>
+    <div id="mMoist" style="display:none;"></div>
+    <div id="mTemp" style="display:none;"></div>
+    <div id="mHumid" style="display:none;"></div>
+    <div id="mobDrawer" style="display:none;"></div>
+    <div id="mobOverlay" style="display:none;"></div>
+
+    <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="config.js"></script>
     <script src="js/script.js"></script>
