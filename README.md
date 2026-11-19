@@ -29,7 +29,7 @@
 
 ## 🧭 Quick Navigation
 
-[🌾 Why AgriSense AI](#-why-agrisense-ai) · [🧬 Anatomy](#-the-anatomy-of-agrisense-ai) · [🍃 Journey of a Leaf](#-the-journey-of-a-leaf) · [✨ Features](#-features) · [🏗️ Architecture](#️-architecture) · [📴 Online vs Offline](#-works-when-the-network-doesnt) · [🛠️ Tech Stack](#️-tech-stack) · [📂 Repository Structure](#-repository-structure) · [📖 Glossary](#-plain-language-glossary) · [❓ FAQ](#-faq) · [🛡️ Responsible Use](#️-responsible-use) · [🔭 Horizon](#-horizon)
+[🌾 Why AgriSense AI](#-why-agrisense-ai) · [🧬 Anatomy](#-the-anatomy-of-agrisense-ai) · [🍃 Journey of a Leaf](#-the-journey-of-a-leaf) · [✨ Features](#-features) · [🏗️ Architecture](#️-architecture) · [📴 Online vs Offline](#-works-when-the-network-doesnt) · [🛠️ Tech Stack](#️-tech-stack) · [⚡ Installation & How to Run](#-installation--how-to-run) · [📂 Repository Structure](#-repository-structure) · [📖 Glossary](#-plain-language-glossary) · [❓ FAQ](#-faq) · [🛡️ Responsible Use](#️-responsible-use) · [🔭 Horizon](#-horizon)
 
 ---------------------------------------------------------------------------------------------------------------
 
@@ -299,6 +299,207 @@ Rural connectivity is a design requirement, not an afterthought.
 
 -------------------------------------------------------------------------------------------------
 
+<a id="-installation--how-to-run"></a>
+## ⚡ Installation & How to Run
+
+Follow this step-by-step guide to set up AgriSense AI locally, run the server and web interfaces, or connect the physical ESP32 IoT soil telemetry node.
+
+### 📋 Prerequisites
+
+Before proceeding, ensure your development machine has the following tools installed:
+
+| Component | Minimum Version | Purpose |
+| :--- | :--- | :--- |
+| **Python** | `3.10` or `3.11` *(tested on Python 3.11.5)* | Backend server, ML inference & processing scripts |
+| **Git** | `2.x+` | Source code management |
+| **Modern Web Browser** | Chrome, Edge, Safari, Firefox | PWA interface, WebRTC camera capture & telemetry charts |
+| *(Optional)* **Arduino IDE** | `2.x+` | Flashing telemetry firmware to ESP32 board |
+| *(Optional)* **Groq Cloud API Key** | Free tier available | Online AI Agronomist chatbot ([Get API Key](https://console.groq.com/)) |
+
+---
+
+### 📦 Step 1: Clone the Repository
+
+Clone the project repository to your local system and enter the project directory:
+
+```bash
+git clone https://github.com/Dheeraj-del-cyber/IPBL.git
+cd IPBL2
+```
+
+---
+
+### 🐍 Step 2: Set Up Python Virtual Environment
+
+It is recommended to use an isolated Python virtual environment to manage dependencies cleanly.
+
+#### On Windows (PowerShell / Command Prompt):
+```powershell
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment (PowerShell)
+.\venv\Scripts\Activate.ps1
+
+# (Or if using CMD instead)
+# .\venv\Scripts\activate.bat
+```
+
+> **Note for Windows Users:** If PowerShell displays an execution policy error, enable script execution for your session by running: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`.
+
+#### On Linux / macOS:
+```bash
+# Create virtual environment
+python3 -m venv venv
+
+# Activate virtual environment
+source venv/bin/activate
+```
+
+---
+
+### 📥 Step 3: Install Dependencies
+
+With the virtual environment activated, install all required packages:
+
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+*(This installs Flask, Flask-CORS, TensorFlow CPU, OpenCV Headless, Pillow, NumPy, Requests, and python-dotenv).*
+
+---
+
+### ⚙️ Step 4: Configure Environment Variables
+
+The server loads environment configurations from `server/.env`.
+
+Verify or configure [`server/.env`](file:///c:/Users/Dheeraj/OneDrive/Videos/Music/Desktop/HACKATHONS/IPBL2/server/.env):
+
+```env
+# Groq Cloud API for Conversational Agronomist Chatbot
+GROQ_API_KEY=your_groq_api_key_here
+GROQ_MODEL=qwen/qwen3.8-27b
+
+# Server Networking & Execution
+PORT=5000
+FLASK_DEBUG=0
+MAX_CONTENT_LENGTH=8388608
+```
+
+> 💡 **Note:** If `GROQ_API_KEY` is omitted, the application will automatically fall back to the built-in offline agronomic rule-engine for diagnosis explanations and crop planning advice.
+
+---
+
+### 🚀 Step 5: Running the Application
+
+You can run AgriSense AI in three convenient modes depending on your workflow:
+
+#### Mode A: Full-Stack Local Server (Recommended for Development)
+This mode runs the Python Flask server locally. The Flask backend handles CNN disease classification, crop recommendation, IoT telemetry ingestion, and serves the static web UI directly.
+
+1. **Configure Web Client for Localhost:**
+   Open [`web/config.js`](file:///c:/Users/Dheeraj/OneDrive/Videos/Music/Desktop/HACKATHONS/IPBL2/web/config.js) and point the API base to your local server:
+   ```javascript
+   window.API_BASE = "http://127.0.0.1:5000";
+   ```
+   *(Or leave empty / commented out to allow automatic origin detection).*
+
+2. **Launch the Flask Application Server:**
+   ```bash
+   python server/app.py
+   ```
+   *(TensorFlow initializes and model weights are cached within 3–5 seconds).*
+
+3. **Access in Your Web Browser:**
+   Navigate to:
+   ```
+   http://localhost:5000
+   ```
+   You now have access to the full operations hub, foliar disease camera scanner, cultivar planner, and live IoT telemetry visualizer!
+
+---
+
+#### Mode B: Lightweight Frontend-Only (Connected to Cloud Render API)
+If you prefer not to run Python or TensorFlow on your local machine, the frontend can connect directly to the live cloud-deployed backend on Render.
+
+1. **Verify Cloud Target in `web/config.js`:**
+   ```javascript
+   window.API_BASE = "https://ipbl-p70f.onrender.com";
+   ```
+
+2. **Launch the Frontend:**
+   You can serve the web client using any simple static file server:
+   ```bash
+   # Using Python's built-in HTTP server
+   python -m http.server 3000 --directory web
+   ```
+   *(Alternatively, open [`web/index.html`](file:///c:/Users/Dheeraj/OneDrive/Videos/Music/Desktop/HACKATHONS/IPBL2/web/index.html) directly with the VS Code **Live Server** extension, or double-click `web/index.html` in your file explorer).*
+
+3. **Navigate to:**
+   ```
+   http://localhost:3000
+   ```
+
+---
+
+#### Mode C: Connect the ESP32 IoT Soil Moisture Node
+To stream real-time soil moisture telemetry into the web dashboard from physical soil:
+
+1. **Hardware Pin Connections:**
+   - Connect the **VCC** pin of the Capacitive Soil Moisture Sensor to **3.3V** or **5V** on the ESP32.
+   - Connect the **GND** pin of the sensor to **GND** on the ESP32.
+   - Connect the **Analog Signal (AOUT)** pin to **GPIO 36 (VP)** on the ESP32.
+   - Connect the ESP32 to your PC via a Micro-USB data cable.
+
+2. **Configure the Firmware:**
+   Open [`iot/esp32_firmware/esp32_firmware.ino`](file:///c:/Users/Dheeraj/OneDrive/Videos/Music/Desktop/HACKATHONS/IPBL2/iot/esp32_firmware/esp32_firmware.ino) in the **Arduino IDE**:
+   ```cpp
+   // Set your Wi-Fi credentials
+   const char* WIFI_SSID     = "YOUR_WIFI_NAME";
+   const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
+
+   // Target Server Endpoint (Render Cloud or Local IP)
+   const char* SERVER_URL    = "https://ipbl-p70f.onrender.com/update_moisture";
+   // For local development on the same Wi-Fi, use: "http://<YOUR_PC_IP>:5000/update_moisture"
+   ```
+
+3. **Flash the Node:**
+   - In Arduino IDE, go to **Tools → Board** → select `ESP32 Dev Module`.
+   - Select your USB COM Port under **Tools → Port** (e.g., `COM3` on Windows, `/dev/ttyUSB0` on Linux).
+   - Set **Tools → Upload Speed** to `115200` *(recommended to prevent serial buffer drops during flash)*.
+   - Click **Upload**.
+
+4. **Verify Live Stream:**
+   - Open **Tools → Serial Monitor** at `115200 baud`.
+   - The ESP32 will print Wi-Fi connection status, raw ADC values, calculated moisture percentages, and HTTP response codes.
+   - Switch to the **IoT Telemetry** screen on the web interface to view the live fluid wave indicator and historical charts updating in real time.
+
+---
+
+### 🧪 Step 6: Automated Testing & API Verification
+
+You can verify server health and external API connectivity with the built-in testing script:
+
+```bash
+python tests/test_api.py
+```
+
+To manually verify the IoT moisture ingestion API via CLI:
+
+```bash
+# On Windows (PowerShell)
+Invoke-RestMethod -Uri "http://127.0.0.1:5000/update_moisture" -Method Post -ContentType "application/json" -Body '{"moisture": 52.4}'
+Invoke-RestMethod -Uri "http://127.0.0.1:5000/get_moisture"
+
+# On Linux / macOS (cURL)
+curl -X POST http://127.0.0.1:5000/update_moisture -H "Content-Type: application/json" -d "{\"moisture\": 52.4}"
+curl http://127.0.0.1:5000/get_moisture
+```
+
+-------------------------------------------------------------------------------------------------
+
 ## 📂 Repository Structure
 
 ```text
@@ -308,6 +509,9 @@ IPBL2/
 │   │   ├── train/                # Training samples by disease category
 │   │   └── val/                  # Validation samples
 │   └── README.md                 # Dataset documentation & class listing
+├── iot/                          # Embedded telematics & sensor firmware
+│   └── esp32_firmware/           # Arduino firmware for ESP32 capacitive sensor
+│       └── esp32_firmware.ino    # Real-time HTTPS telemetry publisher
 ├── scripts/                      # ML training, download & export utilities
 │   ├── download_model.py         # Automated model weights downloader
 │   ├── export_to_web.py          # TensorFlow.js converter for offline PWA
