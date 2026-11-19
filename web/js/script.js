@@ -1808,6 +1808,7 @@ async function fetchIoTWeather() {
     }
     navigator.geolocation.getCurrentPosition(async (pos) => {
         const { latitude: lat, longitude: lon } = pos.coords;
+        setSunTrajectoryLocation(lat, lon);
         try {
             const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,apparent_temperature&timezone=auto`);
             const data = await res.json();
@@ -2115,6 +2116,7 @@ function autoFillLocationData() {
 
     navigator.geolocation.getCurrentPosition(async (pos) => {
         const { latitude: lat, longitude: lon } = pos.coords;
+        setSunTrajectoryLocation(lat, lon);
         try {
             // Fetch Location Name (Reverse Geocoding)
             const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
@@ -2225,6 +2227,199 @@ async function fetchCropRecommendation() {
 
 
 /* ==========================================================================
+   MOBILE HERO SUN / MOON TRAJECTORY
+   ========================================================================== */
+let sunTrajectoryLocation = null;
+let sunTrajectoryFrame = null;
+let sunTrajectoryPath = null;
+let sunTrajectoryPathLength = 0;
+let sunTrajectorySun = null;
+let sunTrajectoryMoon = null;
+let sunTrajectoryRoot = null;
+let cachedSunEventsKey = '';
+let cachedSunEvents = null;
+
+function setSunTrajectoryLocation(latitude, longitude) {
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude) ||
+        latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) return;
+
+    sunTrajectoryLocation = { latitude, longitude };
+    cachedSunEventsKey = '';
+    updateSunTrajectory();
+}
+
+function fallbackSunEvent(date, sunrise) {
+    const event = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    event.setHours(sunrise ? 6 : 18, 0, 0, 0);
+    return event;
+}
+
+function normalizeDegrees(degrees) {
+    return ((degrees % 360) + 360) % 360;
+}
+
+function calculateSunEvent(date, sunrise) {
+    if (!sunTrajectoryLocation) return fallbackSunEvent(date, sunrise);
+
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    const dayOfYear = Math.floor(
+        (Date.UTC(year, month, day) - Date.UTC(year, 0, 0)) / 86400000
+    );
+    const longitudeHour = sunTrajectoryLocation.longitude / 15;
+    const approximateTime = dayOfYear + ((sunrise ? 6 : 18) - longitudeHour) / 24;
+    const meanAnomaly = 0.9856 * approximateTime - 3.289;
+    const trueLongitude = normalizeDegrees(
+        meanAnomaly +
+        1.916 * Math.sin(meanAnomaly * Math.PI / 180) +
+        0.020 * Math.sin(2 * meanAnomaly * Math.PI / 180) +
+        282.634
+    );
+
+    let rightAscension = normalizeDegrees(
+        Math.atan(0.91764 * Math.tan(trueLongitude * Math.PI / 180)) * 180 / Math.PI
+    );
+    rightAscension += Math.floor(trueLongitude / 90) * 90 -
+        Math.floor(rightAscension / 90) * 90;
+    rightAscension /= 15;
+
+    const sinDeclination = 0.39782 * Math.sin(trueLongitude * Math.PI / 180);
+    const cosDeclination = Math.cos(Math.asin(sinDeclination));
+    const latitudeRadians = sunTrajectoryLocation.latitude * Math.PI / 180;
+    const cosHourAngle = (
+        Math.cos(90.833 * Math.PI / 180) -
+        sinDeclination * Math.sin(latitudeRadians)
+    ) / (cosDeclination * Math.cos(latitudeRadians));
+
+    if (!Number.isFinite(cosHourAngle) || cosHourAngle < -1 || cosHourAngle > 1) {
+        return fallbackSunEvent(date, sunrise);
+    }
+
+    const hourAngle = sunrise
+        ? 360 - Math.acos(cosHourAngle) * 180 / Math.PI
+        : Math.acos(cosHourAngle) * 180 / Math.PI;
+    const localMeanTime = hourAngle / 15 + rightAscension -
+        0.06571 * approximateTime - 6.622;
+    const utcHours = ((localMeanTime - longitudeHour) % 24 + 24) % 24;
+    let event = new Date(Date.UTC(year, month, day) + utcHours * 3600000);
+    const targetDate = Date.UTC(year, month, day);
+
+    for (let attempt = 0; attempt < 3; attempt++) {
+        const eventDate = Date.UTC(event.getFullYear(), event.getMonth(), event.getDate());
+        if (eventDate === targetDate) return event;
+        event.setDate(event.getDate() + (eventDate < targetDate ? 1 : -1));
+    }
+
+    return fallbackSunEvent(date, sunrise);
+}
+
+function getSunEvents(now) {
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const key = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}-${now.getTimezoneOffset()}-` +
+        `${sunTrajectoryLocation ? `${sunTrajectoryLocation.latitude},${sunTrajectoryLocation.longitude}` : 'fallback'}`;
+
+    if (key !== cachedSunEventsKey) {
+        const yesterday = new Date(today);
+        const tomorrow = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        cachedSunEvents = {
+            sunrise: calculateSunEvent(today, true),
+            sunset: calculateSunEvent(today, false),
+            previousSunset: calculateSunEvent(yesterday, false),
+            nextSunrise: calculateSunEvent(tomorrow, true)
+        };
+        cachedSunEventsKey = key;
+    }
+
+    return cachedSunEvents;
+}
+
+function clampProgress(value) {
+    return Math.max(0, Math.min(1, value));
+}
+
+function updateSunTrajectory(now = new Date()) {
+    if (!sunTrajectoryPath || !sunTrajectorySun || !sunTrajectoryMoon || !sunTrajectoryRoot) return null;
+
+    const events = getSunEvents(now);
+    const transitionDuration = 20 * 60 * 1000;
+    const sunProgress = clampProgress(
+        (now.getTime() - events.sunrise.getTime()) /
+        (events.sunset.getTime() - events.sunrise.getTime())
+    );
+    const sunriseFade = clampProgress(
+        (now.getTime() - (events.sunrise.getTime() - transitionDuration / 2)) / transitionDuration
+    );
+    const sunsetFade = clampProgress(
+        ((events.sunset.getTime() + transitionDuration / 2) - now.getTime()) / transitionDuration
+    );
+    const sunOpacity = Math.min(sunriseFade, sunsetFade);
+    const moonStart = now.getTime() < events.sunrise.getTime() + transitionDuration / 2
+        ? events.previousSunset
+        : events.sunset;
+    const moonEnd = now.getTime() < events.sunrise.getTime() + transitionDuration / 2
+        ? events.sunrise
+        : events.nextSunrise;
+    const moonProgress = 1 - clampProgress(
+        (now.getTime() - moonStart.getTime()) / (moonEnd.getTime() - moonStart.getTime())
+    );
+    const sunPoint = sunTrajectoryPath.getPointAtLength(sunTrajectoryPathLength * sunProgress);
+    const moonPoint = sunTrajectoryPath.getPointAtLength(sunTrajectoryPathLength * moonProgress);
+
+    sunTrajectorySun.setAttribute('transform', `translate(${sunPoint.x} ${sunPoint.y})`);
+    sunTrajectoryMoon.setAttribute('transform', `translate(${moonPoint.x} ${moonPoint.y})`);
+    sunTrajectorySun.setAttribute('opacity', String(sunOpacity));
+    sunTrajectoryMoon.setAttribute('opacity', String(1 - sunOpacity));
+    sunTrajectoryRoot.dataset.phase = sunOpacity > 0.99 ? 'day' : sunOpacity < 0.01 ? 'night' : 'twilight';
+    sunTrajectoryRoot.dataset.sunProgress = String(sunProgress);
+    sunTrajectoryRoot.dataset.moonProgress = String(moonProgress);
+
+    return { phase: sunTrajectoryRoot.dataset.phase, sunProgress, moonProgress, sunOpacity };
+}
+
+function animateSunTrajectory() {
+    updateSunTrajectory(new Date());
+    sunTrajectoryFrame = requestAnimationFrame(animateSunTrajectory);
+}
+
+function startSunTrajectory() {
+    sunTrajectoryRoot = document.querySelector('.hero-trajectory');
+    sunTrajectoryPath = document.getElementById('trajectoryPath');
+    sunTrajectoryPathLength = sunTrajectoryPath ? sunTrajectoryPath.getTotalLength() : 0;
+    sunTrajectorySun = document.getElementById('trajectorySun');
+    sunTrajectoryMoon = document.getElementById('trajectoryMoon');
+    if (!sunTrajectoryPath || !sunTrajectorySun || !sunTrajectoryMoon ||
+        !sunTrajectoryRoot || document.hidden ||
+        getComputedStyle(sunTrajectoryRoot).display === 'none') {
+        stopSunTrajectory();
+        return;
+    }
+
+    updateSunTrajectory(new Date());
+    if (sunTrajectoryFrame === null) {
+        sunTrajectoryFrame = requestAnimationFrame(animateSunTrajectory);
+    }
+}
+
+function stopSunTrajectory() {
+    if (sunTrajectoryFrame !== null) {
+        cancelAnimationFrame(sunTrajectoryFrame);
+        sunTrajectoryFrame = null;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', startSunTrajectory);
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopSunTrajectory();
+    else startSunTrajectory();
+});
+window.addEventListener('resize', startSunTrajectory);
+window.addEventListener('pagehide', stopSunTrajectory);
+window.addEventListener('pageshow', startSunTrajectory);
+
+/* ==========================================================================
    FARM CANVAS LIGHTING LOGIC
    ========================================================================== */
 function updateFarmLighting() {
@@ -2262,7 +2457,8 @@ if (typeof originalNavigateTo === "function") {
         originalNavigateTo(screenId);
         if (screenId === "screenHome") {
             updateFarmLighting();
-        }
+            startSunTrajectory();
+        } else stopSunTrajectory();
     };
 }
 

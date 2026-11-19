@@ -3078,39 +3078,64 @@ ul, ol {
 
     .hero-trajectory {
         position: absolute;
-        top: 0.5rem;
-        left: 12%;
-        right: 12%;
+        top: 0;
+        left: 0;
+        right: 0;
         display: block;
-        height: 2rem;
+        height: 72px;
+        z-index: 1;
         pointer-events: none;
     }
 
-    .trajectory-sun,
-    .trajectory-moon {
-        position: absolute;
-        display: grid;
-        width: 28px;
-        height: 28px;
-        place-items: center;
-        border: 1px solid rgba(255, 255, 255, 0.48);
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.18);
-        color: #fff8cc;
-        font-size: 1rem;
-        line-height: 1;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    .trajectory-svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+
+    .trajectory-path {
+        fill: none;
+        stroke: rgba(255, 255, 255, 0.34);
+        stroke-width: 1.5;
+        stroke-dasharray: 4 9;
+        vector-effect: non-scaling-stroke;
+    }
+
+    .trajectory-body {
+        transform-box: view-box;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.28));
     }
 
     .trajectory-sun {
-        top: 0.15rem;
-        left: 0;
+        color: #ffe28a;
     }
 
-    .trajectory-moon {
-        top: 0.15rem;
-        right: 0;
-        color: #e7efff;
+    .sun-rays {
+        fill: none;
+    }
+
+    .sun-disc {
+        fill: #ffe28a;
+        stroke: rgba(255, 255, 255, 0.72);
+        stroke-width: 1;
+    }
+
+    .sun-halo {
+        fill: #ffd35a;
+        opacity: 0.2;
+        filter: blur(5px);
+    }
+
+    .moon-disc {
+        fill: #e5eeff;
+        stroke: rgba(255, 255, 255, 0.72);
+        stroke-width: 0.8;
+    }
+
+    .moon-halo {
+        fill: #dce8ff;
+        opacity: 0.16;
+        filter: blur(5px);
     }
 
     .hub-hero-card {
