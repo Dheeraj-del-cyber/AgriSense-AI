@@ -11,7 +11,10 @@ const AppState = {
     selectedFile: null,
     currentLang: localStorage.getItem('agri-lang') || 'en',
     iotInterval: null,
-    lastMoisture: 0
+    lastMoisture: 0,
+    cameraStream: null,
+    cameraRequestId: 0,
+    cameraStatusKey: 'cameraStarting'
 };
 
 
@@ -25,26 +28,40 @@ const TRANSLATIONS = {
         heroTitle1: 'Healthy Crops', heroTitle2: 'Predictable Yields',
         heroDesc: 'Clinical foliar disease diagnosis, real-time root-zone telemetry, and verified agronomic protocols.',
         heroBtn1: 'Analyze Leaf Specimen',
+        tabletReady: 'READY TO SCAN', tabletKicker: 'PLANT HEALTH CHECK',
+        tabletHeading: 'Analyze Leaf Specimen',
+        tabletDescription: "Discover your crop's health with AI-powered diagnostics.",
+        tabletButton: 'Start Leaf Scanning',
+        cameraInstruction: 'Position the leaf inside the frame.',
+        cameraStarting: 'Preparing live camera…',
+        cameraConnecting: 'Connecting to the live camera…',
+        cameraReady: 'Camera ready. Position the leaf inside the frame.',
+        cameraDenied: 'Camera access was denied. Allow camera permission or use Upload Image.',
+        cameraMissing: 'No camera was found. Use Upload Image to continue.',
+        cameraUnavailable: 'Live camera is unavailable. You can still capture with your device camera or upload an image.',
+        cameraCaptureError: 'Could not capture the photo. Please try again or upload an image.',
         statCrops: 'Crops Supported', statDiseases: 'Pathogens Modeled', statLangs: 'Languages',
         statAdvice: 'Advisory Engine', statFocus: 'Edge Field Ready',
         selectLang: 'Platform Language',
         doThisFirst: 'Primary Operations',
-        qaScanLeaf: 'Pathology Diagnostics', qaScanSub: 'Instant foliar classification',
-        qaIoT: 'Soil Telemetry', qaIoTSub: 'Real-time root-zone moisture',
-        qaChat: 'Agronomic Consultation', qaChatSub: 'Interactive crop advisory',
+        opCardOpen: 'Open',
+        qaScanLeaf: 'Pathology Diagnostics', qaScanSub: 'Spot leaf disease with AI.',
+        qaIoT: 'Soil Telemetry', qaIoTSub: 'Check soil moisture and field readings.',
+        qaChat: 'Agronomic Consultation', qaChatSub: 'Get guidance for crop care.',
         secFeaturesTitle: 'Operational Systems',
-        secFeaturesDesc: 'Integrated field intelligence combining neural diagnostics and hardware telematics.',
+        secFeaturesDesc: 'A few practical tools for healthier crops and smarter field decisions.',
         featDetect: 'Disease Diagnostics', featDetectDesc: 'Computer vision analysis across 38+ plant pathogens.',
         featMonitor: 'Soil Telemetry', featMonitorDesc: 'Live root-zone moisture tracking with dynamic thresholds.',
         todayTip: "Agronomic Bulletin",
-        workflowTitle: 'Diagnostic Protocol', workflowSubtitle: 'From field sample to actionable agronomic treatment in seconds',
-        step1Title: 'Capture Specimen', step1Desc: 'Photograph affected crop foliage under natural lighting.',
-        step2Title: 'Neural Analysis', step2Desc: 'CNN evaluates pathogen signature with confidence scoring.',
-        step3Title: 'Apply Treatment', step3Desc: 'Follow structured biological, chemical, and preventive protocols.',
+        workflowTitle: 'Diagnostic Protocol', workflowSubtitle: 'A practical path from field observation to crop care.',
+        workflowPhase1: 'OBSERVE', workflowPhase2: 'ASSESS', workflowPhase3: 'CARE',
+        step1Title: 'Capture a leaf', step1Desc: 'Take a clear photo of the affected leaf in natural light.',
+        step2Title: 'Review the result', step2Desc: 'See the AI assessment of the leaf and its symptoms.',
+        step3Title: 'Choose next steps', step3Desc: 'Use the diagnosis to guide treatment and crop care.',
         back: 'Back', pageDetect: 'Pathology Diagnostics',
         uploadTitle: 'Upload Foliage Specimen', uploadDrag: 'Drag and drop image or browse file system',
         uploadFormats: 'JPEG / PNG formats supported (up to 8 MB)', uploadHint: 'Ensure foliage is flat, sharp, and in natural daylight.',
-        btnTakePhoto: 'Capture with Camera', btnChoosePhoto: 'Browse Image File',
+        btnTakePhoto: 'Capture Photo', btnChoosePhoto: 'Upload Image',
         retake: 'Discard Specimen', analyze: 'Run Diagnostic Analysis',
         scanStepsTitle: 'Diagnostic Operating Procedure',
         scanStep1: 'Mount or hold specimen flat with clear background',
@@ -77,7 +94,7 @@ const TRANSLATIONS = {
         recSoil: 'Soil Classification', recSeason: 'Agro-Climatic Season', recBtn: 'Generate Cultivar Plan',
         recResultTitle: 'Optimal Crop Selections', recReasoning: 'Agronomic Rationale', recPrep: 'Field & Seedbed Preparation',
         recEmpty: 'Specify regional coordinates, climate metrics, and soil taxonomy to compute optimal crop recommendations.',
-        qaRecommend: 'Crop Planning', qaRecommendSub: 'Targeted cultivar selection'
+        qaRecommend: 'Crop Planning', qaRecommendSub: 'Choose crops for your soil and climate.'
     },
     hi: {
         navHome: 'हब', navDetect: 'रोग पहचान', navCrops: 'फसलें', navScan: 'स्कैन शुरू करें',
@@ -86,10 +103,23 @@ const TRANSLATIONS = {
         heroTitle1: 'स्वस्थ फसलें', heroTitle2: 'स्थिर उत्पादन',
         heroDesc: 'सटीक फसल रोग पहचान, वास्तविक समय मिट्टी नमी ट्रैकिंग, और सत्यापित कृषि उपचार।',
         heroBtn1: 'पत्ती का नमूना विश्लेषित करें',
+        tabletReady: 'स्कैन के लिए तैयार', tabletKicker: 'पौधे के स्वास्थ्य की जांच',
+        tabletHeading: 'पत्ती के नमूने का विश्लेषण करें',
+        tabletDescription: 'AI निदान से अपनी फसल का स्वास्थ्य जानें।',
+        tabletButton: 'पत्ती स्कैन करना शुरू करें',
+        cameraInstruction: 'पत्ती को फ्रेम के अंदर रखें।',
+        cameraStarting: 'लाइव कैमरा तैयार हो रहा है…',
+        cameraConnecting: 'लाइव कैमरे से जुड़ रहे हैं…',
+        cameraReady: 'कैमरा तैयार है। पत्ती को फ्रेम के अंदर रखें।',
+        cameraDenied: 'कैमरा अनुमति अस्वीकृत है। अनुमति दें या छवि अपलोड करें।',
+        cameraMissing: 'कैमरा नहीं मिला। आगे बढ़ने के लिए छवि अपलोड करें।',
+        cameraUnavailable: 'लाइव कैमरा उपलब्ध नहीं है। डिवाइस कैमरा या छवि अपलोड का उपयोग करें।',
+        cameraCaptureError: 'फोटो कैप्चर नहीं हुई। फिर से प्रयास करें या छवि अपलोड करें।',
         statCrops: 'फसलें', statDiseases: 'रोग वर्गीकरण', statLangs: 'भाषाएं',
         statAdvice: 'सलाह इंजन', statFocus: 'फील्ड-तैयार',
         selectLang: 'भाषा चुनें',
         doThisFirst: 'प्रमुख कार्यप्रणाली',
+        opCardOpen: 'खोलें',
         qaScanLeaf: 'रोग निदान', qaScanSub: 'त्वरित रोग पहचान',
         qaIoT: 'मिट्टी टेलीमेट्री', qaIoTSub: 'लाइव मिट्टी नमी डेटा',
         qaChat: 'कृषि परामर्श', qaChatSub: 'विशेषज्ञ से प्रश्न पूछें',
@@ -98,14 +128,15 @@ const TRANSLATIONS = {
         featDetect: 'रोग पहचान', featDetectDesc: 'पत्तियों की छवियों से तुरंत 38+ पादप रोगों का सटीक निदान।',
         featMonitor: 'मिट्टी टेलीमेट्री', featMonitorDesc: 'लाइव रूट-ज़ोन नमी ट्रैकिंग और सिंचाई दिशानिर्देश।',
         todayTip: 'कृषि बुलेटिन',
-        workflowTitle: 'मानक निदान प्रक्रिया', workflowSubtitle: 'नमूना कैप्चर से लेकर सटीक उपचार तक की त्वरित प्रक्रिया',
-        step1Title: 'नमूना कैप्चर करें', step1Desc: 'स्पष्ट प्राकृतिक प्रकाश में फसल की पत्ती की फोटो लें।',
-        step2Title: 'न्यूरल विश्लेषण', step2Desc: 'CNN मॉडल विश्वास स्कोर के साथ रोग की पहचान करता है।',
-        step3Title: 'उपचार लागू करें', step3Desc: 'प्रमाणित जैविक और रासायनिक नियंत्रण दिशानिर्देशों का पालन करें।',
+        workflowTitle: 'रोग निदान प्रक्रिया', workflowSubtitle: 'खेत में पहचान से फसल की देखभाल तक का सरल तरीका।',
+        workflowPhase1: 'निरीक्षण', workflowPhase2: 'जांच', workflowPhase3: 'देखभाल',
+        step1Title: 'पत्ती की फोटो लें', step1Desc: 'प्रभावित पत्ती की स्पष्ट फोटो प्राकृतिक रोशनी में लें।',
+        step2Title: 'परिणाम देखें', step2Desc: 'पत्ती और उसके लक्षणों का AI आकलन देखें।',
+        step3Title: 'अगला कदम चुनें', step3Desc: 'निदान के आधार पर उपचार और फसल की देखभाल करें।',
         back: 'वापस', pageDetect: 'पादप रोग निदान',
         uploadTitle: 'पत्ती का नमूना अपलोड करें', uploadDrag: 'फ़ाइल खींचें या सिस्टम से चुनें',
         uploadFormats: 'JPG / PNG प्रारूप (अधिकतम 8 MB)', uploadHint: 'पत्ती को प्राकृतिक प्रकाश में रखें।',
-        btnTakePhoto: 'कैमरे से फोटो लें', btnChoosePhoto: 'फ़ाइल ब्राउज़ करें',
+        btnTakePhoto: 'फोटो लें', btnChoosePhoto: 'छवि अपलोड करें',
         retake: 'दूसरा फोटो लें', analyze: 'विश्लेषण शुरू करें',
         scanStepsTitle: 'निदान कार्यप्रणाली',
         scanStep1: 'पत्ती को केंद्र में रखकर फोटो चुनें',
@@ -147,10 +178,23 @@ const TRANSLATIONS = {
         heroTitle1: 'ಆರೋಗ್ಯಕರ ಬೆಳೆಗಳು', heroTitle2: 'ಸುಸ್ಥಿರ ಆದಾಯ',
         heroDesc: 'ಸಸ್ಯ ರೋಗಗಳ ನಿಖರ ಪತ್ತೆ, ನೈಜ ಸಮಯದ ಮಣ್ಣಿನ ತೇವಾಂಶ ಮೇಲ್ವಿಚಾರಣೆ ಮತ್ತು ಕೃಷಿ ಮಾರ್ಗದರ್ಶನ.',
         heroBtn1: 'ಎಲೆಯ ಮಾದರಿ ವಿಶ್ಲೇಷಿಸಿ',
+        tabletReady: 'ಸ್ಕ್ಯಾನ್‌ಗೆ ಸಿದ್ಧ', tabletKicker: 'ಸಸ್ಯ ಆರೋಗ್ಯ ಪರಿಶೀಲನೆ',
+        tabletHeading: 'ಎಲೆಯ ಮಾದರಿ ವಿಶ್ಲೇಷಿಸಿ',
+        tabletDescription: 'AI ರೋಗನಿರ್ಣಯದ ಮೂಲಕ ನಿಮ್ಮ ಬೆಳೆಯ ಆರೋಗ್ಯ ತಿಳಿಯಿರಿ.',
+        tabletButton: 'ಎಲೆ ಸ್ಕ್ಯಾನಿಂಗ್ ಪ್ರಾರಂಭಿಸಿ',
+        cameraInstruction: 'ಎಲೆಯನ್ನು ಚೌಕಟ್ಟಿನೊಳಗೆ ಇರಿಸಿ.',
+        cameraStarting: 'ಲೈವ್ ಕ್ಯಾಮೆರಾ ಸಿದ್ಧವಾಗುತ್ತಿದೆ…',
+        cameraConnecting: 'ಲೈವ್ ಕ್ಯಾಮೆರಾಗೆ ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ…',
+        cameraReady: 'ಕ್ಯಾಮೆರಾ ಸಿದ್ಧವಾಗಿದೆ. ಎಲೆಯನ್ನು ಚೌಕಟ್ಟಿನೊಳಗೆ ಇರಿಸಿ.',
+        cameraDenied: 'ಕ್ಯಾಮೆರಾ ಅನುಮತಿ ನಿರಾಕರಿಸಲಾಗಿದೆ. ಅನುಮತಿಸಿ ಅಥವಾ ಚಿತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.',
+        cameraMissing: 'ಕ್ಯಾಮೆರಾ ಕಂಡುಬಂದಿಲ್ಲ. ಮುಂದುವರಿಸಲು ಚಿತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.',
+        cameraUnavailable: 'ಲೈವ್ ಕ್ಯಾಮೆರಾ ಲಭ್ಯವಿಲ್ಲ. ಸಾಧನದ ಕ್ಯಾಮೆರಾ ಅಥವಾ ಚಿತ್ರ ಅಪ್‌ಲೋಡ್ ಬಳಸಿ.',
+        cameraCaptureError: 'ಫೋಟೋ ಸೆರೆಹಿಡಿಯಲಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಚಿತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.',
         statCrops: 'ಬೆಳೆಗಳು', statDiseases: 'ರೋಗ ಮಾದರಿಗಳು', statLangs: 'ಭಾಷೆಗಳು',
         statAdvice: 'ಸಲಹಾ ವ್ಯವಸ್ಥೆ', statFocus: 'ಕ್ಷೇತ್ರ-ಸಿದ್ಧ',
         selectLang: 'ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ',
         doThisFirst: 'ಪ್ರಮುಖ ಕಾರ್ಯಗಳು',
+        opCardOpen: 'ತೆರೆಯಿರಿ',
         qaScanLeaf: 'ರೋಗ ಪತ್ತೆಹಚ್ಚುವಿಕೆ', qaScanSub: 'ತಕ್ಷಣದ ಎಲೆ ರೋಗ ಪತ್ತೆ',
         qaIoT: 'ಮಣ್ಣಿನ ಟೆಲಿಮೆಟ್ರಿ', qaIoTSub: 'ಲೈವ್ ಮಣ್ಣಿನ ತೇವಾಂಶ ಡೇಟಾ',
         qaChat: 'ಕೃಷಿ ಸಮಾಲೋಚನೆ', qaChatSub: 'ತಜ್ಞರೊಂದಿಗೆ ಚರ್ಚಿಸಿ',
@@ -159,14 +203,15 @@ const TRANSLATIONS = {
         featDetect: 'ರೋಗ ಪತ್ತೆ', featDetectDesc: 'ಕಂಪ್ಯೂಟರ್ ದೃಷ್ಟಿ ತಂತ್ರಜ್ಞಾನದ ಮೂಲಕ 38+ ಸಸ್ಯ ರೋಗಗಳ ನಿಖರ ಪತ್ತೆ.',
         featMonitor: 'ಮಣ್ಣಿನ ಟೆಲಿಮೆಟ್ರಿ', featMonitorDesc: 'ಮಣ್ಣಿನ ತೇವಾಂಶದ ನೈಜ ಸಮಯದ ಟ್ರ್ಯಾಕಿಂಗ್.',
         todayTip: 'ಕೃಷಿ ಬುಲೆಟಿನ್',
-        workflowTitle: 'ರೋಗ ಪತ್ತೆ ವಿಧಾನ', workflowSubtitle: 'ಫೋಟೋದಿಂದ ನಿಖರ ಪರಿಹಾರದವರೆಗಿನ ಸರಳ ಪ್ರಕ್ರಿಯೆ',
-        step1Title: 'ಮಾದರಿ ಸೆರೆಹಿಡಿಯಿರಿ', step1Desc: 'ನೈಸರ್ಗಿಕ ಬೆಳಕಿನಲ್ಲಿ ಎಲೆಯ ಸ್ಪಷ್ಟ ಚಿತ್ರವನ್ನು ತೆಗೆದುಕೊಳ್ಳಿ.',
-        step2Title: 'ನ್ಯೂರಲ್ ವಿಶ್ಲೇಷಣೆ', step2Desc: 'CNN ಮಾದರಿಯು ರೋಗದ ನಿಖರ ಸ್ಕೋರ್ ನೀಡುತ್ತದೆ.',
-        step3Title: 'ಚಿಕಿತ್ಸೆ ಅನ್ವಯಿಸಿ', step3Desc: 'ಪ್ರಮಾಣಿತ ಸಾವಯವ ಮತ್ತು ರಾಸಾಯನಿಕ ಕ್ರಮಗಳನ್ನು ಅನುಸರಿಸಿ.',
+        workflowTitle: 'ರೋಗ ಪತ್ತೆ ವಿಧಾನ', workflowSubtitle: 'ಹೊಲದ ಪರಿಶೀಲನೆಯಿಂದ ಬೆಳೆ ಆರೈಕೆಯವರೆಗೆ ಸರಳ ಹಂತಗಳು.',
+        workflowPhase1: 'ಗಮನಿಸಿ', workflowPhase2: 'ಪರಿಶೀಲಿಸಿ', workflowPhase3: 'ಆರೈಕೆ',
+        step1Title: 'ಎಲೆಯ ಚಿತ್ರ ತೆಗೆಯಿರಿ', step1Desc: 'ಬಾಧಿತ ಎಲೆಯ ಸ್ಪಷ್ಟ ಚಿತ್ರವನ್ನು ನೈಸರ್ಗಿಕ ಬೆಳಕಿನಲ್ಲಿ ತೆಗೆಯಿರಿ.',
+        step2Title: 'ಫಲಿತಾಂಶ ನೋಡಿ', step2Desc: 'ಎಲೆ ಮತ್ತು ಅದರ ಲಕ್ಷಣಗಳ AI ಮೌಲ್ಯಮಾಪನ ನೋಡಿ.',
+        step3Title: 'ಮುಂದಿನ ಕ್ರಮ ಆರಿಸಿ', step3Desc: 'ರೋಗನಿರ್ಣಯದ ಆಧಾರದಲ್ಲಿ ಚಿಕಿತ್ಸೆ ಮತ್ತು ಬೆಳೆ ಆರೈಕೆ ಮಾಡಿ.',
         back: 'ಹಿಂದೆ', pageDetect: 'ರೋಗ ಪತ್ತೆಹಚ್ಚುವಿಕೆ',
         uploadTitle: 'ಎಲೆಯ ಚಿತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ', uploadDrag: 'ಚಿತ್ರವನ್ನು ಇಲ್ಲಿ ಎಳೆದುಬಿಡಿ ಅಥವಾ ಫೈಲ್ ಆಯ್ಕೆಮಾಡಿ',
         uploadFormats: 'JPG / PNG ಬೆಂಬಲಿತವಾಗಿದೆ (ಗರಿಷ್ಠ 8 MB)', uploadHint: 'ಎಲೆಯನ್ನು ನೈಸರ್ಗಿಕ ಬೆಳಕಿನಲ್ಲಿ ಸ್ಪಷ್ಟವಾಗಿ ಇರಿಸಿ.',
-        btnTakePhoto: 'ಕ್ಯಾಮೆರಾದಿಂದ ಫೋಟೋ ತೆಗೆಯಿರಿ', btnChoosePhoto: 'ಚಿತ್ರವನ್ನು ಆಯ್ಕೆಮಾಡಿ',
+        btnTakePhoto: 'ಫೋಟೋ ಸೆರೆಹಿಡಿಯಿರಿ', btnChoosePhoto: 'ಚಿತ್ರ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ',
         retake: 'ಮತ್ತೆ ತೆಗೆಯಿರಿ', analyze: 'ವಿಶ್ಲೇಷಣೆ ಪ್ರಾರಂಭಿಸಿ',
         scanStepsTitle: 'ಕಾರ್ಯಾಚರಣೆ ಹಂತಗಳು',
         scanStep1: 'ಸ್ಪಷ್ಟ ಎಲೆಯ ಫೋಟೋವನ್ನು ಆಯ್ಕೆಮಾಡಿ',
@@ -245,11 +290,16 @@ function navigateTo(screenId) {
 
     if (!target) return;
 
+    const previousScreen = AppState.currentScreen;
+    if (screenId === 'screenDiseaseDetect' && previousScreen !== screenId && AppState.selectedFile) {
+        resetDetection();
+    }
+
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     // Cleanup current
-    if (AppState.currentScreen === 'screenDiseaseDetect' && screenId !== 'screenResult') {
+    if (AppState.currentScreen === 'screenDiseaseDetect' && screenId !== 'screenDiseaseDetect') {
         if (typeof stopCamera === 'function') stopCamera();
     }
 
@@ -264,7 +314,7 @@ function navigateTo(screenId) {
     });
 
     target.classList.add('active', 'entering');
-    AppState.previousScreen = AppState.currentScreen;
+    AppState.previousScreen = previousScreen;
     AppState.currentScreen = screenId;
 
     // Update Nav UI
@@ -278,7 +328,10 @@ function navigateTo(screenId) {
     }
 
     // Sub-initializers
-    if (screenId === 'screenDiseaseDetect') initUploadZone();
+    if (screenId === 'screenDiseaseDetect') {
+        initUploadZone();
+        startCamera();
+    }
     if (screenId === 'screenIoT') startIoTMonioting();
     else stopIoTMonioting();
 }
@@ -315,7 +368,10 @@ function applyLanguage(lang) {
     // Elements with data-i18n
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (dict[key]) el.textContent = dict[key];
+        if (dict[key]) {
+            const textTarget = el.tagName === 'BUTTON' ? el.querySelector('span') || el : el;
+            textTarget.textContent = dict[key];
+        }
     });
 
     // Placeholders
@@ -323,6 +379,7 @@ function applyLanguage(lang) {
         const key = el.getAttribute('data-i18n-placeholder');
         if (dict[key]) el.placeholder = dict[key];
     });
+    updateCameraStatus(AppState.cameraStatusKey);
 
     // Update dynamic elements like chat input
     const chatInput = document.getElementById('chatInput');
@@ -370,7 +427,7 @@ function closeLangMenu() {
 
 /* --- Upload Zone (Desktop) --- */
 function initUploadZone() {
-    const zone = document.getElementById('cameraArea');
+    const zone = document.getElementById('uploadZone');
     if (!zone || zone._dragReady) return;
     zone._dragReady = true;
 
@@ -395,6 +452,12 @@ function initUploadZone() {
 }
 
 function loadImageFile(file) {
+    stopCamera();
+    const cameraView = document.getElementById('liveCameraView');
+    const cameraStatus = document.getElementById('cameraStatus');
+    if (cameraView) cameraView.hidden = true;
+    if (cameraStatus) cameraStatus.hidden = true;
+
     const reader = new FileReader();
     reader.onload = (event) => {
         const img = document.getElementById('imagePreview');
@@ -416,10 +479,7 @@ function showAnalyzeControls() {
 
 function setupPhotoButtons() {
     const chooseBtn = document.getElementById('choosePhotoBtn');
-    const hint = document.getElementById('uploadHintText');
-
     if (chooseBtn) chooseBtn.style.display = 'block';
-    if (hint) hint.textContent = 'Click to browse files from your computer.';
 }
 
 function triggerUpload() {
@@ -434,6 +494,110 @@ function handleFileSelect(e) {
     loadImageFile(file);
 }
 
+function updateCameraStatus(key) {
+    AppState.cameraStatusKey = key;
+    const status = document.getElementById('cameraStatus');
+    const dict = TRANSLATIONS[AppState.currentLang] || TRANSLATIONS.en;
+    if (status && key && dict[key]) status.textContent = dict[key];
+}
+
+async function startCamera() {
+    if (AppState.cameraStream || AppState.selectedFile) return;
+
+    const video = document.getElementById('cameraPreview');
+    const cameraView = document.getElementById('liveCameraView');
+    const placeholder = document.getElementById('cameraPlaceholder');
+    const status = document.getElementById('cameraStatus');
+    if (!video || !cameraView || !placeholder || !status) return;
+
+    const requestId = ++AppState.cameraRequestId;
+    status.hidden = false;
+    updateCameraStatus('cameraConnecting');
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        updateCameraStatus('cameraUnavailable');
+        return;
+    }
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { ideal: 'environment' } },
+            audio: false
+        });
+
+        if (requestId !== AppState.cameraRequestId || AppState.currentScreen !== 'screenDiseaseDetect') {
+            stream.getTracks().forEach(track => track.stop());
+            return;
+        }
+
+        AppState.cameraStream = stream;
+        video.srcObject = stream;
+        await video.play();
+        cameraView.hidden = false;
+        placeholder.style.display = 'none';
+        updateCameraStatus('cameraReady');
+    } catch (error) {
+        if (requestId !== AppState.cameraRequestId) return;
+
+        if (AppState.cameraStream) {
+            AppState.cameraStream.getTracks().forEach(track => track.stop());
+            AppState.cameraStream = null;
+            video.srcObject = null;
+        }
+        cameraView.hidden = true;
+        placeholder.style.display = 'flex';
+
+        if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+            updateCameraStatus('cameraDenied');
+        } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+            updateCameraStatus('cameraMissing');
+        } else {
+            updateCameraStatus('cameraUnavailable');
+        }
+    }
+}
+
+function stopCamera() {
+    AppState.cameraRequestId += 1;
+    if (AppState.cameraStream) {
+        AppState.cameraStream.getTracks().forEach(track => track.stop());
+        AppState.cameraStream = null;
+    }
+
+    const video = document.getElementById('cameraPreview');
+    if (video) {
+        video.pause();
+        video.srcObject = null;
+    }
+}
+
+function capturePhoto() {
+    const video = document.getElementById('cameraPreview');
+    if (!AppState.cameraStream || !video || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+        const fallbackInput = document.getElementById('cameraInput');
+        if (fallbackInput) fallbackInput.click();
+        return;
+    }
+
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const context = canvas.getContext('2d');
+    if (!context || !canvas.width || !canvas.height) {
+        updateCameraStatus('cameraCaptureError');
+        return;
+    }
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    canvas.toBlob(blob => {
+        if (!blob) {
+            updateCameraStatus('cameraCaptureError');
+            return;
+        }
+
+        loadImageFile(new File([blob], `leaf-specimen-${Date.now()}.jpg`, { type: 'image/jpeg' }));
+    }, 'image/jpeg', 0.92);
+}
+
 function showAnalyzeControls() {
     document.getElementById('uploadControls').classList.add('hidden');
     document.getElementById('analyzeControls').classList.remove('hidden');
@@ -444,11 +608,19 @@ function retakePhoto() {
 }
 
 function resetDetection() {
+    stopCamera();
     const img = document.getElementById('imagePreview');
     img.style.display = 'none';
     img.src = '';
     AppState.selectedFile = null;
     document.getElementById('cameraPlaceholder').style.display = 'flex';
+    const cameraView = document.getElementById('liveCameraView');
+    const cameraStatus = document.getElementById('cameraStatus');
+    if (cameraView) cameraView.hidden = true;
+    if (cameraStatus) {
+        cameraStatus.hidden = false;
+        updateCameraStatus('cameraConnecting');
+    }
     document.getElementById('uploadControls').classList.remove('hidden');
     document.getElementById('analyzeControls').classList.add('hidden');
     const chooseBtn = document.getElementById('choosePhotoBtn');
@@ -456,6 +628,7 @@ function resetDetection() {
     document.getElementById('fileInput').value = '';
     const cameraInput = document.getElementById('cameraInput');
     if (cameraInput) cameraInput.value = '';
+    if (AppState.currentScreen === 'screenDiseaseDetect') startCamera();
 }
 
 
@@ -722,8 +895,8 @@ function toggleMobileMenu() {
 
 function renderDailyTip() {
     const tips = ["Water crops early morning", "Rotate crops each season", "Use organic compost", "Check soil pH regularly"];
-    const el = document.getElementById('dailyTip');
-    if (el) el.textContent = tips[new Date().getDate() % tips.length];
+    const tip = tips[new Date().getDate() % tips.length];
+    document.querySelectorAll('.daily-tip-copy').forEach(el => { el.textContent = tip; });
 }
 
 function initVoiceAssistant() {
@@ -759,8 +932,8 @@ function hideLoading() {
 
 function renderDailyTip() {
     const tips = ["Water crops early morning", "Rotate crops each season", "Use organic compost", "Check soil pH regularly"];
-    const el = document.getElementById('dailyTip');
-    if (el) el.textContent = tips[new Date().getDate() % tips.length];
+    const tip = tips[new Date().getDate() % tips.length];
+    document.querySelectorAll('.daily-tip-copy').forEach(el => { el.textContent = tip; });
 }
 
 function updateMetrics() {
@@ -2255,4 +2428,3 @@ if (typeof originalNavigateTo === "function") {
         }
     };
 }
-
