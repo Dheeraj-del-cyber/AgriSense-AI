@@ -20,7 +20,7 @@ const AppState = {
 const TRANSLATIONS = {
     en: {
         navHome: 'Hub', navDetect: 'Diagnostics', navCrops: 'Crops', navScan: 'Start Scan',
-        navBottomHub: 'Home', navBottomDetect: 'Detect', navBottomPlanner: 'Crop', navBottomIoT: 'Water', navBottomAdvisor: 'Advisor', navBottomProfile: 'Profile',
+        navBottomHub: 'Home', navBottomDetect: 'Detect', navBottomPlanner: 'Crop', navBottomIoT: 'Water', navBottomAdvisor: 'Advisor', navBottomProfile: 'Profile', navBottomAnalytics: 'Analytics', navBottomTools: 'Tools',
         heroBadge: 'Precision Agronomic Intelligence',
         heroTitle1: 'Healthy Crops', heroTitle2: 'Predictable Yields',
         heroDesc: 'Clinical foliar disease diagnosis, real-time root-zone telemetry, and verified agronomic protocols.',
@@ -81,7 +81,7 @@ const TRANSLATIONS = {
     },
     hi: {
         navHome: 'हब', navDetect: 'रोग पहचान', navCrops: 'फसलें', navScan: 'स्कैन शुरू करें',
-        navBottomHub: 'होम', navBottomDetect: 'पहचान', navBottomPlanner: 'फसल', navBottomIoT: 'पानी', navBottomAdvisor: 'सलाहकार', navBottomProfile: 'प्रोफ़ाइल',
+        navBottomHub: 'होम', navBottomDetect: 'पहचान', navBottomPlanner: 'फसल', navBottomIoT: 'पानी', navBottomAdvisor: 'सलाहकार', navBottomProfile: 'प्रोफ़ाइल', navBottomAnalytics: 'विश्लेषण', navBottomTools: 'उपकरण',
         heroBadge: 'सटीक कृषि आसूचना',
         heroTitle1: 'स्वस्थ फसलें', heroTitle2: 'स्थिर उत्पादन',
         heroDesc: 'सटीक फसल रोग पहचान, वास्तविक समय मिट्टी नमी ट्रैकिंग, और सत्यापित कृषि उपचार।',
@@ -142,7 +142,7 @@ const TRANSLATIONS = {
     },
     kn: {
         navHome: 'ಹಬ್', navDetect: 'ರೋಗ ಪತ್ತೆ', navCrops: 'ಬೆಳೆಗಳು', navScan: 'ಸ್ಕ್ಯಾನ್ ಪ್ರಾರಂಭಿಸಿ',
-        navBottomHub: 'ಮುಖಪುಟ', navBottomDetect: 'ಪತ್ತೆ', navBottomPlanner: 'ಬೆಳೆ', navBottomIoT: 'ನೀರು', navBottomAdvisor: 'ಸಲಹೆಗಾರ', navBottomProfile: 'ಪ್ರೊಫೈಲ್',
+        navBottomHub: 'ಮುಖಪುಟ', navBottomDetect: 'ಪತ್ತೆ', navBottomPlanner: 'ಬೆಳೆ', navBottomIoT: 'ನೀರು', navBottomAdvisor: 'ಸಲಹೆಗಾರ', navBottomProfile: 'ಪ್ರೊಫೈಲ್', navBottomAnalytics: 'ವಿಶ್ಲೇಷಣೆ', navBottomTools: 'ಪರಿಕರ',
         heroBadge: 'ನಿಖರ ಕೃಷಿ ಮಾಹಿತಿ ವ್ಯವಸ್ಥೆ',
         heroTitle1: 'ಆರೋಗ್ಯಕರ ಬೆಳೆಗಳು', heroTitle2: 'ಸುಸ್ಥಿರ ಆದಾಯ',
         heroDesc: 'ಸಸ್ಯ ರೋಗಗಳ ನಿಖರ ಪತ್ತೆ, ನೈಜ ಸಮಯದ ಮಣ್ಣಿನ ತೇವಾಂಶ ಮೇಲ್ವಿಚಾರಣೆ ಮತ್ತು ಕೃಷಿ ಮಾರ್ಗದರ್ಶನ.',
@@ -1155,6 +1155,24 @@ const CHAT_CLOSE_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="no
 let chatOpen = false;
 let chatIsLoading = false;
 
+function syncChatViewport() {
+    const visualViewport = window.visualViewport;
+    const visibleHeight = visualViewport ? visualViewport.height : window.innerHeight;
+    const keyboardInset = visualViewport
+        ? Math.max(0, window.innerHeight - visualViewport.offsetTop - visualViewport.height)
+        : 0;
+
+    document.documentElement.style.setProperty('--chat-visible-height', `${visibleHeight}px`);
+    document.documentElement.style.setProperty('--chat-keyboard-inset', `${keyboardInset}px`);
+}
+
+syncChatViewport();
+window.addEventListener('resize', syncChatViewport, { passive: true });
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', syncChatViewport, { passive: true });
+    window.visualViewport.addEventListener('scroll', syncChatViewport, { passive: true });
+}
+
 function toggleChatbot() {
     chatOpen = !chatOpen;
     const panel = document.getElementById('chatPanel');
@@ -1170,6 +1188,7 @@ function toggleChatbot() {
         if (btn) {
             btn.innerHTML = CHAT_CLOSE_SVG;
             btn.setAttribute('aria-expanded', 'true');
+            btn.setAttribute('aria-label', 'Close Chat');
             btn.setAttribute('title', 'Close Consultation');
         }
         const input = document.getElementById('chatInput');
@@ -1185,6 +1204,7 @@ function toggleChatbot() {
         if (btn) {
             btn.innerHTML = CHAT_ICON_SVG;
             btn.setAttribute('aria-expanded', 'false');
+            btn.setAttribute('aria-label', 'Open Chat');
             btn.setAttribute('title', 'Open Agronomic Consultation');
         }
     }
@@ -2267,6 +2287,7 @@ async function fetchCropRecommendation() {
    ========================================================================== */
 let sunTrajectoryLocation = null;
 let sunTrajectoryFrame = null;
+let sunTrajectoryTimer = null;
 let sunTrajectoryPath = null;
 let sunTrajectoryPathLength = 0;
 let sunTrajectorySun = null;
@@ -2274,6 +2295,7 @@ let sunTrajectoryMoon = null;
 let sunTrajectoryRoot = null;
 let cachedSunEventsKey = '';
 let cachedSunEvents = null;
+const SUN_TRAJECTORY_UPDATE_INTERVAL = 5000;
 
 function setSunTrajectoryLocation(latitude, longitude) {
     if (!Number.isFinite(latitude) || !Number.isFinite(longitude) ||
@@ -2416,8 +2438,20 @@ function updateSunTrajectory(now = new Date()) {
 }
 
 function animateSunTrajectory() {
+    sunTrajectoryFrame = null;
+    if (document.hidden) return;
+
     updateSunTrajectory(new Date());
-    sunTrajectoryFrame = requestAnimationFrame(animateSunTrajectory);
+    scheduleSunTrajectoryUpdate();
+}
+
+function scheduleSunTrajectoryUpdate() {
+    if (document.hidden || sunTrajectoryTimer !== null || sunTrajectoryFrame !== null) return;
+
+    sunTrajectoryTimer = window.setTimeout(() => {
+        sunTrajectoryTimer = null;
+        sunTrajectoryFrame = requestAnimationFrame(animateSunTrajectory);
+    }, SUN_TRAJECTORY_UPDATE_INTERVAL);
 }
 
 function startSunTrajectory() {
@@ -2434,15 +2468,17 @@ function startSunTrajectory() {
     }
 
     updateSunTrajectory(new Date());
-    if (sunTrajectoryFrame === null) {
-        sunTrajectoryFrame = requestAnimationFrame(animateSunTrajectory);
-    }
+    scheduleSunTrajectoryUpdate();
 }
 
 function stopSunTrajectory() {
     if (sunTrajectoryFrame !== null) {
         cancelAnimationFrame(sunTrajectoryFrame);
         sunTrajectoryFrame = null;
+    }
+    if (sunTrajectoryTimer !== null) {
+        clearTimeout(sunTrajectoryTimer);
+        sunTrajectoryTimer = null;
     }
 }
 
