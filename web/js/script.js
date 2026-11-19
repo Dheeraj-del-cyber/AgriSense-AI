@@ -20,7 +20,7 @@ const AppState = {
 const TRANSLATIONS = {
     en: {
         navHome: 'Hub', navDetect: 'Diagnostics', navCrops: 'Crops', navScan: 'Start Scan',
-        navBottomHub: 'Hub', navBottomDetect: 'Detect', navBottomPlanner: 'Planner', navBottomIoT: 'Telemetry', navBottomAdvisor: 'Advisor', navBottomProfile: 'Profile',
+        navBottomHub: 'Home', navBottomDetect: 'Tools', navBottomPlanner: 'Crop', navBottomIoT: 'Water', navBottomAdvisor: 'Advisor', navBottomProfile: 'Analytics',
         heroBadge: 'Precision Agronomic Intelligence',
         heroTitle1: 'Healthy Crops', heroTitle2: 'Predictable Yields',
         heroDesc: 'Clinical foliar disease diagnosis, real-time root-zone telemetry, and verified agronomic protocols.',
@@ -81,7 +81,7 @@ const TRANSLATIONS = {
     },
     hi: {
         navHome: 'हब', navDetect: 'रोग पहचान', navCrops: 'फसलें', navScan: 'स्कैन शुरू करें',
-        navBottomHub: 'हब', navBottomDetect: 'पहचान', navBottomPlanner: 'योजना', navBottomIoT: 'सेंसर', navBottomAdvisor: 'सलाहकार', navBottomProfile: 'प्रोफ़ाइल',
+        navBottomHub: 'होम', navBottomDetect: 'टूल', navBottomPlanner: 'फसल', navBottomIoT: 'पानी', navBottomAdvisor: 'सलाहकार', navBottomProfile: 'विश्लेषण',
         heroBadge: 'सटीक कृषि आसूचना',
         heroTitle1: 'स्वस्थ फसलें', heroTitle2: 'स्थिर उत्पादन',
         heroDesc: 'सटीक फसल रोग पहचान, वास्तविक समय मिट्टी नमी ट्रैकिंग, और सत्यापित कृषि उपचार।',
@@ -142,7 +142,7 @@ const TRANSLATIONS = {
     },
     kn: {
         navHome: 'ಹಬ್', navDetect: 'ರೋಗ ಪತ್ತೆ', navCrops: 'ಬೆಳೆಗಳು', navScan: 'ಸ್ಕ್ಯಾನ್ ಪ್ರಾರಂಭಿಸಿ',
-        navBottomHub: 'ಹಬ್', navBottomDetect: 'ಪತ್ತೆ', navBottomPlanner: 'ಯೋಜನೆ', navBottomIoT: 'ಸಂವೇದಕ', navBottomAdvisor: 'ಸಲಹೆಗಾರ', navBottomProfile: 'ಪ್ರೊಫೈಲ್',
+        navBottomHub: 'ಮುಖಪುಟ', navBottomDetect: 'ಉಪಕರಣಗಳು', navBottomPlanner: 'ಬೆಳೆ', navBottomIoT: 'ನೀರು', navBottomAdvisor: 'ಸಲಹೆಗಾರ', navBottomProfile: 'ವಿಶ್ಲೇಷಣೆ',
         heroBadge: 'ನಿಖರ ಕೃಷಿ ಮಾಹಿತಿ ವ್ಯವಸ್ಥೆ',
         heroTitle1: 'ಆರೋಗ್ಯಕರ ಬೆಳೆಗಳು', heroTitle2: 'ಸುಸ್ಥಿರ ಆದಾಯ',
         heroDesc: 'ಸಸ್ಯ ರೋಗಗಳ ನಿಖರ ಪತ್ತೆ, ನೈಜ ಸಮಯದ ಮಣ್ಣಿನ ತೇವಾಂಶ ಮೇಲ್ವಿಚಾರಣೆ ಮತ್ತು ಕೃಷಿ ಮಾರ್ಗದರ್ಶನ.',
@@ -268,9 +268,12 @@ function navigateTo(screenId) {
     AppState.currentScreen = screenId;
 
     // Update Nav UI
-    document.querySelectorAll('.nav-link, .bottom-nav-link').forEach(l => {
+    document.querySelectorAll('.nav-link').forEach(l => {
         l.classList.toggle('active', l.getAttribute('data-screen') === screenId);
     });
+    const bottomNavLinks = [...document.querySelectorAll('.bottom-nav-link')];
+    const selectedBottomLink = bottomNavLinks.find(l => l.getAttribute('data-screen') === screenId);
+    bottomNavLinks.forEach(l => l.classList.toggle('active', l === selectedBottomLink));
 
     // Vibrate on navigation (mobile)
     if (window.navigator.vibrate) {
@@ -281,6 +284,13 @@ function navigateTo(screenId) {
     if (screenId === 'screenDiseaseDetect') initUploadZone();
     if (screenId === 'screenIoT') startIoTMonioting();
     else stopIoTMonioting();
+}
+
+function navigateFromBottomNav(screenId, link) {
+    navigateTo(screenId);
+    document.querySelectorAll('.bottom-nav-link').forEach(item => {
+        item.classList.toggle('active', item === link);
+    });
 }
 
 function goBackFromResult() {

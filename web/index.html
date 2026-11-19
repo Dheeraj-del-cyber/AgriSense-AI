@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>AgriSense AI — Precision Agronomic & Telemetry System</title>
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <meta name="description"
@@ -63,6 +63,9 @@
                         <button class="lang-opt" onclick="setLanguage('kn')">ಕನ್ನಡ (Kannada)</button>
                     </div>
                 </div>
+                <button class="nav-profile-btn" type="button" aria-label="User Profile">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </button>
             </div>
         </div>
     </nav>
@@ -70,37 +73,37 @@
     <!-- Bottom Navigation (Mobile Native Form Factor) -->
     <nav class="bottom-nav" aria-label="Mobile Navigation">
         <a href="#" class="bottom-nav-link active" data-screen="screenHome"
-            onclick="navigateTo('screenHome'); return false;" aria-label="Hub">
+            onclick="navigateFromBottomNav('screenHome', this); return false;" aria-label="Home">
             <span class="bottom-nav-icon">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
             </span>
-            <span class="bottom-nav-text" data-i18n="navBottomHub">Hub</span>
-        </a>
-        <a href="#" class="bottom-nav-link" data-screen="screenDiseaseDetect"
-            onclick="navigateTo('screenDiseaseDetect'); return false;" aria-label="Diagnostics">
-            <span class="bottom-nav-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-            </span>
-            <span class="bottom-nav-text" data-i18n="navBottomDetect">Detect</span>
+            <span class="bottom-nav-text" data-i18n="navBottomHub">Home</span>
         </a>
         <a href="#" class="bottom-nav-link" data-screen="screenRecommend"
-            onclick="navigateTo('screenRecommend'); return false;" aria-label="Crop Planner">
+            onclick="navigateFromBottomNav('screenRecommend', this); return false;" aria-label="Crop">
             <span class="bottom-nav-icon">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"></path><path d="M10 20c5.5-2.5.8-6.4 3-10"></path><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4.1 5.5.8z"></path><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"></path></svg>
             </span>
-            <span class="bottom-nav-text" data-i18n="navBottomPlanner">Planner</span>
+            <span class="bottom-nav-text" data-i18n="navBottomPlanner">Crop</span>
         </a>
-        <a href="#" class="bottom-nav-link" data-screen="screenIoT" onclick="navigateTo('screenIoT'); return false;" aria-label="IoT Telemetry">
+        <a href="#" class="bottom-nav-link" data-screen="screenIoT" onclick="navigateFromBottomNav('screenIoT', this); return false;" aria-label="Water">
             <span class="bottom-nav-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
             </span>
-            <span class="bottom-nav-text" data-i18n="navBottomIoT">Telemetry</span>
+            <span class="bottom-nav-text" data-i18n="navBottomIoT">Water</span>
         </a>
-        <a href="#" class="bottom-nav-link mobile-profile-btn" onclick="openProfile(); return false;" aria-label="User Profile">
+        <a href="#" class="bottom-nav-link" data-screen="screenIoT" onclick="navigateFromBottomNav('screenIoT', this); return false;" aria-label="Analytics">
             <span class="bottom-nav-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-5 5"></path></svg>
             </span>
-            <span class="bottom-nav-text" data-i18n="navBottomProfile">Profile</span>
+            <span class="bottom-nav-text" data-i18n="navBottomProfile">Analytics</span>
+        </a>
+        <a href="#" class="bottom-nav-link" data-screen="screenDiseaseDetect"
+            onclick="navigateFromBottomNav('screenDiseaseDetect', this); return false;" aria-label="Tools">
+            <span class="bottom-nav-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            </span>
+            <span class="bottom-nav-text" data-i18n="navBottomDetect">Tools</span>
         </a>
     </nav>
 
@@ -119,9 +122,35 @@
                 <div class="station-platform-tag" data-i18n="heroBadge">Precision Agronomic Intelligence</div>
             </div>
 
+            <nav class="home-feature-strip" aria-label="Quick access">
+                <button class="home-feature-card" type="button" onclick="navigateTo('screenRecommend')">
+                    <span class="home-feature-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"></path><path d="M10 20c5.5-2.5.8-6.4 3-10"></path><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4.1 5.5.8z"></path><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"></path></svg>
+                    </span>
+                    <span>Crop Care</span>
+                </button>
+                <button class="home-feature-card" type="button" onclick="navigateTo('screenIoT')">
+                    <span class="home-feature-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-5 5"></path></svg>
+                    </span>
+                    <span>Analytics</span>
+                </button>
+                <button class="home-feature-card" type="button" onclick="openProfile()">
+                    <span class="home-feature-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.7 2.94-.08-.02a1.7 1.7 0 0 0-1.82.5l-.05.07h-3.4l-.05-.07a1.7 1.7 0 0 0-1.82-.5l-.08.02-1.7-2.94.06-.06A1.7 1.7 0 0 0 9.4 15l-.08-.04v-3.4l.08-.04a1.7 1.7 0 0 0-.34-1.88L9 9.58l1.7-2.94.08.02a1.7 1.7 0 0 0 1.82-.5l.05-.07h3.4l.05.07a1.7 1.7 0 0 0 1.82.5l.08-.02 1.7 2.94-.06.06A1.7 1.7 0 0 0 19.4 11l.08.04v3.4z"></path></svg>
+                    </span>
+                    <span>Settings</span>
+                </button>
+            </nav>
+
             <!-- Hub Hero Section -->
             <div class="hub-hero">
                 <div class="hub-hero-content">
+                    <div class="hero-brand-lockup">
+                        <img src="assets/images/logo2.png" alt="" class="hero-brand-logo">
+                        <span class="hero-brand-name">AgriSence</span>
+                    </div>
+                    <p class="hero-tagline">Smart Farming. Better Tomorrow.</p>
                     <h1 class="hub-headline">
                         <span class="headline-primary" data-i18n="heroTitle1">Healthy Crops</span>
                         <span class="headline-secondary" data-i18n="heroTitle2">Predictable Yields</span>
@@ -147,6 +176,11 @@
                             <button class="lang-pill-item" onclick="setLanguage('kn')">ಕನ್ನಡ</button>
                         </div>
                     </div>
+                </div>
+
+                <div class="hero-trajectory" aria-hidden="true">
+                    <span class="trajectory-sun">☀</span>
+                    <span class="trajectory-moon">☾</span>
                 </div>
 
                 <div class="hub-hero-card">
