@@ -24,7 +24,7 @@ const TRANSLATIONS = {
         heroBadge: 'Precision Agronomic Intelligence',
         heroTitle1: 'Healthy Crops', heroTitle2: 'Predictable Yields',
         heroDesc: 'Clinical foliar disease diagnosis, real-time root-zone telemetry, and verified agronomic protocols.',
-        heroBtn1: 'Analyze Leaf Specimen',
+        heroBtn1: 'Analyze Leaf',
         statCrops: 'Crops Supported', statDiseases: 'Pathogens Modeled', statLangs: 'Languages',
         statAdvice: 'Advisory Engine', statFocus: 'Edge Field Ready',
         selectLang: 'Platform Language',
@@ -85,7 +85,7 @@ const TRANSLATIONS = {
         heroBadge: 'सटीक कृषि आसूचना',
         heroTitle1: 'स्वस्थ फसलें', heroTitle2: 'स्थिर उत्पादन',
         heroDesc: 'सटीक फसल रोग पहचान, वास्तविक समय मिट्टी नमी ट्रैकिंग, और सत्यापित कृषि उपचार।',
-        heroBtn1: 'पत्ती का नमूना विश्लेषित करें',
+        heroBtn1: 'पत्ती जांचें',
         statCrops: 'फसलें', statDiseases: 'रोग वर्गीकरण', statLangs: 'भाषाएं',
         statAdvice: 'सलाह इंजन', statFocus: 'फील्ड-तैयार',
         selectLang: 'भाषा चुनें',
@@ -146,7 +146,7 @@ const TRANSLATIONS = {
         heroBadge: 'ನಿಖರ ಕೃಷಿ ಮಾಹಿತಿ ವ್ಯವಸ್ಥೆ',
         heroTitle1: 'ಆರೋಗ್ಯಕರ ಬೆಳೆಗಳು', heroTitle2: 'ಸುಸ್ಥಿರ ಆದಾಯ',
         heroDesc: 'ಸಸ್ಯ ರೋಗಗಳ ನಿಖರ ಪತ್ತೆ, ನೈಜ ಸಮಯದ ಮಣ್ಣಿನ ತೇವಾಂಶ ಮೇಲ್ವಿಚಾರಣೆ ಮತ್ತು ಕೃಷಿ ಮಾರ್ಗದರ್ಶನ.',
-        heroBtn1: 'ಎಲೆಯ ಮಾದರಿ ವಿಶ್ಲೇಷಿಸಿ',
+        heroBtn1: 'ಎಲೆಯ ಮಾದರಿ',
         statCrops: 'ಬೆಳೆಗಳು', statDiseases: 'ರೋಗ ಮಾದರಿಗಳು', statLangs: 'ಭಾಷೆಗಳು',
         statAdvice: 'ಸಲಹಾ ವ್ಯವಸ್ಥೆ', statFocus: 'ಕ್ಷೇತ್ರ-ಸಿದ್ಧ',
         selectLang: 'ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ',
@@ -220,6 +220,9 @@ window.addEventListener('load', () => {
 function initApp() {
     checkAuth();
     attachProfileButtons();
+    if (AppState.currentScreen === 'screenHome') {
+        document.body.classList.add('mobile-home-fixed');
+    }
 
     // Navigation listener
     window.addEventListener('scroll', () => {
@@ -229,6 +232,7 @@ function initApp() {
     // Initial Data
     renderDailyTip();
     updateMetrics();
+    initHorizLoopCards();
 }
 
 function attachProfileButtons() {
@@ -269,6 +273,12 @@ function navigateTo(screenId) {
     target.classList.add('active', 'entering');
     AppState.previousScreen = AppState.currentScreen;
     AppState.currentScreen = screenId;
+
+    if (screenId === 'screenHome') {
+        document.body.classList.add('mobile-home-fixed');
+    } else {
+        document.body.classList.remove('mobile-home-fixed');
+    }
 
     // Update Nav UI
     document.querySelectorAll('.nav-link').forEach(l => {
@@ -368,6 +378,14 @@ function applyLanguage(lang) {
     document.querySelectorAll('.lang-opt').forEach(opt => {
         const optLang = opt.getAttribute('onclick').match(/'([^']+)'/)[1];
         opt.classList.toggle('active', optLang === lang);
+    });
+
+    // Update active quick pill item
+    document.querySelectorAll('.lang-pill-item').forEach(pill => {
+        const match = (pill.getAttribute('onclick') || '').match(/'([^']+)'/);
+        if (match) {
+            pill.classList.toggle('active', match[1] === lang);
+        }
     });
 }
 
@@ -2476,7 +2494,87 @@ if (typeof originalNavigateTo === "function") {
         if (screenId === "screenHome") {
             updateFarmLighting();
             startSunTrajectory();
-        } else stopSunTrajectory();
+            const track = document.querySelector('.hub-horiz-loop-track');
+            if (track) track.style.animationPlayState = 'running';
+        } else {
+            stopSunTrajectory();
+            const track = document.querySelector('.hub-horiz-loop-track');
+            if (track) track.style.animationPlayState = 'paused';
+        }
     };
+}
+
+// ==========================================
+// HORIZONTAL MOVING CARDS LOOP CONTROLLER (DYNAMIC ARCH)
+// ==========================================
+let horizLoopAnimFrame = null;
+
+function initHorizLoopCards() {
+    const track = document.querySelector('.hub-horiz-loop-track');
+    const container = document.getElementById('hubHorizLoopContainer');
+    if (!track || !container) return;
+
+    const cards = Array.from(track.querySelectorAll('.hub-big-card'));
+    if (!cards.length) return;
+
+    function updateDynamicCardArch() {
+        const homeScreen = document.getElementById('screenHome');
+        const isHomeActive = homeScreen && homeScreen.classList.contains('active');
+
+        if (isHomeActive && window.innerWidth <= 768) {
+            const screenWidth = window.innerWidth;
+            const screenCenterX = screenWidth / 2;
+            const halfScreen = screenWidth * 0.52;
+            const maxDip = 18; // px: matches the dome curve curvature
+            const maxRotation = 2.4; // deg: dynamic radial arch flare
+
+            for (let i = 0; i < cards.length; i++) {
+                const card = cards[i];
+                const rect = card.getBoundingClientRect();
+
+                // Skip if offscreen
+                if (rect.right < -40 || rect.left > screenWidth + 40) continue;
+
+                const cardCenterX = rect.left + rect.width / 2;
+                const dist = (cardCenterX - screenCenterX) / halfScreen;
+                const clamped = Math.max(-1.15, Math.min(1.15, dist));
+
+                // Quadratic parabolic curve matching dome arch
+                const dip = Math.pow(clamped, 2) * maxDip;
+                const rot = clamped * maxRotation;
+                const scale = 1 - Math.abs(clamped) * 0.025;
+
+                card.style.transform = `translate3d(0, ${dip.toFixed(2)}px, 0) rotate(${rot.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+            }
+        } else if (window.innerWidth > 768) {
+            cards.forEach(card => {
+                if (card.style.transform) card.style.transform = '';
+            });
+        }
+
+        horizLoopAnimFrame = requestAnimationFrame(updateDynamicCardArch);
+    }
+
+    if (horizLoopAnimFrame) cancelAnimationFrame(horizLoopAnimFrame);
+    horizLoopAnimFrame = requestAnimationFrame(updateDynamicCardArch);
+
+    // Prevent duplicate event listeners
+    if (!track.dataset.loopListenersAttached) {
+        track.dataset.loopListenersAttached = 'true';
+
+        // Pause moving cards on touch/hover, resume on release
+        container.addEventListener('pointerenter', () => {
+            track.style.animationPlayState = 'paused';
+        });
+        container.addEventListener('pointerleave', () => {
+            track.style.animationPlayState = 'running';
+        });
+        container.addEventListener('touchstart', () => {
+            track.style.animationPlayState = 'paused';
+        }, { passive: true });
+        container.addEventListener('touchend', () => {
+            track.style.animationPlayState = 'running';
+        }, { passive: true });
+    }
 }
 
