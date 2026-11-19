@@ -2254,7 +2254,7 @@ ul, ol {
    ========================================================================== */
 #chatbotWidget {
     position: fixed;
-    bottom: 24px;
+    bottom: calc(24px + var(--chat-keyboard-inset, 0px));
     right: 24px;
     z-index: 9999;
     display: flex;
@@ -2284,6 +2284,7 @@ ul, ol {
 #chatPanel {
     width: 380px;
     height: 540px;
+    height: min(540px, calc(var(--chat-visible-height, 100vh) - env(safe-area-inset-top, 0px) - var(--nav-height) - 96px));
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -2342,8 +2343,9 @@ ul, ol {
 }
 
 .chat-action-btn {
-    width: 28px;
-    height: 28px;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
     border-radius: var(--radius-xs);
     display: flex;
     align-items: center;
@@ -2397,9 +2399,16 @@ ul, ol {
     padding: 0.5rem 0.75rem;
     background: var(--surface);
     border-top: 1px solid var(--border);
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.chat-suggestions-list::-webkit-scrollbar {
+    display: none;
 }
 
 .chat-sugg {
+    min-height: 44px;
     white-space: nowrap;
     padding: 0.3rem 0.6rem;
     background: var(--surface-subtle);
@@ -2428,6 +2437,7 @@ ul, ol {
 
 #chatInput {
     flex: 1;
+    min-height: 44px;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: 0.5rem 0.75rem;
@@ -2441,8 +2451,9 @@ ul, ol {
 }
 
 .chat-send-btn {
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
     border-radius: var(--radius-md);
     background: var(--g-800);
     color: var(--text-inverse);
@@ -2454,6 +2465,20 @@ ul, ol {
 
 .chat-send-btn:hover {
     background: var(--g-900);
+}
+
+.chat-action-btn:focus-visible,
+.chat-sugg:focus-visible,
+.chat-send-btn:focus-visible,
+#chatToggleBtn:focus-visible {
+    outline: 2px solid var(--g-300);
+    outline-offset: 2px;
+}
+
+@media (max-height: 500px) {
+    #chatSuggestions {
+        display: none;
+    }
 }
 
 /* ==========================================================================
@@ -2825,13 +2850,14 @@ ul, ol {
     }
 
     #chatbotWidget {
-        bottom: calc(var(--nav-mobile-height) + 16px);
+        bottom: calc(var(--nav-mobile-height) + 16px + var(--chat-keyboard-inset, 0px));
         right: 16px;
     }
 
     #chatPanel {
         width: calc(100vw - 32px);
         height: 75vh;
+        height: min(75vh, calc(var(--chat-visible-height, 100vh) - env(safe-area-inset-top, 0px) - var(--nav-height) - var(--nav-mobile-height) - env(safe-area-inset-bottom, 0px) - 70px));
         max-width: 380px;
     }
 
@@ -3177,6 +3203,7 @@ ul, ol {
     .trajectory-body {
         transform-box: view-box;
         filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.28));
+        transition: transform 5s linear, opacity 5s linear;
     }
 
     .trajectory-sun {
@@ -3312,7 +3339,7 @@ ul, ol {
 
     #chatbotWidget {
         right: 12px;
-        bottom: calc(var(--nav-mobile-height) + env(safe-area-inset-bottom, 0px) + 2px);
+        bottom: calc(var(--nav-mobile-height) + env(safe-area-inset-bottom, 0px) + 2px + var(--chat-keyboard-inset, 0px));
     }
 
     #chatToggleBtn {
@@ -3410,6 +3437,10 @@ ul, ol {
     #screenHome.active .operations-grid-section,
     #screenHome.active .workflow-protocol-panel {
         animation: none;
+    }
+
+    .trajectory-body {
+        transition: none;
     }
 
     .home-feature-card,
