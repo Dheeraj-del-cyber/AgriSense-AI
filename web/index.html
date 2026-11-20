@@ -16,11 +16,7 @@
         rel="stylesheet">
 
     <!-- Production Stylesheet -->
-<<<<<<< HEAD
-    <link rel="stylesheet" href="css/style.css?v=phase20">
-=======
-    <link rel="stylesheet" href="css/style.css?v=phase5">
->>>>>>> fe243c9d508b2a22244f6e2ffb871a3c03951798
+    <link rel="stylesheet" href="css/style.css?v=phase21">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -71,7 +67,7 @@
         </div>
     </nav>
 
-    <!-- Bottom Navigation (Mobile Native Form Factor: Home, Crop, Water, Analytics, Tools) -->
+    <!-- Bottom Navigation (Mobile Native Form Factor: Home, Detect, Crop, Water, Profile) -->
     <nav class="bottom-nav" aria-label="Mobile Navigation">
         <a href="#" class="bottom-nav-link active" data-screen="screenHome"
             onclick="navigateFromBottomNav('screenHome', this); return false;" aria-label="Home">
@@ -79,6 +75,13 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
             </span>
             <span class="bottom-nav-text" data-i18n="navBottomHub">Home</span>
+        </a>
+        <a href="#" class="bottom-nav-link" data-screen="screenDiseaseDetect"
+            onclick="navigateFromBottomNav('screenDiseaseDetect', this); return false;" aria-label="Detect">
+            <span class="bottom-nav-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            </span>
+            <span class="bottom-nav-text" data-i18n="navBottomDetect">Detect</span>
         </a>
         <a href="#" class="bottom-nav-link" data-screen="screenRecommend"
             onclick="navigateFromBottomNav('screenRecommend', this); return false;" aria-label="Crop">
@@ -94,19 +97,12 @@
             </span>
             <span class="bottom-nav-text" data-i18n="navBottomIoT">Water</span>
         </a>
-        <a href="#" class="bottom-nav-link" data-screen="screenIoT"
-            onclick="navigateFromBottomNav('screenIoT', this); return false;" aria-label="Analytics">
+        <a href="#" class="bottom-nav-link mobile-profile-btn" data-action="profile"
+            onclick="openProfile(); return false;" aria-label="Profile">
             <span class="bottom-nav-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-5 5"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </span>
-            <span class="bottom-nav-text" data-i18n="navBottomAnalytics">Analytics</span>
-        </a>
-        <a href="#" class="bottom-nav-link" data-screen="screenDiseaseDetect"
-            onclick="navigateFromBottomNav('screenDiseaseDetect', this); return false;" aria-label="Tools">
-            <span class="bottom-nav-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-            </span>
-            <span class="bottom-nav-text" data-i18n="navBottomTools">Tools</span>
+            <span class="bottom-nav-text" data-i18n="navBottomProfile">Profile</span>
         </a>
     </nav>
 
@@ -1087,11 +1083,7 @@
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="config.js"></script>
-<<<<<<< HEAD
-    <script src="js/script.js?v=phase20"></script>
-=======
-    <script src="js/script.js?v=phase5.1"></script>
->>>>>>> fe243c9d508b2a22244f6e2ffb871a3c03951798
+    <script src="js/script.js?v=phase21"></script>
 </body>
 
 </html>
