@@ -1507,6 +1507,7 @@ const CHAT_CLOSE_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="no
 
 let chatOpen = false;
 let chatIsLoading = false;
+let chatHideTimer = null;
 
 function syncChatViewport() {
     const visualViewport = window.visualViewport;
@@ -1527,17 +1528,20 @@ if (window.visualViewport) {
 }
 
 function toggleChatbot() {
-    chatOpen = !chatOpen;
     const panel = document.getElementById('chatPanel');
     const btn = document.getElementById('chatToggleBtn');
 
-    if (!panel) return; // nothing to do
+    if (!panel) return;
+    chatOpen = !chatOpen;
 
     if (chatOpen) {
-        // show with animation
+        clearTimeout(chatHideTimer);
+        panel.style.display = 'flex';
+        panel.classList.remove('chat-open');
+        panel.classList.add('chat-hidden');
+        void panel.offsetWidth;
         panel.classList.remove('chat-hidden');
         panel.classList.add('chat-open');
-        panel.style.display = 'flex';
         if (btn) {
             btn.innerHTML = CHAT_CLOSE_SVG;
             btn.setAttribute('aria-expanded', 'true');
@@ -1552,8 +1556,9 @@ function toggleChatbot() {
     } else {
         panel.classList.remove('chat-open');
         panel.classList.add('chat-hidden');
-        // keep a short timeout before hiding to allow animation
-        setTimeout(() => { panel.style.display = 'none'; }, 260);
+        chatHideTimer = setTimeout(() => {
+            if (!chatOpen) panel.style.display = 'none';
+        }, 320);
         if (btn) {
             btn.innerHTML = CHAT_ICON_SVG;
             btn.setAttribute('aria-expanded', 'false');
@@ -2903,8 +2908,36 @@ function initHorizLoopCards() {
     const container = document.getElementById('hubHorizLoopContainer');
     if (!track || !container) return;
 
-    const cards = Array.from(track.querySelectorAll('.hub-big-card'));
-    if (!cards.length) return;
+    const originalCards = Array.from(track.querySelectorAll('.hub-big-card'))
+        .filter(card => card.getAttribute('aria-hidden') !== 'true');
+    if (!originalCards.length) return;
+
+    let cards = [];
+
+    function configureLoopCopies() {
+        track.querySelectorAll('.hub-big-card[aria-hidden="true"]').forEach(card => card.remove());
+
+        const groupWidth = originalCards.reduce((width, card) => {
+            const style = window.getComputedStyle(card);
+            return width + card.getBoundingClientRect().width + (parseFloat(style.marginRight) || 0);
+        }, 0);
+
+        if (!groupWidth) return;
+
+        const copyCount = Math.max(2, Math.ceil((container.clientWidth + groupWidth) / groupWidth));
+        for (let copyIndex = 1; copyIndex < copyCount; copyIndex += 1) {
+            originalCards.forEach(card => {
+                const clone = card.cloneNode(true);
+                clone.setAttribute('aria-hidden', 'true');
+                track.appendChild(clone);
+            });
+        }
+
+        track.style.setProperty('--hub-loop-offset', `-${groupWidth}px`);
+        cards = Array.from(track.querySelectorAll('.hub-big-card'));
+    }
+
+    configureLoopCopies();
 
     function updateDynamicCardArch() {
         const homeScreen = document.getElementById('screenHome');
@@ -2950,6 +2983,7 @@ function initHorizLoopCards() {
     // Prevent duplicate event listeners
     if (!track.dataset.loopListenersAttached) {
         track.dataset.loopListenersAttached = 'true';
+        window.addEventListener('resize', configureLoopCopies, { passive: true });
 
         // Pause moving cards on touch/hover, resume on release
         container.addEventListener('pointerenter', () => {

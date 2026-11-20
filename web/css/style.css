@@ -2484,20 +2484,22 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1), transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s;
 }
 
 #chatPanel.chat-hidden {
     opacity: 0;
     transform: translateY(16px) scale(0.96);
     pointer-events: none;
-    display: none !important;
+    visibility: hidden;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.3s;
 }
 
 #chatPanel.chat-open {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
+    visibility: visible;
 }
 
 .chat-header {
@@ -3084,7 +3086,7 @@ body.mobile-home-fixed .farm-footer,
 /* ==========================================================================
    MOBILE & TABLET RESPONSIVENESS
    ========================================================================== */
-@media (max-width: 900px) {
+@media (min-width: 0px) {
     .hub-hero {
         grid-template-columns: 1fr;
         gap: 1.5rem;
@@ -3111,7 +3113,7 @@ body.mobile-home-fixed .farm-footer,
     }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 0px) {
     .specimen-pdf-actions {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3124,7 +3126,6 @@ body.mobile-home-fixed .farm-footer,
         justify-content: center;
         gap: 0.5rem;
     }
-
     .navbar {
         display: none !important;
     }
@@ -3207,7 +3208,7 @@ body.mobile-home-fixed .farm-footer,
     }
 }
 
-@media (max-width: 480px) {
+@media (min-width: 0px) {
     .container {
         padding: 0 1rem;
     }
@@ -3236,7 +3237,7 @@ body.mobile-home-fixed .farm-footer,
     }
 }
 
-@media (max-width: 400px) {
+@media (min-width: 0px) {
     .bottom-nav {
         left: 8px;
         right: 8px;
@@ -3340,7 +3341,7 @@ body.mobile-home-fixed .farm-footer,
     display: none;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 0px) {
     .navbar {
         display: none !important;
     }
@@ -3423,7 +3424,7 @@ body.mobile-home-fixed .farm-footer,
     .hub-horiz-loop-track {
         display: flex;
         align-items: flex-start;
-        gap: 0.65rem;
+        gap: 0;
         width: max-content;
         animation: hub-horiz-slide 20s linear infinite;
         will-change: transform;
@@ -3441,7 +3442,7 @@ body.mobile-home-fixed .farm-footer,
         }
 
         100% {
-            transform: translate3d(-50%, 0, 0);
+            transform: translate3d(var(--hub-loop-offset, -50%), 0, 0);
         }
     }
 
@@ -3449,6 +3450,7 @@ body.mobile-home-fixed .farm-footer,
         flex: 0 0 172px;
         width: 172px;
         height: 176px;
+        margin-right: 0.65rem;
         border-radius: 20px 20px 10px 10px;
         padding: 0.75rem 0.85rem 1.4rem;
         display: flex;
@@ -4104,6 +4106,77 @@ body.mobile-home-fixed .farm-footer,
 
     #screenHome.active .hub-hero {
         animation-delay: 60ms;
+    }
+}
+
+@media (min-width: 769px) {
+    #screenHome {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+    }
+
+    #screenHome .container {
+        width: 100%;
+        max-width: none;
+    }
+
+    #screenHome .hub-horiz-loop-container {
+        width: 100%;
+    }
+
+    #screenHome .hub-horiz-loop-track {
+        width: max-content;
+    }
+
+    #screenHome .hub-big-card {
+        flex-basis: 210px;
+        width: 210px;
+        height: 190px;
+    }
+
+    #screenHome .hub-hero {
+        width: 100%;
+        max-width: none;
+        min-height: 520px;
+        margin-top: -90px;
+        padding-top: 5rem;
+    }
+
+    #screenHome .hub-hero-card {
+        max-width: 520px;
+    }
+
+    #screenHome .hub-hero-content {
+        width: 100%;
+    }
+
+    .bottom-nav {
+        max-width: 720px;
+    }
+
+    .bottom-nav-grass {
+        width: 100%;
+        bottom: 0;
+        height: clamp(150px, 24vh, 240px);
+    }
+
+    .bottom-nav-grass-img {
+        width: 100vw;
+        max-width: none;
+        height: 100%;
+        object-fit: fill;
+    }
+
+    .screen:not(#screenHome) > .container {
+        max-width: 1160px;
+    }
+}
+
+@media (min-width: 769px) {
+    #chatbotWidget {
+        right: calc(50% - 26px);
+        bottom: calc(14px + var(--nav-mobile-height, 62px) + 12px);
     }
 }
 
