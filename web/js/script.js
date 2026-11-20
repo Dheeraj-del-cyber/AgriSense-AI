@@ -580,6 +580,256 @@ async function analyzeImage() {
 }
 
 
+async function generateSpecimenPdf() {
+    const protocolCards = Array.from(document.querySelectorAll('#resultBody .advisory-grid > .advisory-card'));
+    if (protocolCards.length !== 4) {
+        throw new Error('The specimen report must contain all four treatment protocols.');
+    }
+
+    const protocols = protocolCards.map((card) => {
+        const title = card.querySelector('h4')?.textContent.trim();
+        const items = Array.from(card.querySelectorAll('li'))
+            .map((item) => item.textContent.trim());
+        if (!title || items.length === 0) {
+            throw new Error('A treatment protocol is missing its heading or instructions.');
+        }
+        return { title, items };
+    });
+
+    const canvasWidth = 1240;
+    const canvasHeight = 1754;
+    const canvas = document.createElement('canvas');
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+    const context = canvas.getContext('2d');
+    if (!context) {
+        throw new Error('This browser cannot create the specimen report PDF.');
+    }
+
+    const lineHeight = 32;
+    const textWidth = 440;
+    const wrapText = (text) => {
+        const lines = [];
+        text.split(/\r?\n/).forEach((paragraph) => {
+            const words = paragraph.split(/\s+/).filter(Boolean);
+            let line = '';
+            words.forEach((word) => {
+                const parts = [];
+                let part = '';
+                Array.from(word).forEach((character) => {
+                    if (part && context.measureText(part + character).width > textWidth) {
+                        parts.push(part);
+                        part = character;
+                    } else {
+                        part += character;
+                    }
+                });
+                if (part) parts.push(part);
+
+                parts.forEach((wordPart, index) => {
+                    const candidate = line ? `${line} ${wordPart}` : wordPart;
+                    if (line && context.measureText(candidate).width > textWidth) {
+                        lines.push(line);
+                        line = wordPart;
+                    } else {
+                        line = candidate;
+                    }
+                    if (index < parts.length - 1) {
+                        lines.push(line);
+                        line = '';
+                    }
+                });
+            });
+            lines.push(line);
+        });
+        return lines;
+    };
+
+    context.font = '28px Arial, sans-serif';
+    const protocolLines = protocols.map((protocol) => protocol.items.flatMap((item) => {
+        const wrapped = wrapText(item);
+        return wrapped.map((line, index) => index === 0 ? `• ${line}` : `  ${line}`);
+    }));
+    const cursors = protocolLines.map(() => 0);
+    const diagnosis = document.querySelector('#resultBody .result-name')?.textContent.trim() || 'Specimen Evaluation';
+    const confidence = document.querySelector('#resultBody .result-confidence-badge')?.textContent.trim() || '';
+    const pageImages = [];
+    let pageNumber = 0;
+
+    while (cursors.some((cursor, index) => cursor < protocolLines[index].length)) {
+        pageNumber += 1;
+        const firstPage = pageNumber === 1;
+        const gridTop = firstPage ? 270 : 190;
+        const margin = 82;
+        const gap = 28;
+        const gridBottom = canvasHeight - margin;
+        const cellWidth = (canvasWidth - margin * 2 - gap) / 2;
+        const cellHeight = (gridBottom - gridTop - gap) / 2;
+
+        context.fillStyle = '#ffffff';
+        context.fillRect(0, 0, canvasWidth, canvasHeight);
+        context.fillStyle = '#164e35';
+        context.font = 'bold 25px Arial, sans-serif';
+        context.fillText('AGRISENSE AI  |  FIELD DIAGNOSTIC REPORT', margin, 66);
+        context.fillStyle = '#173b2b';
+        context.font = 'bold 44px Arial, sans-serif';
+        context.fillText(firstPage ? 'Specimen Evaluation' : 'Treatment Protocols (continued)', margin, 126);
+        context.fillStyle = '#52645a';
+        context.font = '27px Arial, sans-serif';
+        context.fillText(`Specimen: ${diagnosis}`, margin, 174);
+        if (firstPage && confidence) {
+            context.fillText(confidence, margin, 216);
+        }
+        context.fillStyle = '#68776e';
+        context.font = '22px Arial, sans-serif';
+        context.textAlign = 'right';
+        context.fillText(`Page ${pageNumber}`, canvasWidth - margin, 66);
+        context.textAlign = 'left';
+
+        protocols.forEach((protocol, index) => {
+            const column = index % 2;
+            const row = Math.floor(index / 2);
+            const x = margin + column * (cellWidth + gap);
+            const y = gridTop + row * (cellHeight + gap);
+            const padding = 28;
+
+            context.fillStyle = '#ffffff';
+            context.strokeStyle = '#9db7a5';
+            context.lineWidth = 3;
+            context.fillRect(x, y, cellWidth, cellHeight);
+            context.strokeRect(x, y, cellWidth, cellHeight);
+            context.fillStyle = '#eff5f0';
+            context.fillRect(x + 2, y + 2, cellWidth - 4, 86);
+            context.fillStyle = '#164e35';
+            context.font = 'bold 28px Arial, sans-serif';
+            const titleLines = wrapText(protocol.title);
+            titleLines.slice(0, 2).forEach((line, titleLine) => {
+                context.fillText(line, x + padding, y + 42 + titleLine * 32);
+            });
+            context.strokeStyle = '#d5e0d8';
+            context.lineWidth = 2;
+            context.beginPath();
+            context.moveTo(x + padding, y + 92);
+            context.lineTo(x + cellWidth - padding, y + 92);
+            context.stroke();
+
+            context.fillStyle = '#26352c';
+            context.font = '28px Arial, sans-serif';
+            const maxLines = Math.floor((cellHeight - 130) / lineHeight);
+            const start = cursors[index];
+            const end = Math.min(start + maxLines, protocolLines[index].length);
+            protocolLines[index].slice(start, end).forEach((line, lineIndex) => {
+                context.fillText(line, x + padding, y + 138 + lineIndex * lineHeight);
+            });
+            cursors[index] = end;
+        });
+
+        const jpeg = await new Promise((resolve, reject) => {
+            canvas.toBlob((blob) => {
+                if (blob) resolve(blob);
+                else reject(new Error('The browser could not render a PDF page.'));
+            }, 'image/jpeg', 0.92);
+        });
+        const bytes = new Uint8Array(await jpeg.arrayBuffer());
+        let binary = '';
+        for (let offset = 0; offset < bytes.length; offset += 0x8000) {
+            binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000));
+        }
+        pageImages.push(binary);
+    }
+
+    const objects = [
+        '<< /Type /Catalog /Pages 2 0 R >>',
+        `<< /Type /Pages /Kids [${pageImages.map((_, index) => `${3 + index * 3} 0 R`).join(' ')}] /Count ${pageImages.length} >>`
+    ];
+    pageImages.forEach((image, index) => {
+        const pageObject = 3 + index * 3;
+        const imageObject = pageObject + 1;
+        const contentObject = pageObject + 2;
+        const content = 'q\n595.28 0 0 841.89 0 0 cm\n/Im0 Do\nQ\n';
+        objects.push(
+            `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 ${imageObject} 0 R >> >> /Contents ${contentObject} 0 R >>`,
+            `<< /Type /XObject /Subtype /Image /Width ${canvasWidth} /Height ${canvasHeight} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${image.length} >>\nstream\n${image}\nendstream`,
+            `<< /Length ${content.length} >>\nstream\n${content}endstream`
+        );
+    });
+
+    let pdf = '%PDF-1.4\n';
+    const offsets = [0];
+    objects.forEach((object, index) => {
+        offsets.push(pdf.length);
+        pdf += `${index + 1} 0 obj\n${object}\nendobj\n`;
+    });
+    const xrefOffset = pdf.length;
+    pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+    offsets.slice(1).forEach((offset) => {
+        pdf += `${String(offset).padStart(10, '0')} 00000 n \n`;
+    });
+    pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+
+    const pdfBytes = new Uint8Array(pdf.length);
+    for (let index = 0; index < pdf.length; index += 1) {
+        pdfBytes[index] = pdf.charCodeAt(index);
+    }
+    return new File([pdfBytes], 'AgriSense_Specimen_Report.pdf', { type: 'application/pdf' });
+}
+
+function downloadSpecimenPdfFile(file) {
+    const url = URL.createObjectURL(file);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'AgriSense_Specimen_Report.pdf';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+async function handleSpecimenPdfAction(action) {
+    const buttons = Array.from(document.querySelectorAll('.specimen-pdf-actions button'));
+    buttons.forEach((item) => { item.disabled = true; });
+    try {
+        const file = await generateSpecimenPdf();
+        if (action === 'download') {
+            downloadSpecimenPdfFile(file);
+            return;
+        }
+
+        let canShareFile = false;
+        if (typeof navigator.share === 'function' && typeof navigator.canShare === 'function') {
+            try {
+                canShareFile = navigator.canShare({ files: [file] });
+            } catch (error) {
+                canShareFile = false;
+            }
+        }
+        if (!canShareFile) {
+            downloadSpecimenPdfFile(file);
+            alert('Native PDF sharing is unavailable. The report has been downloaded instead.');
+            return;
+        }
+
+        try {
+            await navigator.share({
+                files: [file],
+                title: 'AgriSense Specimen Report',
+                text: 'AgriSense specimen evaluation report'
+            });
+        } catch (error) {
+            if (error.name === 'AbortError') return;
+            downloadSpecimenPdfFile(file);
+            alert('Native PDF sharing failed. The report has been downloaded instead.');
+        }
+    } catch (error) {
+        if (error.name !== 'AbortError') {
+            console.error('Unable to generate or share the specimen PDF:', error);
+            alert('The specimen PDF could not be generated or shared. Please try again.');
+        }
+    } finally {
+        buttons.forEach((item) => { item.disabled = false; });
+    }
+}
+
 function renderRealDiseaseResult(data) {
     const pr = data.prediction_results;
     const disease = pr.disease;
@@ -637,6 +887,28 @@ function renderRealDiseaseResult(data) {
     const body = document.getElementById('resultBody');
     const title = document.getElementById('resultTitle');
     title.textContent = isHealthy ? 'Specimen Evaluation' : 'Diagnostic Report';
+    const pdfActionsHtml = isHealthy && advisoryHtml.includes('class="advisory-card')
+        ? `<div class="specimen-pdf-actions" aria-label="Specimen report actions">
+            <button type="button" class="btn-primary" onclick="handleSpecimenPdfAction('download')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Download PDF</span>
+            </button>
+            <button type="button" class="btn-secondary" onclick="handleSpecimenPdfAction('share')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+                <span>Share PDF</span>
+            </button>
+        </div>`
+        : '';
 
     const statusIcon = isHealthy
         ? `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`
@@ -652,6 +924,7 @@ function renderRealDiseaseResult(data) {
             </div>
         </div>
         
+        ${pdfActionsHtml}
         <div class="result-card" style="margin:1.25rem 0">
             <div class="result-card-header">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
