@@ -1149,7 +1149,7 @@ Rules:
     }
 }
 
-const CHAT_ICON_SVG = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
+const CHAT_ICON_SVG = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v2"></path><circle cx="12" cy="2.5" r=".5" fill="#fff"></circle><rect x="4" y="6" width="16" height="14" rx="4"></rect><path d="M2 11v4M22 11v4M9 16h6"></path><circle cx="9" cy="11.5" r="1" fill="#fff" stroke="none"></circle><circle cx="15" cy="11.5" r="1" fill="#fff" stroke="none"></circle></svg>';
 const CHAT_CLOSE_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
 
 let chatOpen = false;
