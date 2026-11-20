@@ -359,7 +359,7 @@ ul, ol {
 .bottom-nav-grass {
     display: none;
     position: fixed;
-    bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) - 2px);
+    bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) + 12px);
     left: 0;
     right: 0;
     width: 100%;
@@ -378,20 +378,23 @@ ul, ol {
     user-select: none;
 }
 
-/* --- Mobile Bottom Navigation (Phase 4 Polish) --- */
+/* --- Mobile Bottom Navigation (Curved Full Box) --- */
 .bottom-nav {
     display: none;
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px));
-    padding: 0 6px env(safe-area-inset-bottom, 0px);
-    background: rgba(250, 252, 249, 0.88);
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    left: 14px;
+    right: 14px;
+    max-width: 480px;
+    margin: 0 auto;
+    height: var(--nav-mobile-height, 58px);
+    padding: 0 8px;
+    background: rgba(250, 252, 249, 0.94);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     backdrop-filter: blur(20px) saturate(180%);
-    border-top: 1px solid rgba(22, 78, 53, 0.12);
-    box-shadow: 0 -4px 20px rgba(10, 35, 20, 0.08);
+    border: 1px solid rgba(22, 78, 53, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(10, 35, 20, 0.12), 0 2px 8px rgba(10, 35, 20, 0.05);
     z-index: 1000;
     align-items: center;
     justify-content: space-around;
@@ -2987,7 +2990,7 @@ ul, ol {
     }
 
     #chatbotWidget {
-        bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) + 12px + var(--chat-keyboard-inset, 0px));
+        bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) + 26px + var(--chat-keyboard-inset, 0px));
         right: 14px;
     }
 
@@ -3035,6 +3038,8 @@ ul, ol {
 
 @media (max-width: 400px) {
     .bottom-nav {
+        left: 8px;
+        right: 8px;
         padding: 0 2px;
     }
 
@@ -3788,16 +3793,22 @@ ul, ol {
 
     .bottom-nav-grass {
         display: block;
-        bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) - 2px);
+        bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) + 12px);
     }
 
     .bottom-nav {
-        height: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px));
-        padding: 0 4px env(safe-area-inset-bottom, 0px);
+        bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+        left: 14px;
+        right: 14px;
+        max-width: 480px;
+        margin: 0 auto;
+        height: var(--nav-mobile-height, 58px);
+        padding: 0 4px;
         justify-content: space-around;
-        border-top: 1px solid rgba(22, 78, 53, 0.12);
-        background: rgba(250, 252, 249, 0.92);
-        box-shadow: 0 -4px 20px rgba(15, 46, 30, 0.08);
+        border: 1px solid rgba(22, 78, 53, 0.15);
+        border-radius: 16px;
+        background: rgba(250, 252, 249, 0.94);
+        box-shadow: 0 8px 32px rgba(15, 46, 30, 0.14);
         -webkit-backdrop-filter: blur(20px) saturate(180%);
         backdrop-filter: blur(20px) saturate(180%);
     }
@@ -3855,7 +3866,7 @@ ul, ol {
 
     #chatbotWidget {
         right: 14px;
-        bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) + 12px + var(--chat-keyboard-inset, 0px));
+        bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) + 26px + var(--chat-keyboard-inset, 0px));
     }
 
     #chatToggleBtn {
