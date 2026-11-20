@@ -3086,7 +3086,7 @@ body.mobile-home-fixed .farm-footer,
 /* ==========================================================================
    MOBILE & TABLET RESPONSIVENESS
    ========================================================================== */
-@media (max-width: 900px) {
+@media (min-width: 0px) {
     .hub-hero {
         grid-template-columns: 1fr;
         gap: 1.5rem;
@@ -3113,7 +3113,7 @@ body.mobile-home-fixed .farm-footer,
     }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 0px) {
     .specimen-pdf-actions {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3208,7 +3208,7 @@ body.mobile-home-fixed .farm-footer,
     }
 }
 
-@media (max-width: 480px) {
+@media (min-width: 0px) {
     .container {
         padding: 0 1rem;
     }
@@ -3237,7 +3237,7 @@ body.mobile-home-fixed .farm-footer,
     }
 }
 
-@media (max-width: 400px) {
+@media (min-width: 0px) {
     .bottom-nav {
         left: 8px;
         right: 8px;
@@ -3341,7 +3341,7 @@ body.mobile-home-fixed .farm-footer,
     display: none;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 0px) {
     .navbar {
         display: none !important;
     }
