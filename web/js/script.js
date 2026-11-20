@@ -596,19 +596,21 @@ async function generateSpecimenPdf() {
         return { title, items };
     });
 
-    const canvasWidth = 1240;
-    const canvasHeight = 1754;
+    const pageWidth = 1240;
+    const pageHeight = 1754;
+    const renderScale = 2;
     const canvas = document.createElement('canvas');
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
+    canvas.width = pageWidth * renderScale;
+    canvas.height = pageHeight * renderScale;
     const context = canvas.getContext('2d');
     if (!context) {
         throw new Error('This browser cannot create the specimen report PDF.');
     }
+    context.scale(renderScale, renderScale);
 
-    const lineHeight = 32;
+    const lineHeight = 34;
     const textWidth = 440;
-    const wrapText = (text) => {
+    const wrapText = (text, maxWidth = textWidth) => {
         const lines = [];
         text.split(/\r?\n/).forEach((paragraph) => {
             const words = paragraph.split(/\s+/).filter(Boolean);
@@ -617,7 +619,7 @@ async function generateSpecimenPdf() {
                 const parts = [];
                 let part = '';
                 Array.from(word).forEach((character) => {
-                    if (part && context.measureText(part + character).width > textWidth) {
+                    if (part && context.measureText(part + character).width > maxWidth) {
                         parts.push(part);
                         part = character;
                     } else {
@@ -628,7 +630,7 @@ async function generateSpecimenPdf() {
 
                 parts.forEach((wordPart, index) => {
                     const candidate = line ? `${line} ${wordPart}` : wordPart;
-                    if (line && context.measureText(candidate).width > textWidth) {
+                    if (line && context.measureText(candidate).width > maxWidth) {
                         lines.push(line);
                         line = wordPart;
                     } else {
@@ -646,45 +648,83 @@ async function generateSpecimenPdf() {
     };
 
     context.font = '28px Arial, sans-serif';
-    const protocolLines = protocols.map((protocol) => protocol.items.flatMap((item) => {
+    const protocolItems = protocols.map((protocol) => protocol.items.map((item) => {
         const wrapped = wrapText(item);
         return wrapped.map((line, index) => index === 0 ? `• ${line}` : `  ${line}`);
     }));
-    const cursors = protocolLines.map(() => 0);
+    const cursors = protocolItems.map(() => ({ item: 0, line: 0 }));
     const diagnosis = document.querySelector('#resultBody .result-name')?.textContent.trim() || 'Specimen Evaluation';
-    const confidence = document.querySelector('#resultBody .result-confidence-badge')?.textContent.trim() || '';
+    const confidence = document.querySelector('#resultBody .result-confidence-badge')
+        ?.textContent.trim().replace(/\s+Neural Confidence$/i, '') || '';
+    context.font = 'bold 27px Arial, sans-serif';
+    const diagnosisLines = wrapText(diagnosis, 610);
+    const summaryHeight = Math.max(82, diagnosisLines.length * 26 + 40);
+    const reportDate = new Date().toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    });
+    const protocolColors = ['#c17b16', '#43834e', '#347b9b', '#164e35'];
     const pageImages = [];
     let pageNumber = 0;
 
-    while (cursors.some((cursor, index) => cursor < protocolLines[index].length)) {
+    while (cursors.some((cursor, index) => cursor.item < protocolItems[index].length)) {
         pageNumber += 1;
         const firstPage = pageNumber === 1;
-        const gridTop = firstPage ? 270 : 190;
+        const gridTop = firstPage ? 180 + summaryHeight + 20 : 190;
         const margin = 82;
         const gap = 28;
-        const gridBottom = canvasHeight - margin;
-        const cellWidth = (canvasWidth - margin * 2 - gap) / 2;
+        const gridBottom = pageHeight - 105;
+        const cellWidth = (pageWidth - margin * 2 - gap) / 2;
         const cellHeight = (gridBottom - gridTop - gap) / 2;
 
         context.fillStyle = '#ffffff';
-        context.fillRect(0, 0, canvasWidth, canvasHeight);
+        context.fillRect(0, 0, pageWidth, pageHeight);
         context.fillStyle = '#164e35';
-        context.font = 'bold 25px Arial, sans-serif';
-        context.fillText('AGRISENSE AI  |  FIELD DIAGNOSTIC REPORT', margin, 66);
-        context.fillStyle = '#173b2b';
-        context.font = 'bold 44px Arial, sans-serif';
-        context.fillText(firstPage ? 'Specimen Evaluation' : 'Treatment Protocols (continued)', margin, 126);
-        context.fillStyle = '#52645a';
-        context.font = '27px Arial, sans-serif';
-        context.fillText(`Specimen: ${diagnosis}`, margin, 174);
-        if (firstPage && confidence) {
-            context.fillText(confidence, margin, 216);
-        }
+        context.fillRect(0, 0, pageWidth, 14);
+        context.fillStyle = '#164e35';
+        context.font = 'bold 30px Arial, sans-serif';
+        context.fillText('AgriSense', margin, 66);
+        context.fillStyle = '#52705e';
+        context.font = 'bold 18px Arial, sans-serif';
+        context.fillText('PRECISION AGRICULTURE', margin + 148, 64);
         context.fillStyle = '#68776e';
-        context.font = '22px Arial, sans-serif';
+        context.font = '20px Arial, sans-serif';
         context.textAlign = 'right';
-        context.fillText(`Page ${pageNumber}`, canvasWidth - margin, 66);
+        context.fillText(`FIELD REPORT  •  ${reportDate}`, pageWidth - margin, 64);
         context.textAlign = 'left';
+
+        context.fillStyle = '#173b2b';
+        context.font = 'bold 48px Georgia, serif';
+        context.fillText(firstPage ? 'Specimen Evaluation Report' : 'Treatment Protocols', margin, 124);
+        if (!firstPage) {
+            context.fillStyle = '#52645a';
+            context.font = '27px Arial, sans-serif';
+            context.fillText(`${diagnosis}  •  continued`, margin, 164);
+        } else {
+            context.fillStyle = '#52645a';
+            context.font = '24px Arial, sans-serif';
+            context.fillText('Crop health assessment and treatment guidance', margin, 158);
+            context.fillStyle = '#f1f6f2';
+            context.fillRect(margin, 180, pageWidth - margin * 2, summaryHeight);
+            context.strokeStyle = '#d5e0d8';
+            context.lineWidth = 2;
+            context.strokeRect(margin, 180, pageWidth - margin * 2, summaryHeight);
+            context.fillStyle = '#68776e';
+            context.font = 'bold 17px Arial, sans-serif';
+            context.fillText('SPECIMEN', margin + 20, 208);
+            context.fillStyle = '#173b2b';
+            context.font = 'bold 27px Arial, sans-serif';
+            diagnosisLines.forEach((line, index) => {
+                context.fillText(line, margin + 20, 232 + index * 26);
+            });
+            context.fillStyle = '#68776e';
+            context.font = 'bold 17px Arial, sans-serif';
+            context.fillText('NEURAL CONFIDENCE', margin + 700, 208);
+            context.fillStyle = '#164e35';
+            context.font = 'bold 26px Arial, sans-serif';
+            context.fillText(confidence || 'Not available', margin + 700, 240);
+        }
 
         protocols.forEach((protocol, index) => {
             const column = index % 2;
@@ -692,21 +732,27 @@ async function generateSpecimenPdf() {
             const x = margin + column * (cellWidth + gap);
             const y = gridTop + row * (cellHeight + gap);
             const padding = 28;
+            const accent = protocolColors[index];
 
             context.fillStyle = '#ffffff';
-            context.strokeStyle = '#9db7a5';
-            context.lineWidth = 3;
+            context.strokeStyle = '#d2ded5';
+            context.lineWidth = 2;
             context.fillRect(x, y, cellWidth, cellHeight);
             context.strokeRect(x, y, cellWidth, cellHeight);
-            context.fillStyle = '#eff5f0';
-            context.fillRect(x + 2, y + 2, cellWidth - 4, 86);
-            context.fillStyle = '#164e35';
+            context.fillStyle = accent;
+            context.fillRect(x + 2, y + 2, cellWidth - 4, 9);
+            context.fillStyle = '#f3f7f4';
+            context.fillRect(x + 2, y + 11, cellWidth - 4, 82);
+            context.fillStyle = accent;
+            context.font = 'bold 18px Arial, sans-serif';
+            context.fillText(String(index + 1).padStart(2, '0'), x + padding, y + 47);
+            context.fillStyle = '#173b2b';
             context.font = 'bold 28px Arial, sans-serif';
-            const titleLines = wrapText(protocol.title);
+            const titleLines = wrapText(protocol.title, cellWidth - padding * 2 - 48);
             titleLines.slice(0, 2).forEach((line, titleLine) => {
-                context.fillText(line, x + padding, y + 42 + titleLine * 32);
+                context.fillText(line, x + padding + 42, y + 42 + titleLine * 32);
             });
-            context.strokeStyle = '#d5e0d8';
+            context.strokeStyle = '#e0e8e2';
             context.lineWidth = 2;
             context.beginPath();
             context.moveTo(x + padding, y + 92);
@@ -716,19 +762,51 @@ async function generateSpecimenPdf() {
             context.fillStyle = '#26352c';
             context.font = '28px Arial, sans-serif';
             const maxLines = Math.floor((cellHeight - 130) / lineHeight);
-            const start = cursors[index];
-            const end = Math.min(start + maxLines, protocolLines[index].length);
-            protocolLines[index].slice(start, end).forEach((line, lineIndex) => {
-                context.fillText(line, x + padding, y + 138 + lineIndex * lineHeight);
-            });
-            cursors[index] = end;
+            const cursor = cursors[index];
+            const items = protocolItems[index];
+            let renderedLines = 0;
+            while (cursor.item < items.length && renderedLines < maxLines) {
+                const itemLines = items[cursor.item];
+                const remainingLines = itemLines.length - cursor.line;
+                const availableLines = maxLines - renderedLines;
+
+                if (remainingLines > availableLines && renderedLines > 0) break;
+
+                const linesToDraw = Math.min(remainingLines, availableLines);
+                itemLines.slice(cursor.line, cursor.line + linesToDraw).forEach((line, lineIndex) => {
+                    context.fillText(line, x + padding, y + 138 + (renderedLines + lineIndex) * lineHeight);
+                });
+                renderedLines += linesToDraw;
+                cursor.line += linesToDraw;
+
+                if (cursor.line === itemLines.length) {
+                    cursor.item += 1;
+                    cursor.line = 0;
+                    if (cursor.item < items.length && renderedLines < maxLines) renderedLines += 1;
+                } else {
+                    break;
+                }
+            }
         });
+
+        context.strokeStyle = '#d5e0d8';
+        context.lineWidth = 2;
+        context.beginPath();
+        context.moveTo(margin, pageHeight - 74);
+        context.lineTo(pageWidth - margin, pageHeight - 74);
+        context.stroke();
+        context.fillStyle = '#68776e';
+        context.font = '19px Arial, sans-serif';
+        context.fillText('AgriSense AI  •  Specimen report', margin, pageHeight - 42);
+        context.textAlign = 'right';
+        context.fillText(`Page ${pageNumber}`, pageWidth - margin, pageHeight - 42);
+        context.textAlign = 'left';
 
         const jpeg = await new Promise((resolve, reject) => {
             canvas.toBlob((blob) => {
                 if (blob) resolve(blob);
                 else reject(new Error('The browser could not render a PDF page.'));
-            }, 'image/jpeg', 0.92);
+            }, 'image/jpeg', 0.94);
         });
         const bytes = new Uint8Array(await jpeg.arrayBuffer());
         let binary = '';
@@ -749,7 +827,7 @@ async function generateSpecimenPdf() {
         const content = 'q\n595.28 0 0 841.89 0 0 cm\n/Im0 Do\nQ\n';
         objects.push(
             `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 ${imageObject} 0 R >> >> /Contents ${contentObject} 0 R >>`,
-            `<< /Type /XObject /Subtype /Image /Width ${canvasWidth} /Height ${canvasHeight} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${image.length} >>\nstream\n${image}\nendstream`,
+            `<< /Type /XObject /Subtype /Image /Width ${canvas.width} /Height ${canvas.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${image.length} >>\nstream\n${image}\nendstream`,
             `<< /Length ${content.length} >>\nstream\n${content}endstream`
         );
     });
