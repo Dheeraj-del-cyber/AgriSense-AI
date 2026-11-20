@@ -280,6 +280,12 @@ function navigateTo(screenId) {
         document.body.classList.remove('mobile-home-fixed');
     }
 
+    // Hide footer completely on Home screen, display on inner screens
+    const farmFooter = document.querySelector('.farm-footer');
+    if (farmFooter) {
+        farmFooter.style.display = (screenId === 'screenHome') ? 'none' : 'block';
+    }
+
     // Update Nav UI
     document.querySelectorAll('.nav-link').forEach(l => {
         l.classList.toggle('active', l.getAttribute('data-screen') === screenId);
