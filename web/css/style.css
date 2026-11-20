@@ -649,7 +649,7 @@ ol {
     min-height: 480px;
     border-radius: var(--radius-xl);
     overflow: hidden;
-    border-top: 4px solid #D1D3D0;
+    border-top: 4px solid #ffffff;
     background:
         linear-gradient(180deg, rgba(8, 33, 20, 0.35) 0%, rgba(8, 33, 20, 0.85) 100%),
         url("../assets/images/hero.png?v=dim50") center center / cover no-repeat;
@@ -3276,6 +3276,7 @@ body.mobile-home-fixed .farm-footer,
 
 .hub-horiz-loop-container {
     display: none;
+    background: #ffffff;
 }
 
 .home-feature-card {
@@ -3353,6 +3354,8 @@ body.mobile-home-fixed .farm-footer,
         overflow: hidden !important;
         height: 100dvh !important;
         max-height: 100dvh !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
     }
 
     .screen {
@@ -3379,6 +3382,8 @@ body.mobile-home-fixed .farm-footer,
         padding-top: calc(env(safe-area-inset-top, 0px) + 0.65rem);
         padding-bottom: calc(var(--nav-mobile-height) + env(safe-area-inset-bottom, 0px));
         box-sizing: border-box;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
     }
 
     #screenHome .station-overview {
@@ -3392,6 +3397,7 @@ body.mobile-home-fixed .farm-footer,
         padding: 0;
         width: 100%;
         max-width: 100%;
+        background: #ffffff !important;
     }
 
     #screenHome .operations-grid-section,
@@ -3411,6 +3417,7 @@ body.mobile-home-fixed .farm-footer,
         padding: 0.15rem 0 0;
         margin-top: 0.1rem;
         margin-bottom: 0;
+        background: #ffffff !important;
     }
 
     .hub-horiz-loop-track {
@@ -3645,7 +3652,7 @@ body.mobile-home-fixed .farm-footer,
         padding: 2.85rem 1rem 1.15rem;
         overflow: hidden;
         border: none;
-        border-top: 4px solid #D1D3D0;
+        border-top: 4px solid #ffffff;
         border-radius: 50% 50% 0 0 / 72px 72px 0 0;
         background:
             linear-gradient(180deg,
