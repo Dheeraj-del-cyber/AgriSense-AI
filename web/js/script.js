@@ -1354,12 +1354,12 @@ function appendChatMsg(text, role, isTyping = false) {
     div.id = id;
 
     if (role === 'user') {
-        div.className = 'chat-msg user-msg';
-        div.style.cssText = 'background:var(--g-600); color:white; border-radius:18px 18px 4px 18px; padding:12px 16px; font-size:0.95rem; max-width:85%; align-self:flex-end; box-shadow:var(--sh-md);';
+        div.className = 'chat-msg user user-msg';
+        div.style.cssText = 'background:linear-gradient(135deg, #1b6e46, #155e37); color:#ffffff; border-radius:18px 18px 4px 18px; padding:10px 14px; font-size:0.875rem; max-width:85%; align-self:flex-end; box-shadow:0 2px 8px rgba(27, 110, 70, 0.22); word-break:break-word;';
         div.textContent = text;
     } else {
         div.className = 'chat-msg ai-msg markdown-body';
-        div.style.cssText = 'background:var(--white); color:var(--n-800); border:1px solid var(--border); border-radius:18px 18px 18px 4px; padding:12px 16px; font-size:0.95rem; max-width:90%; align-self:flex-start; box-shadow:var(--sh-sm); line-height:1.6;';
+        div.style.cssText = 'background:#ffffff; color:#1e293b; border:1px solid rgba(22, 78, 53, 0.12); border-radius:18px 18px 18px 4px; padding:11px 15px; font-size:0.875rem; max-width:88%; align-self:flex-start; box-shadow:0 2px 8px rgba(10, 35, 20, 0.05); line-height:1.55; word-break:break-word;';
         if (typeof marked !== 'undefined') {
             div.innerHTML = marked.parse(text);
         } else {
