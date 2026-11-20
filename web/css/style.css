@@ -359,7 +359,7 @@ ul, ol {
 .bottom-nav-grass {
     display: none;
     position: fixed;
-    bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) + 12px);
+    bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) - 62px);
     left: 0;
     right: 0;
     width: 100%;
@@ -371,9 +371,13 @@ ul, ol {
 
 .bottom-nav-grass-img {
     display: block;
-    width: 100%;
+    position: relative;
+    left: 50%;
+    width: 110%;
+    max-width: none;
     height: auto;
     object-fit: contain;
+    transform: translateX(-50%);
     pointer-events: none;
     user-select: none;
 }
@@ -3793,7 +3797,7 @@ ul, ol {
 
     .bottom-nav-grass {
         display: block;
-        bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) + 12px);
+        bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) - 62px);
     }
 
     .bottom-nav {
