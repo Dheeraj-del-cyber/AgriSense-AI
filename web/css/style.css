@@ -4173,6 +4173,13 @@ body.mobile-home-fixed .farm-footer,
     }
 }
 
+@media (min-width: 769px) {
+    #chatbotWidget {
+        right: calc(50% - 26px);
+        bottom: calc(14px + var(--nav-mobile-height, 62px) + 12px);
+    }
+}
+
 @media (max-width: 380px) {
     .home-feature-card {
         flex-basis: 104px;
