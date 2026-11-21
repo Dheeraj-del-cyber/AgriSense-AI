@@ -1790,7 +1790,7 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
    ========================================================================== */
 .iot-dashboard {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 1.5rem;
     margin-bottom: 1.5rem;
 }
@@ -1955,9 +1955,15 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     bottom: -10%;
     width: 0;
     height: 0;
+    transform: translate3d(var(--water-tilt-x, 0px), var(--water-tilt-y, 0px), 0) rotate(var(--water-tilt-angle, 0deg));
+    transform-origin: 0 0;
     transition: bottom 1s cubic-bezier(0.34, 1.25, 0.64, 1);
     z-index: 2;
     pointer-events: none;
+}
+
+.moisture-gauge-track.tilt-active .wave-container {
+    will-change: transform;
 }
 
 .wave-cover {
@@ -2147,6 +2153,47 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     width: 100%;
     padding-top: 0.5rem;
     border-top: 1px solid var(--border-subtle);
+}
+
+.gauge-tilt-control {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .gauge-tilt-control {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.35rem;
+        width: 100%;
+        margin-top: 0.15rem;
+    }
+
+    .gauge-tilt-button {
+        min-height: 38px;
+        padding: 0.45rem 0.9rem;
+        border: 1px solid #cfe2d3;
+        border-radius: var(--radius-pill);
+        background: linear-gradient(145deg, #f8fcf8, #eaf3eb);
+        color: var(--g-800);
+        font-size: 0.75rem;
+        font-weight: 700;
+        box-shadow: 3px 3px 8px rgba(47, 80, 52, 0.12), -3px -3px 8px #fff;
+        cursor: pointer;
+    }
+
+    .gauge-tilt-button[aria-pressed="true"] {
+        background: #e7f4e9;
+        border-color: #9dc9a7;
+        box-shadow: inset 2px 2px 5px rgba(47, 80, 52, 0.12), inset -2px -2px 5px #fff;
+    }
+
+    .gauge-tilt-status {
+        color: var(--text-muted);
+        font-size: 0.68rem;
+        line-height: 1.35;
+        text-align: center;
+    }
 }
 
 .scale-item {
@@ -3599,7 +3646,28 @@ body.mobile-home-fixed .farm-footer,
     }
 
     .iot-stats-row {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.5rem;
+    }
+
+    .stat-pill-card {
+        min-width: 0;
+        padding: 0.75rem 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .stat-pill-glyph {
+        width: 30px;
+        height: 30px;
+    }
+
+    .stat-pill-data {
+        min-width: 0;
+    }
+
+    .stat-pill-label {
+        overflow-wrap: anywhere;
+        line-height: 1.25;
     }
 
     .form-row-pair {
@@ -3699,7 +3767,28 @@ body.mobile-home-fixed .farm-footer,
     }
 
     .iot-stats-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.35rem;
+    }
+
+    .stat-pill-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.625rem 0.35rem;
+        gap: 0.375rem;
+    }
+
+    .stat-pill-glyph {
+        width: 28px;
+        height: 28px;
+    }
+
+    .stat-pill-label {
+        font-size: 0.625rem;
+    }
+
+    .stat-pill-val {
+        font-size: 0.875rem;
     }
 }
 

@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Production Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=phase71">
+    <link rel="stylesheet" href="css/style.css?v=phase72">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -892,6 +892,15 @@
                             <div class="scale-item scale-opt"><span>30–75%</span><small>Optimal</small></div>
                             <div class="scale-item scale-wet"><span>&gt; 75%</span><small>Saturated</small></div>
                         </div>
+                        <div class="gauge-tilt-control">
+                            <button id="gaugeTiltButton" class="gauge-tilt-button" type="button"
+                                onclick="toggleGaugeTilt()" aria-pressed="false">
+                                Enable phone tilt
+                            </button>
+                            <span id="gaugeTiltStatus" class="gauge-tilt-status" role="status" aria-live="polite">
+                                Tilt your phone to move the water.
+                            </span>
+                        </div>
                     </div>
 
                     <div class="telemetry-card-footer">
@@ -900,39 +909,6 @@
                     </div>
                 </div>
 
-                <!-- Recommendation & Hardware Status Card -->
-                <div class="telemetry-card">
-                    <div class="telemetry-card-header">
-                        <div class="telemetry-header-title">
-                            <span class="telemetry-icon-wrap icon-advisor">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="12" y1="16" x2="12" y2="12"></line>
-                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                                </svg>
-                            </span>
-                            <h3 data-i18n="iotAIRec">Field Guidance</h3>
-                        </div>
-                        <span class="telemetry-tag-pill">DYNAMIC ADVISORY</span>
-                    </div>
-
-                    <div class="iot-recommendation-box">
-                        <p id="iotRecommendation"></p>
-                    </div>
-
-                    <div class="telemetry-specs-grid">
-                        <div class="spec-tile">
-                            <span class="spec-label" data-i18n="iotOptRange">Target Range</span>
-                            <span class="spec-value">40% – 70%</span>
-                        </div>
-                        <div class="spec-tile">
-                            <span class="spec-label" data-i18n="iotConn">Telemetry Link</span>
-                            <span class="spec-value" id="connectionStatus" style="color:var(--g-700);"
-                                data-i18n="iotLive">Active</span>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- 4-Stat Strip -->
@@ -1375,7 +1351,7 @@
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="config.js"></script>
-    <script src="js/script.js?v=phase71"></script>
+    <script src="js/script.js?v=phase72"></script>
 </body>
 
 </html>
