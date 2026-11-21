@@ -5229,8 +5229,8 @@ body.mobile-home-fixed .farm-footer,
 
 @media (min-width: 769px) {
     body:has(#screenHome.active) {
-        background: #082114 !important;
-        background-color: #082114 !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
     }
 
     #screenHome {
@@ -5238,8 +5238,8 @@ body.mobile-home-fixed .farm-footer,
         max-width: none;
         margin: 0;
         padding-bottom: 0 !important;
-        background: #082114 !important;
-        background-color: #082114 !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
     }
 
     #screenHome .container {
@@ -5251,11 +5251,12 @@ body.mobile-home-fixed .farm-footer,
 
     #screenHome .station-overview {
         height: 100%;
-        background: transparent !important;
+        background: #ffffff !important;
     }
 
     #screenHome .hub-horiz-loop-container {
         width: 100%;
+        background: #ffffff !important;
     }
 
     #screenHome .hub-horiz-loop-track {
@@ -5277,7 +5278,9 @@ body.mobile-home-fixed .farm-footer,
         margin-top: -90px;
         margin-bottom: 0;
         padding-top: 5rem;
-        border-radius: 0;
+        border: none;
+        border-top: 4px solid #ffffff;
+        border-radius: 50% 50% 0 0 / 72px 72px 0 0;
     }
 
     #screenHome .hub-hero-card {
