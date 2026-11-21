@@ -2250,6 +2250,15 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     margin-bottom: 1.5rem;
 }
 
+.iot-chart-card.neumorphic-chart {
+    background: #f5f8f5;
+    border: 1px solid #e1e9e1;
+    border-radius: 20px;
+    box-shadow:
+        9px 9px 20px rgba(177, 191, 177, 0.3),
+        -8px -8px 20px rgba(255, 255, 255, 0.95);
+}
+
 .chart-header-row {
     display: flex;
     align-items: center;
@@ -2282,6 +2291,13 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     border-radius: var(--radius-pill);
 }
 
+.neumorphic-chart .chart-sample-badge {
+    background: #f1f5f1;
+    box-shadow:
+        3px 3px 7px rgba(177, 191, 177, 0.25),
+        -3px -3px 7px rgba(255, 255, 255, 0.9);
+}
+
 .iot-chart-wrap {
     width: 100%;
     height: 140px;
@@ -2290,6 +2306,16 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     border-radius: var(--radius-md);
     overflow: hidden;
     position: relative;
+}
+
+.iot-chart-wrap.neumorphic-chart-well {
+    height: 176px;
+    background: #f0f4f0;
+    border: 1px solid #e0e8e0;
+    border-radius: 12px;
+    box-shadow:
+        inset 5px 5px 10px rgba(177, 191, 177, 0.28),
+        inset -5px -5px 10px rgba(255, 255, 255, 0.88);
 }
 
 #moistureChart {
@@ -2308,10 +2334,19 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     color: var(--text-muted);
 }
 
+.neumorphic-chart .chart-legend {
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
 .legend-item {
     display: flex;
     align-items: center;
     gap: 0.35rem;
+}
+
+.neumorphic-chart .legend-item {
+    min-width: 0;
 }
 
 .legend-dot {
