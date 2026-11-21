@@ -73,11 +73,11 @@ const TRANSLATIONS = {
         iotOpt: 'Optimal', iotOptRec: 'Root-zone moisture is balanced. Transpiration and nutrient uptake conditions are ideal.',
         iotWet: 'Saturated (Wet)', iotWetRec: 'Soil is waterlogged. Suspend irrigation and verify field drainage to prevent root hypoxia and fungal proliferation.',
         navRecommend: 'Crop Planner', featRecommend: 'Cultivar Recommendation', featRecommendDesc: 'Soil taxonomy and microclimate modeling for optimal crop selection.',
-        recTitle: 'Agronomic Crop Planner', recAutoFill: 'Auto-detect Microclimate & Coordinates',
+        recTitle: 'Crop Guidance', recAutoFill: 'Auto-detect Climate & Coordinates',
         recLocation: 'Field Region / Territory', recTemp: 'Ambient Temperature (°C)', recHumid: 'Relative Humidity (%)',
-        recSoil: 'Soil Classification', recSeason: 'Agro-Climatic Season', recBtn: 'Generate Cultivar Plan',
+        recSoil: 'Soil Classification', recSeason: 'Agro-Climatic Season', recBtn: 'Continue',
         recResultTitle: 'Optimal Crop Selections', recReasoning: 'Agronomic Rationale', recPrep: 'Field & Seedbed Preparation',
-        recEmpty: 'Specify regional coordinates, climate metrics, and soil taxonomy to compute optimal crop recommendations.',
+        recEmpty: 'Specify regional coordinates, climate metrics, and soil taxonomy to compute optimal crop recommendations.', recLoading: 'Loading Field Specifications',
         qaRecommend: 'Crop Planning', qaRecommendSub: 'Targeted cultivar selection'
     },
     hi: {
