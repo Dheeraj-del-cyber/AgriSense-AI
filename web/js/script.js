@@ -56,16 +56,16 @@ const TRANSLATIONS = {
         tip2: 'Fill 70% or more of the frame with the target leaf',
         tip3: 'Ensure macro focus is sharp and motionless',
         tip4: 'Frame both healthy tissue and symptomatic lesions',
-        iotTitle: 'Field Telemetry & Soil Station', iotSoilMoisture: 'Soil Moisture Level',
+        iotTitle: 'Soil Moisture', iotSoilMoisture: 'Soil Moisture Level',
         fetching: 'Syncing telemetry...', lastUpdated: 'Last Packet:',
-        iotAIRec: 'Agronomic Assessment', iotOptRange: 'Target Range',
-        iotConn: 'Telemetry Link', iotLive: 'Active', iotOffline: 'Offline', iotDisconnected: 'Sensor telemetry interrupted. Verify hardware link.',
+        iotAIRec: 'Field Guidance', iotOptRange: 'Target Range',
+        iotConn: 'Telemetry Link', iotLive: 'Active', iotOffline: 'Offline', iotDisconnected: '',
         iotMinToday: '24h Minimum', iotMaxToday: '24h Maximum',
         iotAverage: 'Moving Average', iotReadings: 'Packet Count',
-        iotChartTitle: 'Root-Zone Moisture Trendline', iotLast20: 'Last 20 Telemetry Samples',
-        iotWeather: 'Field Agrometeorology', iotDetectLoc: 'Querying station coordinates...',
+        iotChartTitle: 'Moisture Pattern', iotLast20: 'Last 20 Telemetry Samples',
+        iotWeather: 'Farm Weather', iotDetectLoc: 'Querying station coordinates...',
         iotRefreshWeather: 'Refresh Weather Feed',
-        iotSoilHealth: 'Soil Vigor Index', iotWaiting: 'Evaluating...',
+        iotSoilHealth: 'Soil Condition', iotWaiting: 'Evaluating...',
         iotConnectSensor: 'Awaiting live sensor telemetry to compute soil health score.',
         chatGreeting: "Welcome to AgriSense AI. You can query pathogen management, chemical dosages, biological controls, or irrigation schedules.",
         chatPlaceholder: 'Inquire about pathology, soil nutrients, or field management...',
@@ -2056,7 +2056,7 @@ function setIoTOffline(lastUpdated = '--:--:--') {
         badge.textContent = offlineText;
     }
     if (recBox) {
-        recBox.textContent = dict.iotDisconnected || 'Sensor disconnected. Please check connection.';
+        recBox.textContent = '';
     }
     if (gradeEl) {
         gradeEl.textContent = offlineText;
@@ -2171,15 +2171,15 @@ function updateIoTUI(data) {
         if (moisture < 30) {
             badge.classList.add('status-dry');
             badge.textContent = dict.iotDry || 'Too Dry';
-            if (recBox) recBox.textContent = dict.iotDryRec || 'Soil moisture is critically low. Initiate irrigation immediately.';
+            if (recBox) recBox.textContent = '';
         } else if (moisture >= 30 && moisture <= 75) {
             badge.classList.add('status-good');
             badge.textContent = dict.iotOpt || 'Optimal';
-            if (recBox) recBox.textContent = dict.iotOptRec || 'Soil moisture is at an ideal level for most crops. No action needed.';
+            if (recBox) recBox.textContent = '';
         } else {
             badge.classList.add('status-wet');
             badge.textContent = dict.iotWet || 'Too Wet';
-            if (recBox) recBox.textContent = dict.iotWetRec || 'Soil is saturated. Stop irrigation and ensure proper drainage to avoid root rot.';
+            if (recBox) recBox.textContent = '';
         }
     }
 
