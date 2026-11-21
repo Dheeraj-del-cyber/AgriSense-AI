@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Production Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=phase67">
+    <link rel="stylesheet" href="css/style.css?v=phase68">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -1202,10 +1202,21 @@
     </div>
 
     <!-- Processing Overlay -->
-    <div id="loadingOverlay" class="loading-overlay hidden">
-        <div class="loading-card">
-            <div class="radar-spinner"></div>
+    <div id="loadingOverlay" class="loading-overlay loading-screen hidden">
+        <div class="loading-card" role="status" aria-live="polite" aria-atomic="true">
+            <div class="loading-emblem" aria-hidden="true">
+                <div class="loading-leaf-mark">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 4c-8 0-13 4-13 11 0 3 2 5 5 5 7 0 8-8 8-16Z"></path>
+                        <path d="M5 21c2-5 5-8 10-11"></path>
+                    </svg>
+                </div>
+            </div>
+            <span class="loading-kicker">AGRISENSE AI <span aria-hidden="true">/</span> FIELD ANALYSIS</span>
             <p id="loadingText" class="loading-caption">Processing Diagnostic Inference...</p>
+            <div class="loading-progress" aria-hidden="true"><span></span></div>
+            <span class="loading-detail">Analyzing your crop signals</span>
         </div>
     </div>
 
@@ -1360,7 +1371,7 @@
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="config.js"></script>
-    <script src="js/script.js?v=phase67"></script>
+    <script src="js/script.js?v=phase68"></script>
 </body>
 
 </html>
