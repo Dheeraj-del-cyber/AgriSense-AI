@@ -4809,15 +4809,30 @@ body.mobile-home-fixed .farm-footer,
 }
 
 @media (min-width: 769px) {
+    body:has(#screenHome.active) {
+        background: #082114 !important;
+        background-color: #082114 !important;
+    }
+
     #screenHome {
         width: 100%;
         max-width: none;
         margin: 0;
+        padding-bottom: 0 !important;
+        background: #082114 !important;
+        background-color: #082114 !important;
     }
 
     #screenHome .container {
         width: 100%;
         max-width: none;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #screenHome .station-overview {
+        height: 100%;
+        background: transparent !important;
     }
 
     #screenHome .hub-horiz-loop-container {
@@ -4837,9 +4852,13 @@ body.mobile-home-fixed .farm-footer,
     #screenHome .hub-hero {
         width: 100%;
         max-width: none;
-        min-height: 520px;
+        min-height: 0;
+        flex: 1 1 auto;
+        height: 100%;
         margin-top: -90px;
+        margin-bottom: 0;
         padding-top: 5rem;
+        border-radius: 0;
     }
 
     #screenHome .hub-hero-card {
@@ -4870,18 +4889,34 @@ body.mobile-home-fixed .farm-footer,
     }
 
     .bottom-nav-grass {
-        width: 100%;
-        bottom: -38px;
-        height: clamp(110px, 15vh, 160px);
+        display: block !important;
+        position: fixed !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: clamp(140px, 17vh, 185px) !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        user-select: none !important;
+        z-index: 999 !important;
+        line-height: 0 !important;
     }
 
     .bottom-nav-grass-img {
-        width: 104vw;
-        max-width: none;
-        height: 100%;
-        object-fit: fill;
+        display: block !important;
+        position: relative !important;
+        left: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        height: 100% !important;
+        object-fit: fill !important;
         animation: none !important;
-        transform: translateX(-50%) !important;
+        transform: none !important;
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+        pointer-events: none !important;
+        user-select: none !important;
     }
 
     .screen:not(#screenHome) > .container {
