@@ -2000,18 +2000,189 @@ function getLocalFallback(q, isApiError = false) {
    IOT MONITORING LOGIC
    ===================================================== */
 
+let gaugeTiltEnabled = false;
+let gaugeTiltPermissionGranted = false;
+let gaugeTiltBaseline = null;
+let gaugeTiltFrame = null;
+let gaugeTiltTarget = { angle: 0, x: 0, y: 0 };
+let gaugeTiltCurrent = { angle: 0, x: 0, y: 0 };
+
 function startIoTMonioting() {
     IoTHistory = [];
     fetchIoTData();
     if (AppState.iotInterval) clearInterval(AppState.iotInterval);
     AppState.iotInterval = setInterval(fetchIoTData, 20000);
     if (!IoTWeatherLoaded) fetchIoTWeather();
+    initializeGaugeTilt();
 }
 
 function stopIoTMonioting() {
     if (AppState.iotInterval) {
         clearInterval(AppState.iotInterval);
         AppState.iotInterval = null;
+    }
+    stopGaugeTilt();
+}
+
+function initializeGaugeTilt() {
+    const button = document.getElementById('gaugeTiltButton');
+    const status = document.getElementById('gaugeTiltStatus');
+    if (!button || !status) return;
+
+    if (!window.isSecureContext || !window.DeviceOrientationEvent) {
+        button.disabled = true;
+        status.textContent = !window.isSecureContext
+            ? 'Phone motion requires a secure connection.'
+            : 'Phone motion is not available on this device.';
+        return;
+    }
+
+    button.disabled = false;
+    if (typeof window.DeviceOrientationEvent.requestPermission === 'function' && !gaugeTiltPermissionGranted) {
+        button.textContent = 'Enable phone tilt';
+        button.setAttribute('aria-pressed', 'false');
+        status.textContent = 'Tap to allow motion access, then tilt your phone.';
+        return;
+    }
+
+    startGaugeTilt();
+}
+
+async function toggleGaugeTilt() {
+    if (gaugeTiltEnabled) {
+        stopGaugeTilt();
+        return;
+    }
+
+    if (!window.isSecureContext || !window.DeviceOrientationEvent) {
+        initializeGaugeTilt();
+        return;
+    }
+
+    try {
+        if (typeof window.DeviceOrientationEvent.requestPermission === 'function') {
+            const permission = await window.DeviceOrientationEvent.requestPermission();
+            if (permission !== 'granted') {
+                const status = document.getElementById('gaugeTiltStatus');
+                if (status) status.textContent = 'Motion access was not granted. You can enable it in browser settings.';
+                return;
+            }
+            gaugeTiltPermissionGranted = true;
+        }
+        startGaugeTilt();
+    } catch (error) {
+        console.error('Phone tilt permission error:', error);
+        const status = document.getElementById('gaugeTiltStatus');
+        if (status) status.textContent = 'Could not enable phone tilt. Check browser motion permissions.';
+    }
+}
+
+function startGaugeTilt() {
+    if (gaugeTiltEnabled) return;
+    gaugeTiltEnabled = true;
+    gaugeTiltBaseline = null;
+    window.addEventListener('deviceorientation', handleGaugeTilt, true);
+    document.getElementById('moistureGaugeTrack')?.classList.add('tilt-active');
+
+    const button = document.getElementById('gaugeTiltButton');
+    const status = document.getElementById('gaugeTiltStatus');
+    if (button) {
+        button.disabled = false;
+        button.textContent = 'Pause phone tilt';
+        button.setAttribute('aria-pressed', 'true');
+    }
+    if (status) status.textContent = 'Tilt your phone to move the water.';
+}
+
+function stopGaugeTilt() {
+    if (gaugeTiltEnabled) {
+        window.removeEventListener('deviceorientation', handleGaugeTilt, true);
+        gaugeTiltEnabled = false;
+    }
+    gaugeTiltBaseline = null;
+    if (gaugeTiltFrame !== null) {
+        cancelAnimationFrame(gaugeTiltFrame);
+        gaugeTiltFrame = null;
+    }
+
+    gaugeTiltTarget = { angle: 0, x: 0, y: 0 };
+    gaugeTiltCurrent = { angle: 0, x: 0, y: 0 };
+    const waterFill = document.getElementById('moistureWaterFill');
+    document.getElementById('moistureGaugeTrack')?.classList.remove('tilt-active');
+    if (waterFill) {
+        waterFill.style.setProperty('--water-tilt-angle', '0deg');
+        waterFill.style.setProperty('--water-tilt-x', '0px');
+        waterFill.style.setProperty('--water-tilt-y', '0px');
+    }
+
+    const button = document.getElementById('gaugeTiltButton');
+    const status = document.getElementById('gaugeTiltStatus');
+    if (button && !button.disabled) {
+        button.textContent = 'Enable phone tilt';
+        button.setAttribute('aria-pressed', 'false');
+    }
+    if (status && !button?.disabled) status.textContent = 'Tilt your phone to move the water.';
+}
+
+function handleGaugeTilt(event) {
+    if (!gaugeTiltEnabled || AppState.currentScreen !== 'screenIoT' ||
+        !Number.isFinite(event.beta) || !Number.isFinite(event.gamma)) return;
+
+    if (!gaugeTiltBaseline) {
+        gaugeTiltBaseline = { beta: event.beta, gamma: event.gamma };
+        return;
+    }
+
+    const deltaBeta = event.beta - gaugeTiltBaseline.beta;
+    const deltaGamma = event.gamma - gaugeTiltBaseline.gamma;
+    const screenAngle = ((screen.orientation?.angle ?? window.orientation ?? 0) % 360 + 360) % 360;
+    let roll = deltaGamma;
+    let pitch = deltaBeta;
+
+    if (screenAngle === 90) {
+        roll = deltaBeta;
+        pitch = -deltaGamma;
+    } else if (screenAngle === 180) {
+        roll = -deltaGamma;
+        pitch = -deltaBeta;
+    } else if (screenAngle === 270) {
+        roll = -deltaBeta;
+        pitch = deltaGamma;
+    }
+
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+    gaugeTiltTarget = {
+        angle: clamp(-roll * 0.35 + pitch * 0.16, -14, 14),
+        x: clamp(roll * 0.2, -5, 5),
+        y: clamp(-pitch * 0.12, -5, 5)
+    };
+
+    if (gaugeTiltFrame === null) {
+        gaugeTiltFrame = requestAnimationFrame(animateGaugeTilt);
+    }
+}
+
+function animateGaugeTilt() {
+    gaugeTiltFrame = null;
+    const waterFill = document.getElementById('moistureWaterFill');
+    if (!waterFill || !gaugeTiltEnabled) return;
+
+    const smoothing = 0.22;
+    gaugeTiltCurrent.angle += (gaugeTiltTarget.angle - gaugeTiltCurrent.angle) * smoothing;
+    gaugeTiltCurrent.x += (gaugeTiltTarget.x - gaugeTiltCurrent.x) * smoothing;
+    gaugeTiltCurrent.y += (gaugeTiltTarget.y - gaugeTiltCurrent.y) * smoothing;
+
+    waterFill.style.setProperty('--water-tilt-angle', `${gaugeTiltCurrent.angle.toFixed(2)}deg`);
+    waterFill.style.setProperty('--water-tilt-x', `${gaugeTiltCurrent.x.toFixed(2)}px`);
+    waterFill.style.setProperty('--water-tilt-y', `${gaugeTiltCurrent.y.toFixed(2)}px`);
+
+    const remaining = Math.abs(gaugeTiltTarget.angle - gaugeTiltCurrent.angle) +
+        Math.abs(gaugeTiltTarget.x - gaugeTiltCurrent.x) +
+        Math.abs(gaugeTiltTarget.y - gaugeTiltCurrent.y);
+    if (remaining > 0.08) {
+        gaugeTiltFrame = requestAnimationFrame(animateGaugeTilt);
+    } else {
+        gaugeTiltCurrent = { ...gaugeTiltTarget };
     }
 }
 

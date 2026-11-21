@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Production Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=phase69">
+    <link rel="stylesheet" href="css/style.css?v=phase70">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -888,6 +888,15 @@
                             <div class="scale-item scale-opt"><span>30–75%</span><small>Optimal</small></div>
                             <div class="scale-item scale-wet"><span>&gt; 75%</span><small>Saturated</small></div>
                         </div>
+                        <div class="gauge-tilt-control">
+                            <button id="gaugeTiltButton" class="gauge-tilt-button" type="button"
+                                onclick="toggleGaugeTilt()" aria-pressed="false">
+                                Enable phone tilt
+                            </button>
+                            <span id="gaugeTiltStatus" class="gauge-tilt-status" role="status" aria-live="polite">
+                                Tilt your phone to move the water.
+                            </span>
+                        </div>
                     </div>
 
                     <div class="telemetry-card-footer">
@@ -1371,7 +1380,7 @@
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="config.js"></script>
-    <script src="js/script.js?v=phase69"></script>
+    <script src="js/script.js?v=phase70"></script>
 </body>
 
 </html>
