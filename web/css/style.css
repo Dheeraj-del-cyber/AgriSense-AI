@@ -4736,12 +4736,7 @@ body.mobile-home-fixed .farm-footer,
     }
 
     #screenHome .hero-farmer-wrap {
-        margin-top: 1.5rem;
-    }
-
-    #screenHome .hero-farmer-img {
-        height: clamp(300px, 44vh, 420px);
-        max-width: 380px;
+        display: none !important;
     }
 
     .bottom-nav {
