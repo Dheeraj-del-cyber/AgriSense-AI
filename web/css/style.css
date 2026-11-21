@@ -4206,7 +4206,7 @@ body.mobile-home-fixed .farm-footer,
         width: 100%;
         margin: -70px 0 0;
         z-index: 10;
-        padding: 2.85rem 1rem 1.15rem;
+        padding: 2.85rem 1rem 0;
         overflow: hidden;
         border: none;
         border-top: 4px solid #ffffff;
@@ -4234,14 +4234,29 @@ body.mobile-home-fixed .farm-footer,
     }
 
     .hero-farmer-wrap {
-        margin-top: clamp(1.85rem, 5vh, 2.75rem);
-        margin-bottom: -1.45rem;
+        flex: 1 1 0%;
+        min-height: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        margin: 0.5rem 0 0;
+        padding: 0;
+        position: relative;
+        z-index: 5;
+        pointer-events: none;
     }
 
     .hero-farmer-img {
-        height: clamp(240px, 36vh, 310px);
-        max-width: min(280px, 88vw);
+        display: block;
+        height: 100%;
+        max-height: min(440px, 100%);
+        width: auto;
+        max-width: min(340px, 86vw);
+        object-fit: contain;
         object-position: bottom center;
+        filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.48));
+        user-select: none;
     }
 
     .hero-trajectory {
