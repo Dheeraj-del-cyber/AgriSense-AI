@@ -387,8 +387,29 @@ ol {
     height: auto;
     object-fit: contain;
     transform: translateX(-50%);
+    transform-origin: 50% 100%;
     pointer-events: none;
     user-select: none;
+    will-change: transform;
+    animation: grass-wind-sway 6.6s cubic-bezier(0.44, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes grass-wind-sway {
+    0%, 100% {
+        transform: translateX(-50%) rotate(0deg) skewX(0deg);
+    }
+    22% {
+        transform: translateX(calc(-50% + 2px)) rotate(0.6deg) skewX(-1.2deg);
+    }
+    46% {
+        transform: translateX(calc(-50% - 1px)) rotate(-0.4deg) skewX(0.7deg);
+    }
+    70% {
+        transform: translateX(calc(-50% + 3px)) rotate(0.8deg) skewX(-1.5deg);
+    }
+    86% {
+        transform: translateX(calc(-50% + 1px)) rotate(0.2deg) skewX(-0.5deg);
+    }
 }
 
 /* --- Mobile Bottom Navigation (Curved Full Box) --- */
@@ -4921,5 +4942,10 @@ body.mobile-home-fixed .farm-footer,
     .wind-leaf {
         animation: none !important;
         display: none !important;
+    }
+
+    .bottom-nav-grass-img {
+        animation: none !important;
+        transform: translateX(-50%) !important;
     }
 }
