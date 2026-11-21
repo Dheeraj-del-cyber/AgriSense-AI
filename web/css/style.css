@@ -4871,12 +4871,12 @@ body.mobile-home-fixed .farm-footer,
 
     .bottom-nav-grass {
         width: 100%;
-        bottom: 0;
-        height: clamp(150px, 24vh, 240px);
+        bottom: -38px;
+        height: clamp(110px, 15vh, 160px);
     }
 
     .bottom-nav-grass-img {
-        width: 100vw;
+        width: 104vw;
         max-width: none;
         height: 100%;
         object-fit: fill;
