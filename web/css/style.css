@@ -3392,10 +3392,36 @@ body.mobile-home-fixed .farm-footer,
         width: calc(100vw - 20px);
         height: calc(var(--chat-visible-height, 100vh) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 20px);
         border-radius: 22px;
+        box-shadow: none;
+        will-change: auto;
     }
 
+    #chatPanel {
+        transition: opacity 180ms ease, transform 180ms ease-out, visibility 0s linear 180ms;
+    }
+
+    #chatPanel.chat-hidden {
+        transform: translate3d(0, 12px, 0) scale(0.99);
+    }
+
+    #chatPanel.chat-open {
+        transform: translate3d(0, 0, 0) scale(1);
+        transition: opacity 180ms ease, transform 180ms ease-out, visibility 0s;
+    }
+
+    #chatPanel.chat-open .chat-header,
+    #chatPanel.chat-open .chat-messages-area,
+    #chatPanel.chat-open .chat-suggestions-list,
+    #chatPanel.chat-open .chat-input-area {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    html.chat-scroll-lock,
     body.chat-scroll-lock {
-        touch-action: none;
+        overflow: hidden;
+        overscroll-behavior: none;
     }
 
     .station-meta-bar {
