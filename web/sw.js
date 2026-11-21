@@ -1,5 +1,5 @@
 // AgriSense AI Service Worker - Offline Cache & PWA Support
-const CACHE_NAME = 'agrisense-ai-v2.1';
+const CACHE_NAME = 'agrisense-ai-v2.3';
 const ASSETS = [
   './',
   './index.html',
@@ -9,6 +9,7 @@ const ASSETS = [
   './assets/images/logo.png',
   './assets/images/logo2.png',
   './assets/images/hero.png',
+  './assets/images/mainlogo.png',
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'
 ];
 

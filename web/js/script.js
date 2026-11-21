@@ -11,7 +11,8 @@ const AppState = {
     selectedFile: null,
     currentLang: localStorage.getItem('agri-lang') || 'en',
     iotInterval: null,
-    lastMoisture: 0
+    lastMoisture: 0,
+    cameraStream: null
 };
 
 
@@ -258,6 +259,7 @@ function navigateTo(screenId) {
     // Cleanup current
     if (AppState.currentScreen === 'screenDiseaseDetect' && screenId !== 'screenResult') {
         if (typeof stopCamera === 'function') stopCamera();
+        if (typeof stopInAreaCamera === 'function') stopInAreaCamera();
     }
 
     screens.forEach(s => {
@@ -407,7 +409,7 @@ function closeLangMenu() {
 
 /* --- Upload Zone (Desktop) --- */
 function initUploadZone() {
-    const zone = document.getElementById('cameraArea');
+    const zone = document.getElementById('uploadZone');
     if (!zone || zone._dragReady) return;
     zone._dragReady = true;
 
@@ -432,6 +434,7 @@ function initUploadZone() {
 }
 
 function loadImageFile(file) {
+    stopInAreaCamera();
     const reader = new FileReader();
     reader.onload = (event) => {
         const img = document.getElementById('imagePreview');
@@ -465,6 +468,95 @@ function triggerUpload() {
     input.click();
 }
 
+async function startInAreaCamera() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        const cameraInput = document.getElementById('cameraInput');
+        if (cameraInput) cameraInput.click();
+        return;
+    }
+
+    stopInAreaCamera();
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { ideal: 'environment' } },
+            audio: false
+        });
+        AppState.cameraStream = stream;
+
+        const video = document.getElementById('cameraVideo');
+        const placeholder = document.getElementById('cameraPlaceholder');
+        const preview = document.getElementById('imagePreview');
+        const controls = document.getElementById('cameraLiveControls');
+        const closeButton = document.getElementById('closeCameraBtn');
+        const zone = document.getElementById('uploadZone');
+
+        placeholder.style.display = 'none';
+        preview.style.display = 'none';
+        video.srcObject = stream;
+        video.style.display = 'block';
+        controls.style.display = 'flex';
+        closeButton.style.display = 'flex';
+        zone.classList.add('camera-live');
+
+        await video.play();
+    } catch (error) {
+        stopInAreaCamera();
+        alert('Camera access could not be opened. Please allow camera permission or use Browse Image File.');
+    }
+}
+
+function stopInAreaCamera() {
+    if (AppState.cameraStream) {
+        AppState.cameraStream.getTracks().forEach(track => track.stop());
+        AppState.cameraStream = null;
+    }
+
+    const video = document.getElementById('cameraVideo');
+    if (video) {
+        video.pause();
+        video.srcObject = null;
+        video.style.display = 'none';
+    }
+
+    const controls = document.getElementById('cameraLiveControls');
+    if (controls) controls.style.display = 'none';
+    const closeButton = document.getElementById('closeCameraBtn');
+    if (closeButton) closeButton.style.display = 'none';
+
+    const zone = document.getElementById('uploadZone');
+    if (zone) zone.classList.remove('camera-live');
+
+    const preview = document.getElementById('imagePreview');
+    if (preview && preview.style.display === 'none') {
+        const placeholder = document.getElementById('cameraPlaceholder');
+        if (placeholder) placeholder.style.display = 'flex';
+    }
+}
+
+function captureFromInAreaCamera() {
+    const video = document.getElementById('cameraVideo');
+    const canvas = document.getElementById('cameraCanvas');
+    if (!video || !video.videoWidth || !video.videoHeight) {
+        alert('Camera is still starting. Please wait a moment and try again.');
+        return;
+    }
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const context = canvas.getContext('2d');
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    canvas.toBlob((blob) => {
+        if (!blob) {
+            alert('Could not capture the photo. Please try again.');
+            return;
+        }
+        const file = new File([blob], `leaf-capture-${Date.now()}.jpg`, { type: 'image/jpeg' });
+        loadImageFile(file);
+    }, 'image/jpeg', 0.92);
+}
+
 function handleFileSelect(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -481,6 +573,7 @@ function retakePhoto() {
 }
 
 function resetDetection() {
+    stopInAreaCamera();
     const img = document.getElementById('imagePreview');
     img.style.display = 'none';
     img.src = '';
