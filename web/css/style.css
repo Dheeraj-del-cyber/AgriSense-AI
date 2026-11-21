@@ -4145,12 +4145,14 @@ body.mobile-home-fixed .farm-footer,
     }
 
     .hero-farmer-wrap {
-        margin-top: 1rem;
+        margin-top: clamp(1.85rem, 5vh, 2.75rem);
+        margin-bottom: -1.45rem;
     }
 
     .hero-farmer-img {
-        height: clamp(230px, 34vh, 290px);
-        max-width: min(270px, 86vw);
+        height: clamp(240px, 36vh, 310px);
+        max-width: min(280px, 88vw);
+        object-position: bottom center;
     }
 
     .hero-trajectory {
