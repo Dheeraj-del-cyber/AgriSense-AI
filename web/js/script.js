@@ -614,6 +614,218 @@ function getCurrentImageFile() {
     });
 }
 
+const MAX_PROFILE_SCAN_HISTORY = 12;
+const DEFAULT_PROFILE_PHOTO = 'assets/images/profile-default.png';
+let profileHistorySaveWarning = null;
+
+function createScanThumbnail() {
+    const image = document.getElementById('imagePreview');
+    if (!image || !image.complete || !image.naturalWidth || !image.naturalHeight) return '';
+
+    const scale = Math.min(1, 320 / Math.max(image.naturalWidth, image.naturalHeight));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+    canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+    const context = canvas.getContext('2d');
+    if (!context) return '';
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/jpeg', 0.68);
+}
+
+function getHistoryGuidance(guidance) {
+    if (typeof guidance !== 'string' || !guidance.trim()) return '';
+    try {
+        const parsed = JSON.parse(guidance);
+        const suggestions = ['recovery', 'prevention', 'organic', 'chemical']
+            .map((key) => parsed[key])
+            .find((items) => Array.isArray(items) && typeof items[0] === 'string');
+        return suggestions ? suggestions[0].trim().slice(0, 180) : '';
+    } catch (error) {
+        return guidance.replace(/\s+/g, ' ').trim().slice(0, 180);
+    }
+}
+
+function saveDiagnosticScan(data) {
+    let phone = '';
+    try {
+        const user = JSON.parse(localStorage.getItem('agri_active_user') || 'null');
+        if (!user || !user.phone) return;
+
+        phone = String(user.phone);
+        const key = `agri_scan_history_${phone}`;
+        const stored = JSON.parse(localStorage.getItem(key) || '[]');
+        if (!Array.isArray(stored)) throw new Error('Stored scan history is not a list.');
+
+        const confidence = data.prediction_results.confidence == null
+            ? NaN
+            : Number(data.prediction_results.confidence);
+        const moisture = Number(AppState.lastMoisture);
+        const record = {
+            diagnosis: String(data.prediction_results.disease || 'Unknown'),
+            confidence: Number.isFinite(confidence) ? confidence : null,
+            moisture: AppState.lastMoisture && Number.isFinite(moisture) ? moisture : null,
+            guidance: getHistoryGuidance(data.guidance),
+            createdAt: new Date().toISOString(),
+            thumbnail: createScanThumbnail()
+        };
+        stored.unshift(record);
+        localStorage.setItem(key, JSON.stringify(stored.slice(0, MAX_PROFILE_SCAN_HISTORY)));
+        if (profileHistorySaveWarning && profileHistorySaveWarning.phone === phone) {
+            profileHistorySaveWarning = null;
+        }
+    } catch (error) {
+        console.error('Unable to save this scan to profile history:', error);
+        profileHistorySaveWarning = {
+            phone,
+            message: 'The scan completed, but its history could not be saved on this device.'
+        };
+        const notice = document.getElementById('profileHistoryNotice');
+        if (notice && phone) {
+            notice.textContent = profileHistorySaveWarning.message;
+            notice.classList.remove('hidden');
+        }
+    }
+}
+
+function renderProfileScanHistory(phone) {
+    const list = document.getElementById('profileHistoryList');
+    const count = document.getElementById('profileHistoryCount');
+    const buttonCount = document.getElementById('profileHistoryButtonCount');
+    const notice = document.getElementById('profileHistoryNotice');
+    if (!list) return;
+
+    list.textContent = '';
+    if (notice) {
+        const warning = profileHistorySaveWarning && profileHistorySaveWarning.phone === String(phone)
+            ? profileHistorySaveWarning.message
+            : '';
+        notice.textContent = warning;
+        notice.classList.toggle('hidden', !warning);
+    }
+
+    let history;
+    try {
+        history = JSON.parse(localStorage.getItem(`agri_scan_history_${phone}`) || '[]');
+        if (!Array.isArray(history)) throw new Error('Stored scan history is not a list.');
+    } catch (error) {
+        console.error('Unable to read profile scan history:', error);
+        history = null;
+    }
+
+    if (history === null) {
+        if (count) count.textContent = 'Unavailable';
+        if (buttonCount) buttonCount.textContent = '--';
+        const errorState = document.createElement('div');
+        errorState.className = 'profile-history-empty';
+        errorState.textContent = 'Scan history could not be loaded from this device.';
+        list.appendChild(errorState);
+        return;
+    }
+
+    const records = history.slice(0, MAX_PROFILE_SCAN_HISTORY);
+    if (count) count.textContent = `${records.length} ${records.length === 1 ? 'scan' : 'scans'}`;
+    if (buttonCount) buttonCount.textContent = records.length;
+    if (!records.length) {
+        const emptyState = document.createElement('div');
+        emptyState.className = 'profile-history-empty';
+        emptyState.innerHTML = `
+            <span class="profile-history-empty-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2-2V8a2 2 0 0 0-2-2h-4l-2-3H9L7 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2z"></path>
+                    <circle cx="12" cy="13" r="3"></circle>
+                </svg>
+            </span>
+            <strong>No scans saved yet</strong>
+            <span>Successful leaf scans will appear here.</span>
+        `;
+        list.appendChild(emptyState);
+        return;
+    }
+
+    const locale = { en: 'en-US', hi: 'hi-IN', kn: 'kn-IN' }[AppState.currentLang] || 'en-US';
+    records.forEach((record) => {
+        const item = document.createElement('article');
+        item.className = 'profile-history-item';
+
+        const thumbnail = document.createElement('div');
+        thumbnail.className = 'profile-history-thumb';
+        if (typeof record.thumbnail === 'string' && record.thumbnail.startsWith('data:image/')) {
+            const image = document.createElement('img');
+            image.src = record.thumbnail;
+            image.alt = `Scanned crop: ${record.diagnosis || 'diagnosis'}`;
+            image.loading = 'lazy';
+            thumbnail.appendChild(image);
+        } else {
+            thumbnail.textContent = 'Leaf scan';
+        }
+        item.appendChild(thumbnail);
+
+        const details = document.createElement('div');
+        details.className = 'profile-history-details';
+        const titleRow = document.createElement('div');
+        titleRow.className = 'profile-history-title-row';
+
+        const title = document.createElement('h4');
+        title.textContent = String(record.diagnosis || 'Unknown diagnosis');
+        titleRow.appendChild(title);
+
+        const confidence = Number(record.confidence);
+        if (record.confidence !== null && record.confidence !== undefined && Number.isFinite(confidence)) {
+            const confidenceLabel = document.createElement('span');
+            confidenceLabel.className = 'profile-history-confidence';
+            confidenceLabel.textContent = `${confidence}%`;
+            titleRow.appendChild(confidenceLabel);
+        }
+        details.appendChild(titleRow);
+
+        const meta = document.createElement('p');
+        meta.className = 'profile-history-meta';
+        const date = new Date(record.createdAt);
+        const dateLabel = Number.isNaN(date.getTime()) ? 'Date unavailable' : date.toLocaleString(locale);
+        const moisture = Number(record.moisture);
+        meta.textContent = record.moisture !== null && record.moisture !== undefined && Number.isFinite(moisture)
+            ? `${dateLabel} · Moisture ${moisture.toFixed(2)}%`
+            : dateLabel;
+        details.appendChild(meta);
+
+        if (typeof record.guidance === 'string' && record.guidance) {
+            const note = document.createElement('p');
+            note.className = 'profile-history-note';
+            note.textContent = record.guidance;
+            details.appendChild(note);
+        }
+
+        item.appendChild(details);
+        list.appendChild(item);
+    });
+}
+
+function setProfileHistoryExpanded(expanded) {
+    const button = document.getElementById('profileHistoryToggle');
+    const panel = document.getElementById('profileHistoryPanel');
+    const buttonText = document.getElementById('profileHistoryToggleText');
+    if (!button || !panel) return;
+
+    button.setAttribute('aria-expanded', String(expanded));
+    panel.classList.toggle('hidden', !expanded);
+    if (buttonText) {
+        buttonText.textContent = expanded ? 'Hide scan history' : 'View your previous scans';
+    }
+
+    if (expanded) {
+        const reduceMotion = window.matchMedia &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        panel.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+    }
+}
+
+function toggleProfileHistory() {
+    const button = document.getElementById('profileHistoryToggle');
+    if (!button) return;
+    setProfileHistoryExpanded(button.getAttribute('aria-expanded') !== 'true');
+}
+
 /* Main analyze function */
 async function analyzeImage() {
     const imgEl = document.getElementById('imagePreview');
@@ -659,6 +871,7 @@ async function analyzeImage() {
                 } catch (e) { }
             }
 
+            saveDiagnosticScan(data);
             renderRealDiseaseResult(data);
         } else if (data.status === 'blurry') {
             renderBlurryResult(data.message || 'Image is too blurry. Please retake.');
@@ -2866,6 +3079,27 @@ function handleAuth(e) {
 }
 
 /* --- Profile & Logout --- */
+function setProfilePhoto(photo) {
+    const photoEmoji = document.getElementById('profilePhotoEmoji');
+    const photoImg = document.getElementById('profilePhotoImg');
+    if (!photoImg) return;
+
+    let usingFallback = !photo;
+    photoImg.onerror = () => {
+        if (!usingFallback) {
+            usingFallback = true;
+            photoImg.src = DEFAULT_PROFILE_PHOTO;
+            return;
+        }
+        photoImg.style.display = 'none';
+        if (photoEmoji) photoEmoji.style.display = 'inline';
+    };
+
+    if (photoEmoji) photoEmoji.style.display = 'none';
+    photoImg.src = photo || DEFAULT_PROFILE_PHOTO;
+    photoImg.style.display = 'block';
+}
+
 function openProfile() {
     const modal = document.getElementById('profileModal');
     if (!modal) return;
@@ -2881,22 +3115,7 @@ function openProfile() {
         document.getElementById('profileName').textContent = (user.name || 'User').toUpperCase();
         document.getElementById('profilePhone').textContent = user.phone || '';
 
-        // Profile photo logic
-        const photoEmoji = document.getElementById('profilePhotoEmoji');
-        const photoImg = document.getElementById('profilePhotoImg');
-        if (user.photo) {
-            if (photoEmoji) photoEmoji.style.display = 'none';
-            if (photoImg) {
-                photoImg.src = user.photo;
-                photoImg.style.display = 'block';
-            }
-        } else {
-            if (photoEmoji) photoEmoji.style.display = 'inline';
-            if (photoImg) {
-                photoImg.src = '';
-                photoImg.style.display = 'none';
-            }
-        }
+        setProfilePhoto(user.photo || '');
 
         // Extra info
         const elLang = document.getElementById('profileLanguage');
@@ -2914,7 +3133,10 @@ function openProfile() {
         const elMoisture = document.getElementById('profileMoisture');
         if (elMoisture) elMoisture.textContent = AppState.lastMoisture ? AppState.lastMoisture.toFixed(2) + '%' : '--';
 
+        renderProfileScanHistory(user.phone);
     } catch (e) { }
+
+    setProfileHistoryExpanded(false);
 
     // Use style.display directly — most reliable on mobile
     modal.classList.remove('hidden');
@@ -2959,14 +3181,7 @@ function handleProfilePhotoUpload(e) {
     reader.onload = (event) => {
         const base64Data = event.target.result;
 
-        // Update DOM
-        const photoEmoji = document.getElementById('profilePhotoEmoji');
-        const photoImg = document.getElementById('profilePhotoImg');
-        if (photoEmoji) photoEmoji.style.display = 'none';
-        if (photoImg) {
-            photoImg.src = base64Data;
-            photoImg.style.display = 'block';
-        }
+        setProfilePhoto(base64Data);
 
         // Update local storage
         const userStr = localStorage.getItem('agri_active_user');

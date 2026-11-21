@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Production Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=phase82">
+    <link rel="stylesheet" href="css/style.css?v=phase83">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -1278,20 +1278,37 @@
 
     <!-- Operator Profile Sheet -->
     <div id="profileModal" class="profile-overlay hidden">
-        <div class="profile-card-premium">
-            <div class="profile-banner"></div>
+        <div class="profile-card-premium" role="dialog" aria-modal="true" aria-labelledby="profileDialogTitle">
+            <div class="profile-banner">
+                <div class="profile-banner-topline">
+                    <span class="profile-eyebrow">FIELD ACCOUNT</span>
+                    <button class="profile-close-icon" type="button" onclick="closeProfile()" aria-label="Close profile">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="profile-banner-copy">
+                    <h2 id="profileDialogTitle">Your field profile</h2>
+                    <p>Your crop diagnostics and recent activity.</p>
+                </div>
+            </div>
 
-            <div class="profile-header-premium">
+            <div class="profile-body">
+              <div class="profile-header-premium">
                 <label for="profilePhotoInput" class="profile-photo-wrap" title="Upload Operator Photo">
                     <div id="profilePhotoContainer" class="profile-photo-container">
-                        <span id="profilePhotoEmoji">
+                        <span id="profilePhotoEmoji" style="display:none;">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                 <circle cx="12" cy="7" r="4"></circle>
                             </svg>
                         </span>
-                        <img id="profilePhotoImg" src="" alt="Profile Photo" style="display:none;">
+                        <img id="profilePhotoImg" src="assets/images/profile-default.png" alt="Profile photo"
+                            style="display:block;">
                     </div>
                     <div class="profile-photo-edit-badge" title="Change Photo">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -1305,10 +1322,12 @@
                 <input type="file" id="profilePhotoInput" accept="image/*" style="display:none"
                     onchange="handleProfilePhotoUpload(event)">
 
-                <h2 id="profileName" class="profile-name-premium">Operator</h2>
-                <p id="profilePhone" class="profile-phone-premium">--</p>
-                <div class="profile-member-since">Active Since <span id="profileDate">2026</span></div>
-            </div>
+                  <div class="profile-identity">
+                    <h2 id="profileName" class="profile-name-premium">Operator</h2>
+                    <p id="profilePhone" class="profile-phone-premium">--</p>
+                    <div class="profile-member-since">Active Since <span id="profileDate">2026</span></div>
+                  </div>
+              </div>
 
             <div class="profile-stats-premium">
                 <div class="stat-badge stat-scans">
@@ -1355,9 +1374,56 @@
                 </div>
             </div>
 
-            <div class="profile-actions-premium">
+                <button id="profileHistoryToggle" class="profile-history-toggle" type="button"
+                    aria-expanded="false" aria-controls="profileHistoryPanel" onclick="toggleProfileHistory()">
+                    <span class="profile-history-toggle-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 19a2 2 0 0 1-2-2V8a2 2 0 0 0-2-2h-4l-2-3H9L7 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2z"></path>
+                            <circle cx="12" cy="13" r="3"></circle>
+                        </svg>
+                    </span>
+                    <span class="profile-history-toggle-copy">
+                        <strong>Scan history</strong>
+                        <small id="profileHistoryToggleText">View your previous scans</small>
+                    </span>
+                    <span id="profileHistoryButtonCount" class="profile-history-toggle-count">0</span>
+                    <svg class="profile-history-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        aria-hidden="true">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+
+                <section id="profileHistoryPanel" class="profile-history hidden"
+                    aria-labelledby="profileHistoryTitle">
+                    <div class="profile-history-heading">
+                        <div>
+                            <span class="profile-section-kicker">RECENT ACTIVITY</span>
+                            <h3 id="profileHistoryTitle">Scan history</h3>
+                        </div>
+                        <span id="profileHistoryCount" class="profile-history-count">0 scans</span>
+                    </div>
+                    <div id="profileHistoryList" class="profile-history-list">
+                        <div class="profile-history-empty">
+                            <span class="profile-history-empty-icon" aria-hidden="true">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M23 19a2 2 0 0 1-2-2V8a2 2 0 0 0-2-2h-4l-2-3H9L7 6H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2z"></path>
+                                    <circle cx="12" cy="13" r="3"></circle>
+                                </svg>
+                            </span>
+                            <strong>No scans saved yet</strong>
+                            <span>Successful leaf scans will appear here.</span>
+                        </div>
+                    </div>
+                    <p id="profileHistoryNotice" class="profile-history-notice hidden" role="status"></p>
+                </section>
+
+                <div class="profile-actions-premium">
                 <button class="btn-secondary" onclick="closeProfile()">Close</button>
                 <button class="btn-danger-outline" onclick="logout()">Sign Out</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1383,7 +1449,7 @@
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="config.js"></script>
-    <script src="js/script.js?v=phase82"></script>
+    <script src="js/script.js?v=phase83"></script>
 </body>
 
 </html>
