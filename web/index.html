@@ -833,8 +833,7 @@
                     <span>Back</span>
                 </button>
                 <div class="screen-title-group">
-                    <span class="screen-kicker">SENSOR TELEMETRY</span>
-                    <h2 class="screen-heading" data-i18n="iotTitle">Field Telemetry & Soil Station</h2>
+                    <h2 class="screen-heading" data-i18n="iotTitle">Soil Moisture</h2>
                 </div>
             </div>
 
@@ -908,13 +907,13 @@
                                     <line x1="12" y1="8" x2="12.01" y2="8"></line>
                                 </svg>
                             </span>
-                            <h3 data-i18n="iotAIRec">Agronomic Assessment</h3>
+                            <h3 data-i18n="iotAIRec">Field Guidance</h3>
                         </div>
                         <span class="telemetry-tag-pill">DYNAMIC ADVISORY</span>
                     </div>
 
                     <div class="iot-recommendation-box">
-                        <p id="iotRecommendation">Awaiting live telemetry packet from ESP32 station...</p>
+                        <p id="iotRecommendation"></p>
                     </div>
 
                     <div class="telemetry-specs-grid">
@@ -1010,7 +1009,7 @@
                             <line x1="12" y1="20" x2="12" y2="4"></line>
                             <line x1="6" y1="20" x2="6" y2="14"></line>
                         </svg>
-                        <h3 data-i18n="iotChartTitle">Root-Zone Moisture Trendline</h3>
+                        <h3 data-i18n="iotChartTitle">Moisture Pattern</h3>
                     </div>
                     <span class="chart-sample-badge" data-i18n="iotLast20">Last 20 Telemetry Samples</span>
                 </div>
@@ -1024,7 +1023,7 @@
                 </div>
             </div>
 
-            <!-- Field Agrometeorology + Soil Vigor Index -->
+            <!-- Farm Weather + Soil Condition -->
             <div class="iot-bottom-grid">
                 <!-- Weather Station -->
                 <div class="telemetry-card">
@@ -1036,7 +1035,7 @@
                                     <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
                                 </svg>
                             </span>
-                            <h3 data-i18n="iotWeather">Field Agrometeorology</h3>
+                            <h3 data-i18n="iotWeather">Farm Weather</h3>
                         </div>
                     </div>
                     <div id="iotWeatherContent" class="iot-weather-content">
@@ -1054,7 +1053,7 @@
                     </button>
                 </div>
 
-                <!-- Soil Vigor Index -->
+                <!-- Soil Condition -->
                 <div class="telemetry-card">
                     <div class="telemetry-card-header">
                         <div class="telemetry-header-title">
@@ -1064,7 +1063,7 @@
                                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                                 </svg>
                             </span>
-                            <h3 data-i18n="iotSoilHealth">Soil Vigor Index</h3>
+                            <h3 data-i18n="iotSoilHealth">Soil Condition</h3>
                         </div>
                     </div>
                     <div class="iot-health-display">
