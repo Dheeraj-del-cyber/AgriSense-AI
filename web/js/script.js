@@ -3173,36 +3173,98 @@ function logout() {
     checkAuth();
 }
 
-function handleProfilePhotoUpload(e) {
-    const file = e.target.files[0];
+function setProfilePhotoStatus(message, isError) {
+    const status = document.getElementById('profilePhotoStatus');
+    if (!status) return;
+    status.textContent = message;
+    status.classList.toggle('is-error', Boolean(isError));
+    status.classList.toggle('hidden', !message);
+}
+
+function compressProfilePhoto(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(reader.error || new Error('Unable to read the selected image.'));
+        reader.onload = () => {
+            if (typeof reader.result !== 'string') {
+                reject(new Error('The selected image could not be read.'));
+                return;
+            }
+
+            const image = new Image();
+            image.onerror = () => reject(new Error('The selected file is not a supported image.'));
+            image.onload = () => {
+                try {
+                    const scale = Math.min(1, 512 / Math.max(image.naturalWidth, image.naturalHeight));
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+                    canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+                    const context = canvas.getContext('2d');
+                    if (!context) throw new Error('Image compression is unavailable in this browser.');
+
+                    context.fillStyle = '#edf5ee';
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                    const compressedPhoto = canvas.toDataURL('image/jpeg', 0.82);
+                    if (compressedPhoto === 'data:,') {
+                        throw new Error('The selected image could not be compressed.');
+                    }
+                    resolve(compressedPhoto);
+                } catch (error) {
+                    reject(error);
+                }
+            };
+            image.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+async function handleProfilePhotoUpload(event) {
+    const input = event.currentTarget || event.target;
+    const file = input.files && input.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        const base64Data = event.target.result;
+    setProfilePhotoStatus('Saving profile photo...', false);
+    try {
+        const photo = await compressProfilePhoto(file);
+        const activeUserString = localStorage.getItem('agri_active_user');
+        if (!activeUserString) throw new Error('No signed-in profile is available.');
 
-        setProfilePhoto(base64Data);
+        const user = JSON.parse(activeUserString);
+        if (!user.phone) throw new Error('The signed-in profile has no user identifier.');
 
-        // Update local storage
-        const userStr = localStorage.getItem('agri_active_user');
-        if (userStr) {
-            try {
-                const user = JSON.parse(userStr);
-                user.photo = base64Data;
-                localStorage.setItem('agri_active_user', JSON.stringify(user));
-
-                // Update users DB as well
-                let users = JSON.parse(localStorage.getItem('agri_users_db') || '{}');
-                if (users[user.phone]) {
-                    users[user.phone].photo = base64Data;
-                    localStorage.setItem('agri_users_db', JSON.stringify(users));
-                }
-            } catch (err) {
-                console.error('Error saving profile photo', err);
-            }
+        const usersString = localStorage.getItem('agri_users_db');
+        const users = JSON.parse(usersString || '{}');
+        if (!users || typeof users !== 'object' || Array.isArray(users)) {
+            throw new Error('The saved user database is invalid.');
         }
-    };
-    reader.readAsDataURL(file);
+
+        const updatedUser = Object.assign({}, user, { photo });
+        const updatedUsers = Object.assign({}, users);
+        updatedUsers[user.phone] = Object.assign({}, users[user.phone] || user, { photo });
+        try {
+            localStorage.setItem('agri_users_db', JSON.stringify(updatedUsers));
+            localStorage.setItem('agri_active_user', JSON.stringify(updatedUser));
+        } catch (storageError) {
+            try {
+                if (usersString === null) localStorage.removeItem('agri_users_db');
+                else localStorage.setItem('agri_users_db', usersString);
+                localStorage.setItem('agri_active_user', activeUserString);
+            } catch (rollbackError) {
+                console.error('Unable to restore profile data after a failed photo save:', rollbackError);
+            }
+            throw storageError;
+        }
+
+        setProfilePhoto(photo);
+        setProfilePhotoStatus('Profile photo saved.', false);
+    } catch (error) {
+        console.error('Unable to save profile photo:', error);
+        setProfilePhotoStatus('Could not save your photo. Try a smaller image.', true);
+    } finally {
+        input.value = '';
+    }
 }
 
 /* =====================================================
