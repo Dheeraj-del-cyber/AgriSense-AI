@@ -1601,6 +1601,23 @@ const CHAT_CLOSE_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="no
 let chatOpen = false;
 let chatIsLoading = false;
 let chatHideTimer = null;
+let chatLockedScrollY = null;
+
+function lockChatBackground() {
+    if (!window.matchMedia('(max-width: 768px)').matches || chatLockedScrollY !== null) return;
+    chatLockedScrollY = window.scrollY;
+    document.body.style.setProperty('--chat-scroll-top', `${-chatLockedScrollY}px`);
+    document.body.classList.add('chat-scroll-lock');
+}
+
+function unlockChatBackground() {
+    if (chatLockedScrollY === null) return;
+    const scrollY = chatLockedScrollY;
+    chatLockedScrollY = null;
+    document.body.classList.remove('chat-scroll-lock');
+    document.body.style.removeProperty('--chat-scroll-top');
+    window.scrollTo(0, scrollY);
+}
 
 function syncChatViewport() {
     const visualViewport = window.visualViewport;
@@ -1623,6 +1640,7 @@ if (window.visualViewport) {
 function toggleChatbot() {
     const panel = document.getElementById('chatPanel');
     const btn = document.getElementById('chatToggleBtn');
+    const widget = document.getElementById('chatbotWidget');
 
     if (!panel) return;
     chatOpen = !chatOpen;
@@ -1632,9 +1650,14 @@ function toggleChatbot() {
         panel.style.display = 'flex';
         panel.classList.remove('chat-open');
         panel.classList.add('chat-hidden');
-        void panel.offsetWidth;
+        if (widget) {
+            widget.classList.remove('chat-expanded');
+            void widget.offsetWidth;
+            widget.classList.add('chat-expanded');
+        }
         panel.classList.remove('chat-hidden');
         panel.classList.add('chat-open');
+        lockChatBackground();
         if (btn) {
             btn.innerHTML = CHAT_CLOSE_SVG;
             btn.setAttribute('aria-expanded', 'true');
@@ -1642,16 +1665,23 @@ function toggleChatbot() {
             btn.setAttribute('title', 'Close Consultation');
         }
         const input = document.getElementById('chatInput');
-        if (input) input.focus({ preventScroll: true });
+        if (input) {
+            if (window.matchMedia('(max-width: 768px)').matches) input.blur();
+            else input.focus({ preventScroll: true });
+        }
         // ensure latest messages visible
         const container = document.getElementById('chatMessages');
         if (container) container.scrollTop = container.scrollHeight;
     } else {
+        if (widget) widget.classList.remove('chat-expanded');
         panel.classList.remove('chat-open');
         panel.classList.add('chat-hidden');
         chatHideTimer = setTimeout(() => {
-            if (!chatOpen) panel.style.display = 'none';
-        }, 320);
+            if (!chatOpen) {
+                panel.style.display = 'none';
+                unlockChatBackground();
+            }
+        }, 640);
         if (btn) {
             btn.innerHTML = CHAT_ICON_SVG;
             btn.setAttribute('aria-expanded', 'false');
