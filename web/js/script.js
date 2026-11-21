@@ -1604,11 +1604,12 @@ let chatHideTimer = null;
 let chatLockedScrollY = null;
 let chatMorphAnimation = null;
 const CHAT_MORPH_DURATION = 560;
+const CHAT_MOBILE_DURATION = 200;
 
 function lockChatBackground() {
     if (!window.matchMedia('(max-width: 768px)').matches || chatLockedScrollY !== null) return;
     chatLockedScrollY = window.scrollY;
-    document.body.style.setProperty('--chat-scroll-top', `${-chatLockedScrollY}px`);
+    document.documentElement.classList.add('chat-scroll-lock');
     document.body.classList.add('chat-scroll-lock');
 }
 
@@ -1616,8 +1617,8 @@ function unlockChatBackground() {
     if (chatLockedScrollY === null) return;
     const scrollY = chatLockedScrollY;
     chatLockedScrollY = null;
+    document.documentElement.classList.remove('chat-scroll-lock');
     document.body.classList.remove('chat-scroll-lock');
-    document.body.style.removeProperty('--chat-scroll-top');
     window.scrollTo(0, scrollY);
 }
 
@@ -1710,7 +1711,11 @@ function toggleChatbot() {
         panel.classList.remove('chat-open');
         panel.classList.add('chat-hidden');
         if (widget) {
-            morphChatWidget(widget, true, () => {});
+            if (window.matchMedia('(max-width: 768px)').matches) {
+                widget.classList.add('chat-expanded');
+            } else {
+                morphChatWidget(widget, true, () => {});
+            }
         }
         panel.classList.remove('chat-hidden');
         panel.classList.add('chat-open');
@@ -1734,12 +1739,20 @@ function toggleChatbot() {
         panel.classList.add('chat-hidden');
         const finishClose = () => {
             if (!chatOpen) {
+                if (widget && window.matchMedia('(max-width: 768px)').matches) {
+                    widget.classList.remove('chat-expanded');
+                }
                 panel.style.display = 'none';
                 unlockChatBackground();
             }
         };
-        if (widget) morphChatWidget(widget, false, finishClose);
-        else chatHideTimer = setTimeout(finishClose, CHAT_MORPH_DURATION);
+        if (widget && !window.matchMedia('(max-width: 768px)').matches) {
+            morphChatWidget(widget, false, finishClose);
+        }
+        else chatHideTimer = setTimeout(
+            finishClose,
+            window.matchMedia('(max-width: 768px)').matches ? CHAT_MOBILE_DURATION : CHAT_MORPH_DURATION
+        );
         if (btn) {
             btn.innerHTML = CHAT_ICON_SVG;
             btn.setAttribute('aria-expanded', 'false');
