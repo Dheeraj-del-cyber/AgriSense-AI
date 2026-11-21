@@ -2004,6 +2004,8 @@ let gaugeTiltEnabled = false;
 let gaugeTiltPermissionGranted = false;
 let gaugeTiltBaseline = null;
 let gaugeTiltFrame = null;
+let gaugeTiltEventTimer = null;
+let gaugeTiltHasSensorData = false;
 let gaugeTiltTarget = { angle: 0, x: 0, y: 0 };
 let gaugeTiltCurrent = { angle: 0, x: 0, y: 0 };
 
@@ -2081,6 +2083,7 @@ function startGaugeTilt() {
     if (gaugeTiltEnabled) return;
     gaugeTiltEnabled = true;
     gaugeTiltBaseline = null;
+    gaugeTiltHasSensorData = false;
     window.addEventListener('deviceorientation', handleGaugeTilt, true);
     document.getElementById('moistureGaugeTrack')?.classList.add('tilt-active');
 
@@ -2091,7 +2094,12 @@ function startGaugeTilt() {
         button.textContent = 'Pause phone tilt';
         button.setAttribute('aria-pressed', 'true');
     }
-    if (status) status.textContent = 'Tilt your phone to move the water.';
+    if (status) status.textContent = 'Waiting for phone motion...';
+    gaugeTiltEventTimer = setTimeout(() => {
+        if (gaugeTiltEnabled && !gaugeTiltHasSensorData && status) {
+            status.textContent = 'No motion data received. Check HTTPS and browser sensor permissions.';
+        }
+    }, 1800);
 }
 
 function stopGaugeTilt() {
@@ -2099,7 +2107,12 @@ function stopGaugeTilt() {
         window.removeEventListener('deviceorientation', handleGaugeTilt, true);
         gaugeTiltEnabled = false;
     }
+    if (gaugeTiltEventTimer !== null) {
+        clearTimeout(gaugeTiltEventTimer);
+        gaugeTiltEventTimer = null;
+    }
     gaugeTiltBaseline = null;
+    gaugeTiltHasSensorData = false;
     if (gaugeTiltFrame !== null) {
         cancelAnimationFrame(gaugeTiltFrame);
         gaugeTiltFrame = null;
@@ -2121,20 +2134,31 @@ function stopGaugeTilt() {
         button.textContent = 'Enable phone tilt';
         button.setAttribute('aria-pressed', 'false');
     }
-    if (status && !button?.disabled) status.textContent = 'Tilt your phone to move the water.';
+    if (status && !button?.disabled) status.textContent = 'Tilt paused. Enable phone tilt to resume.';
 }
 
 function handleGaugeTilt(event) {
     if (!gaugeTiltEnabled || AppState.currentScreen !== 'screenIoT' ||
         !Number.isFinite(event.beta) || !Number.isFinite(event.gamma)) return;
 
+    if (!gaugeTiltHasSensorData) {
+        gaugeTiltHasSensorData = true;
+        if (gaugeTiltEventTimer !== null) {
+            clearTimeout(gaugeTiltEventTimer);
+            gaugeTiltEventTimer = null;
+        }
+        const status = document.getElementById('gaugeTiltStatus');
+        if (status) status.textContent = 'Motion connected. Tilt your phone to move the water.';
+    }
+
     if (!gaugeTiltBaseline) {
         gaugeTiltBaseline = { beta: event.beta, gamma: event.gamma };
         return;
     }
 
-    const deltaBeta = event.beta - gaugeTiltBaseline.beta;
-    const deltaGamma = event.gamma - gaugeTiltBaseline.gamma;
+    const normalizeDelta = (value) => ((value + 180) % 360 + 360) % 360 - 180;
+    const deltaBeta = normalizeDelta(event.beta - gaugeTiltBaseline.beta);
+    const deltaGamma = normalizeDelta(event.gamma - gaugeTiltBaseline.gamma);
     const screenAngle = ((screen.orientation?.angle ?? window.orientation ?? 0) % 360 + 360) % 360;
     let roll = deltaGamma;
     let pitch = deltaBeta;
@@ -2152,9 +2176,9 @@ function handleGaugeTilt(event) {
 
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
     gaugeTiltTarget = {
-        angle: clamp(-roll * 0.35 + pitch * 0.16, -14, 14),
-        x: clamp(roll * 0.2, -5, 5),
-        y: clamp(-pitch * 0.12, -5, 5)
+        angle: clamp(-roll * 0.75 + pitch * 0.35, -24, 24),
+        x: clamp(roll * 0.35, -10, 10),
+        y: clamp(-pitch * 0.18, -8, 8)
     };
 
     if (gaugeTiltFrame === null) {
