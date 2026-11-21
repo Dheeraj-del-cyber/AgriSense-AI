@@ -670,11 +670,12 @@ ol {
 
 .hero-main-logo {
     display: block;
-    height: 62px;
+    height: 72px;
     width: auto;
-    max-width: min(400px, 88vw);
+    max-width: min(440px, 92vw);
     object-fit: contain;
     filter: drop-shadow(0 3px 12px rgba(0, 0, 0, 0.45));
+    transform: translateX(12px);
     user-select: none;
 }
 
@@ -3923,8 +3924,9 @@ body.mobile-home-fixed .farm-footer,
     }
 
     .hero-main-logo {
-        height: 58px;
-        max-width: min(340px, 88vw);
+        height: 68px;
+        max-width: min(360px, 92vw);
+        transform: translateX(10px);
     }
 
     .hero-trajectory {
@@ -4419,8 +4421,9 @@ body.mobile-home-fixed .farm-footer,
     }
 
     #screenHome .hero-main-logo {
-        height: 80px;
-        max-width: 500px;
+        height: 94px;
+        max-width: 560px;
+        transform: translateX(16px);
     }
 
     .bottom-nav {
