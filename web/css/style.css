@@ -4880,6 +4880,8 @@ body.mobile-home-fixed .farm-footer,
         max-width: none;
         height: 100%;
         object-fit: fill;
+        animation: none !important;
+        transform: translateX(-50%) !important;
     }
 
     .screen:not(#screenHome) > .container {
