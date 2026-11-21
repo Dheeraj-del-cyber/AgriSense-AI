@@ -1602,6 +1602,8 @@ let chatOpen = false;
 let chatIsLoading = false;
 let chatHideTimer = null;
 let chatLockedScrollY = null;
+let chatMorphAnimation = null;
+const CHAT_MORPH_DURATION = 560;
 
 function lockChatBackground() {
     if (!window.matchMedia('(max-width: 768px)').matches || chatLockedScrollY !== null) return;
@@ -1617,6 +1619,63 @@ function unlockChatBackground() {
     document.body.classList.remove('chat-scroll-lock');
     document.body.style.removeProperty('--chat-scroll-top');
     window.scrollTo(0, scrollY);
+}
+
+function morphChatWidget(widget, expanding, onComplete) {
+    const currentTransform = getComputedStyle(widget).transform;
+    const currentRadius = getComputedStyle(widget).borderRadius;
+    const wasExpanded = widget.classList.contains('chat-expanded');
+
+    if (chatMorphAnimation) {
+        widget.style.transform = currentTransform;
+        widget.style.borderRadius = currentRadius;
+        chatMorphAnimation.cancel();
+        chatMorphAnimation = null;
+    }
+
+    widget.classList.add('chat-expanded');
+    const width = widget.offsetWidth;
+    const height = widget.offsetHeight;
+    const button = document.getElementById('chatToggleBtn');
+    const collapsedWidth = button ? button.offsetWidth : 52;
+    const collapsedHeight = button ? button.offsetHeight : 52;
+    const collapsedTransform = `scale(${collapsedWidth / width}, ${collapsedHeight / height})`;
+    const fromTransform = expanding
+        ? (wasExpanded && currentTransform !== 'none' ? currentTransform : collapsedTransform)
+        : (currentTransform === 'none' ? 'scale(1, 1)' : currentTransform);
+    const toTransform = expanding ? 'scale(1, 1)' : collapsedTransform;
+    const fromRadius = expanding ? (wasExpanded ? currentRadius : '50%') : currentRadius;
+    const toRadius = expanding ? getComputedStyle(widget).borderRadius : '50%';
+
+    if (typeof widget.animate !== 'function') {
+        if (!expanding) widget.classList.remove('chat-expanded');
+        widget.style.transform = '';
+        widget.style.borderRadius = '';
+        onComplete();
+        return;
+    }
+
+    const animation = widget.animate(
+        [
+            { transform: fromTransform, borderRadius: fromRadius },
+            { transform: toTransform, borderRadius: toRadius }
+        ],
+        {
+            duration: CHAT_MORPH_DURATION,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            fill: 'forwards'
+        }
+    );
+    chatMorphAnimation = animation;
+    animation.onfinish = () => {
+        if (chatMorphAnimation !== animation) return;
+        chatMorphAnimation = null;
+        animation.cancel();
+        widget.style.transform = '';
+        widget.style.borderRadius = '';
+        if (!expanding) widget.classList.remove('chat-expanded');
+        onComplete();
+    };
 }
 
 function syncChatViewport() {
@@ -1651,9 +1710,7 @@ function toggleChatbot() {
         panel.classList.remove('chat-open');
         panel.classList.add('chat-hidden');
         if (widget) {
-            widget.classList.remove('chat-expanded');
-            void widget.offsetWidth;
-            widget.classList.add('chat-expanded');
+            morphChatWidget(widget, true, () => {});
         }
         panel.classList.remove('chat-hidden');
         panel.classList.add('chat-open');
@@ -1673,15 +1730,16 @@ function toggleChatbot() {
         const container = document.getElementById('chatMessages');
         if (container) container.scrollTop = container.scrollHeight;
     } else {
-        if (widget) widget.classList.remove('chat-expanded');
         panel.classList.remove('chat-open');
         panel.classList.add('chat-hidden');
-        chatHideTimer = setTimeout(() => {
+        const finishClose = () => {
             if (!chatOpen) {
                 panel.style.display = 'none';
                 unlockChatBackground();
             }
-        }, 640);
+        };
+        if (widget) morphChatWidget(widget, false, finishClose);
+        else chatHideTimer = setTimeout(finishClose, CHAT_MORPH_DURATION);
         if (btn) {
             btn.innerHTML = CHAT_ICON_SVG;
             btn.setAttribute('aria-expanded', 'false');
