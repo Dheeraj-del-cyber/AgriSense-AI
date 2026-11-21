@@ -368,7 +368,7 @@ ol {
 .bottom-nav-grass {
     display: none;
     position: fixed;
-    bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) - 62px);
+    bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) - 86px);
     left: 0;
     right: 0;
     width: 100%;
@@ -382,12 +382,14 @@ ol {
     display: block;
     position: relative;
     left: 50%;
-    width: 110%;
+    width: 112%;
     max-width: none;
     height: auto;
     object-fit: contain;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scale(1, 1.2);
     transform-origin: 50% 100%;
+    margin-bottom: -28px;
+    padding-bottom: 28px;
     pointer-events: none;
     user-select: none;
     will-change: transform;
@@ -396,19 +398,19 @@ ol {
 
 @keyframes grass-wind-sway {
     0%, 100% {
-        transform: translateX(-50%) rotate(0deg) skewX(0deg);
+        transform: translateX(-50%) skewX(0deg) scale(1, 1.2);
     }
-    22% {
-        transform: translateX(calc(-50% + 2px)) rotate(0.6deg) skewX(-1.2deg);
+    24% {
+        transform: translateX(calc(-50% + 3px)) skewX(-1.5deg) scale(1.01, 1.2);
     }
-    46% {
-        transform: translateX(calc(-50% - 1px)) rotate(-0.4deg) skewX(0.7deg);
+    48% {
+        transform: translateX(calc(-50% - 2px)) skewX(0.9deg) scale(0.99, 1.2);
     }
-    70% {
-        transform: translateX(calc(-50% + 3px)) rotate(0.8deg) skewX(-1.5deg);
+    72% {
+        transform: translateX(calc(-50% + 4px)) skewX(-1.8deg) scale(1.01, 1.2);
     }
-    86% {
-        transform: translateX(calc(-50% + 1px)) rotate(0.2deg) skewX(-0.5deg);
+    88% {
+        transform: translateX(calc(-50% + 1px)) skewX(-0.5deg) scale(1, 1.2);
     }
 }
 
@@ -4704,7 +4706,7 @@ body.mobile-home-fixed .farm-footer,
 
     .bottom-nav-grass {
         display: block;
-        bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) - 62px);
+        bottom: calc(var(--nav-mobile-height, 58px) + env(safe-area-inset-bottom, 0px) - 86px);
     }
 
     .bottom-nav {
