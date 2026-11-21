@@ -684,9 +684,9 @@ ol {
     z-index: 6;
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    padding: 3px 5px;
-    margin: 0.35rem auto 0.45rem;
+    gap: 0.4rem;
+    padding: 4px 6px;
+    margin: 0.65rem auto 0;
     background: rgba(10, 31, 20, 0.45);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -699,9 +699,9 @@ ol {
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 0.3rem 0.85rem;
+    padding: 0.32rem 0.95rem;
     border-radius: 999px;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.88);
     background: transparent;
@@ -719,160 +719,6 @@ ol {
     color: #0b4526;
     font-weight: 700;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-}
-
-/* Hero Live Status Badge */
-.hero-live-badge {
-    position: relative;
-    z-index: 6;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    padding: 0.24rem 0.8rem;
-    margin: 0 auto 0.55rem;
-    background: rgba(8, 28, 18, 0.45);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 999px;
-    color: #ffffff;
-    font-size: 0.74rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-}
-
-.hero-live-badge .live-pulse-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #22c55e;
-    box-shadow: 0 0 8px #22c55e;
-    animation: pulse-dot 1.8s infinite;
-}
-
-/* Hero Quick Stats Strip */
-.hero-quick-stats {
-    position: relative;
-    z-index: 6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.45rem;
-    width: 100%;
-    max-width: 360px;
-    margin: 0 auto 0.65rem;
-}
-
-.hero-stat-card {
-    flex: 1 1 0;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.42rem 0.55rem;
-    background: rgba(10, 31, 20, 0.52);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
-    text-align: left;
-}
-
-.hero-stat-card:hover {
-    transform: translateY(-2px);
-    background: rgba(10, 31, 20, 0.68);
-    border-color: rgba(255, 255, 255, 0.4);
-}
-
-.hero-stat-card:active {
-    transform: scale(0.96);
-}
-
-.h-stat-icon-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    flex-shrink: 0;
-}
-
-.h-stat-icon-wrap.icon-leaf {
-    background: rgba(34, 197, 94, 0.22);
-    color: #4ade80;
-}
-
-.h-stat-icon-wrap.icon-water {
-    background: rgba(56, 189, 248, 0.22);
-    color: #38bdf8;
-}
-
-.h-stat-icon-wrap.icon-crop {
-    background: rgba(250, 204, 21, 0.22);
-    color: #facc15;
-}
-
-.h-stat-details {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    overflow: hidden;
-}
-
-.h-stat-number {
-    font-size: 0.84rem;
-    font-weight: 700;
-    color: #ffffff;
-    line-height: 1.15;
-}
-
-.h-stat-label {
-    font-size: 0.64rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.82);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Hero Scan CTA Button */
-.hero-scan-cta {
-    position: relative;
-    z-index: 6;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.55rem 1.35rem;
-    margin: 0 auto;
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    border-radius: 999px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    cursor: pointer;
-    box-shadow: 0 4px 18px rgba(22, 163, 74, 0.45);
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-
-.hero-scan-cta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 22px rgba(22, 163, 74, 0.6);
-}
-
-.hero-scan-cta:active {
-    transform: scale(0.96);
-}
-
-.hero-scan-cta .cta-cam-icon,
-.hero-scan-cta .cta-arrow {
-    display: flex;
-    align-items: center;
 }
 
 .hub-hero-content {
@@ -3937,13 +3783,13 @@ body.mobile-home-fixed .farm-footer,
     }
 
     .hero-top-brand {
-        margin-top: 1.15rem;
-        margin-bottom: 0.2rem;
+        margin-top: 2.25rem;
+        margin-bottom: 0.35rem;
     }
 
     .hero-main-logo {
-        height: 44px;
-        max-width: min(290px, 84vw);
+        height: 48px;
+        max-width: min(300px, 86vw);
     }
 
     .hero-trajectory {
@@ -4431,22 +4277,13 @@ body.mobile-home-fixed .farm-footer,
     }
 
     #screenHome .hero-top-brand {
-        margin-top: 2rem;
-        margin-bottom: 0.5rem;
+        margin-top: 3.5rem;
+        margin-bottom: 0.75rem;
     }
 
     #screenHome .hero-main-logo {
-        height: 64px;
-        max-width: 420px;
-    }
-
-    #screenHome .hero-quick-stats {
+        height: 68px;
         max-width: 440px;
-        gap: 0.75rem;
-    }
-
-    #screenHome .hero-stat-card {
-        padding: 0.55rem 0.85rem;
     }
 
     .bottom-nav {
