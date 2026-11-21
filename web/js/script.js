@@ -961,7 +961,7 @@ function renderRealDiseaseResult(data) {
     const body = document.getElementById('resultBody');
     const title = document.getElementById('resultTitle');
     title.textContent = isHealthy ? 'Specimen Evaluation' : 'Diagnostic Report';
-    const pdfActionsHtml = isHealthy && advisoryHtml.includes('class="advisory-card')
+    const pdfActionsHtml = advisoryHtml.includes('class="advisory-card')
         ? `<div class="specimen-pdf-actions" aria-label="Specimen report actions">
             <button type="button" class="btn-primary" onclick="handleSpecimenPdfAction('download')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
