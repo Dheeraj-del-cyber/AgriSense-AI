@@ -46,7 +46,7 @@ const TRANSLATIONS = {
         uploadTitle: 'Upload Foliage Specimen', uploadDrag: 'Drag and drop image or browse file system',
         uploadFormats: 'JPEG / PNG formats supported (up to 8 MB)', uploadHint: 'Ensure foliage is flat, sharp, and in natural daylight.',
         btnTakePhoto: 'Capture with Camera', btnChoosePhoto: 'Browse Image File',
-        retake: 'Cancel', analyze: 'Run Diagnostic Analysis',
+        retake: 'Cancel', analyze: 'Continue',
         scanStepsTitle: 'Diagnostic Operating Procedure',
         scanStep1: 'Mount or hold specimen flat with clear background',
         scanStep2: 'Initiate diagnostic inference for pathology report',
