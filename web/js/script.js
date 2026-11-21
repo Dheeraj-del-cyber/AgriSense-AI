@@ -1942,6 +1942,8 @@ function setIoTOffline(lastUpdated = '--:--:--') {
     const banner = document.getElementById('iotAlertBanner');
 
     if (valEl) valEl.textContent = '--';
+    const heroLiveMoist = document.getElementById('heroLiveMoist');
+    if (heroLiveMoist) heroLiveMoist.textContent = 'ESP32';
     if (updateEl) updateEl.textContent = (lastUpdated === 'Never' || lastUpdated === '--:--:--') ? offlineText : lastUpdated;
     if (connStatus) {
         connStatus.textContent = offlineText;
@@ -2018,6 +2020,8 @@ function updateIoTUI(data) {
 
     // Update Value with Smooth Count-Up Animation
     animateMoistureNumber(moisture);
+    const heroLiveMoist = document.getElementById('heroLiveMoist');
+    if (heroLiveMoist) heroLiveMoist.textContent = Math.round(moisture) + '%';
 
     const updateEl = document.getElementById('lastUpdated');
     const connStatus = document.getElementById('connectionStatus');
@@ -2969,6 +2973,9 @@ function updateFarmLighting() {
 document.addEventListener('DOMContentLoaded', () => {
     updateFarmLighting();
     setInterval(updateFarmLighting, 1000 * 60 * 60);
+    if (typeof fetchIoTData === 'function') {
+        fetchIoTData();
+    }
 });
 
 // If the app is SPA and doesn't trigger DOMContentLoaded on navigation, 
