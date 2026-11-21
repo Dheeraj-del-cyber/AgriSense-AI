@@ -2110,31 +2110,10 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
 
 @media (max-width: 768px) {
     .gauge-tilt-control {
-        display: flex;
-        flex-direction: column;
+        display: block;
         align-items: center;
-        gap: 0.35rem;
         width: 100%;
         margin-top: 0.15rem;
-    }
-
-    .gauge-tilt-button {
-        min-height: 38px;
-        padding: 0.45rem 0.9rem;
-        border: 1px solid #cfe2d3;
-        border-radius: var(--radius-pill);
-        background: linear-gradient(145deg, #f8fcf8, #eaf3eb);
-        color: var(--g-800);
-        font-size: 0.75rem;
-        font-weight: 700;
-        box-shadow: 3px 3px 8px rgba(47, 80, 52, 0.12), -3px -3px 8px #fff;
-        cursor: pointer;
-    }
-
-    .gauge-tilt-button[aria-pressed="true"] {
-        background: #e7f4e9;
-        border-color: #9dc9a7;
-        box-shadow: inset 2px 2px 5px rgba(47, 80, 52, 0.12), inset -2px -2px 5px #fff;
     }
 
     .gauge-tilt-status {
