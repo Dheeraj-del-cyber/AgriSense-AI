@@ -3442,6 +3442,17 @@ body.chat-scroll-lock {
     margin-top: 0.35rem;
 }
 
+.profile-photo-status {
+    margin-top: 0.3rem;
+    color: var(--g-800);
+    font-size: 0.68rem;
+    font-weight: 650;
+}
+
+.profile-photo-status.is-error {
+    color: #a34a24;
+}
+
 .profile-stats-premium {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
