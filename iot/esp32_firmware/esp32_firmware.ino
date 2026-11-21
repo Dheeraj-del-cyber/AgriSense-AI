@@ -6,8 +6,8 @@
 // WIFI CONFIGURATION
 // ==================================
 
-const char* WIFI_SSID = "CMF";
-const char* WIFI_PASSWORD = "*";
+const char* WIFI_SSID = "wifi name";
+const char* WIFI_PASSWORD = "wifi password";
 
 // ==================================
 // BACKEND CONFIGURATION
@@ -23,6 +23,7 @@ const char* SERVER_URL =
 const int SENSOR_PIN = 36;  // VP pin (GPIO 36)
 
 const int DRY_ADC_VALUE = 4095;
+const int MID_ADC_VALUE = 1400;
 const int WET_ADC_VALUE = 1276;
 
 const unsigned long SEND_INTERVAL = 500;
@@ -45,9 +46,28 @@ float readMoisture() {
 
   int rawValue = sum / 3;
 
-  float moisture =
-    (float)(DRY_ADC_VALUE - rawValue) /
-    (DRY_ADC_VALUE - WET_ADC_VALUE) * 100.0;
+  float moisture;
+
+  // First calibration range: 0% to 60%
+
+  if (rawValue >= MID_ADC_VALUE) {
+
+    moisture =
+      (float)(DRY_ADC_VALUE - rawValue) /
+      (DRY_ADC_VALUE - MID_ADC_VALUE) * 60.0;
+
+  }
+
+  // Second calibration range: 60% to 100%
+
+  else {
+
+    moisture =
+      60.0 +
+      (float)(MID_ADC_VALUE - rawValue) /
+      (MID_ADC_VALUE - WET_ADC_VALUE) * 40.0;
+
+  }
 
   moisture = constrain(moisture, 0, 100);
 
@@ -69,8 +89,10 @@ float readMoisture() {
 void sendData(float moisture) {
 
   if (WiFi.status() != WL_CONNECTED) {
+
     Serial.println("WiFi disconnected. Reconnecting...");
     WiFi.reconnect();
+
     return;
   }
 
@@ -83,8 +105,10 @@ void sendData(float moisture) {
   http.setTimeout(5000);
 
   if (!http.begin(secureClient, SERVER_URL)) {
+
     Serial.println("HTTP connection failed");
     return;
+
   }
 
   http.addHeader("Content-Type", "application/json");
@@ -95,11 +119,15 @@ void sendData(float moisture) {
   int responseCode = http.POST(payload);
 
   if (responseCode >= 200 && responseCode < 300) {
+
     Serial.print("Backend: SUCCESS | HTTP ");
     Serial.println(responseCode);
+
   } else {
+
     Serial.print("Backend: FAILED | HTTP ");
     Serial.println(responseCode);
+
   }
 
   http.end();
@@ -123,8 +151,10 @@ void setup() {
   Serial.print("Connecting to WiFi");
 
   while (WiFi.status() != WL_CONNECTED) {
+
     delay(300);
     Serial.print(".");
+
   }
 
   Serial.println("\nWiFi Connected!");
@@ -132,6 +162,7 @@ void setup() {
 
   Serial.print("IP Address: ");
   Serial.println(WiFi.localIP());
+
 }
 
 
@@ -150,9 +181,7 @@ void loop() {
     float moisture = readMoisture();
 
     sendData(moisture);
+
   }
+
 }
-// connections 
-//AO-VP
-//GND-GND
-//VCC-3V3
