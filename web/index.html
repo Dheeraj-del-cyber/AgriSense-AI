@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Production Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=phase85">
+    <link rel="stylesheet" href="css/style.css?v=phase86">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -362,7 +362,8 @@
                 </div>
 
                 <!-- 3 Language Switcher Options -->
-                <div class="hero-lang-bar" aria-label="Select Language">
+                <div class="hero-lang-bar" id="heroLangBar" aria-label="Select Language">
+                    <canvas class="hero-lang-glass-canvas" id="heroLangGlassCanvas" aria-hidden="true"></canvas>
                     <button type="button" class="lang-pill-item active" onclick="setLanguage('en')">English</button>
                     <button type="button" class="lang-pill-item" onclick="setLanguage('hi')">हिन्दी</button>
                     <button type="button" class="lang-pill-item" onclick="setLanguage('kn')">ಕನ್ನಡ</button>
@@ -1450,7 +1451,7 @@
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="config.js"></script>
-    <script src="js/script.js?v=phase85"></script>
+    <script src="js/script.js?v=phase86"></script>
 </body>
 
 </html>
