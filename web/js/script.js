@@ -659,7 +659,8 @@ function saveDiagnosticScan(data) {
         const confidence = data.prediction_results.confidence == null
             ? NaN
             : Number(data.prediction_results.confidence);
-        const moisture = Number(AppState.lastMoisture);
+        const hasMoisture = AppState.lastMoisture !== null && AppState.lastMoisture !== undefined && Number.isFinite(Number(AppState.lastMoisture));
+        const moisture = hasMoisture ? Number(AppState.lastMoisture) : null;
 
         let parsedGuidance = null;
         try {
@@ -669,7 +670,7 @@ function saveDiagnosticScan(data) {
         const record = {
             diagnosis: String(data.prediction_results.disease || 'Unknown'),
             confidence: Number.isFinite(confidence) ? confidence : null,
-            moisture: AppState.lastMoisture && Number.isFinite(moisture) ? moisture : null,
+            moisture: moisture,
             guidance: getHistoryGuidance(data.guidance),
             guidanceDetails: parsedGuidance || null,
             createdAt: new Date().toISOString(),
@@ -793,7 +794,7 @@ function renderProfileScanHistory(phone) {
         const moisture = Number(record.moisture);
         meta.textContent = record.moisture !== null && record.moisture !== undefined && Number.isFinite(moisture)
             ? `${dateLabel} · Moisture ${moisture.toFixed(2)}%`
-            : dateLabel;
+            : `${dateLabel} · Moisture: Sensor Offline`;
         details.appendChild(meta);
 
         if (typeof record.guidance === 'string' && record.guidance) {
@@ -862,6 +863,10 @@ async function analyzeImage() {
 
         AppState.resultSource = 'disease';
         if (res.ok && data.status === 'clear' && data.prediction_results) {
+            AppState.lastMoisture = (data.moisture !== null && data.moisture !== undefined && !isNaN(data.moisture))
+                ? Number(data.moisture)
+                : null;
+            AppState.isSensorOnline = Boolean(data.is_sensor_online);
 
             // Update scan count
             const userStr = localStorage.getItem('agri_active_user');
@@ -1328,10 +1333,10 @@ function renderRealDiseaseResult(data) {
                 
                 <div class="metric-line" style="margin-top:1rem">
                     <span class="metric-label">Live Soil Moisture (IoT Station)</span>
-                    <span class="metric-val" style="color:var(--accent-sky)">${(AppState.lastMoisture || 0).toFixed(2)}%</span>
+                    <span class="metric-val" style="color:${AppState.lastMoisture !== null ? 'var(--accent-sky)' : 'var(--n-500)'}">${AppState.lastMoisture !== null ? AppState.lastMoisture.toFixed(2) + '%' : 'Sensor Offline (--%)'}</span>
                 </div>
                 <div class="metric-bar-track">
-                    <div class="metric-bar-fill" style="width:${AppState.lastMoisture || 0}%; background:var(--accent-sky)"></div>
+                    <div class="metric-bar-fill" style="width:${AppState.lastMoisture !== null ? AppState.lastMoisture : 0}%; background:${AppState.lastMoisture !== null ? 'var(--accent-sky)' : 'var(--n-300)'}"></div>
                 </div>
             </div>
         </div>
@@ -2744,7 +2749,7 @@ function updateIoTUI(data) {
     const rawLastUpdated = data.last_updated || '--:--:--';
     const dict = TRANSLATIONS[AppState.currentLang] || TRANSLATIONS.en;
 
-    if (rawLastUpdated === 'Never' || data.status === 'offline') {
+    if (rawLastUpdated === 'Never' || data.status === 'offline' || data.is_online === false) {
         setIoTOffline(rawLastUpdated);
         return;
     }

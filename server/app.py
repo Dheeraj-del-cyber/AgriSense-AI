@@ -97,8 +97,8 @@ def detect():
     elif "Grape" in disease_name or "Esca" in disease_name: crop_type = "Grape"
     elif "Tomato" in disease_name or "Curl" in disease_name: crop_type = "Tomato"
     
-    # Call LLM with Moisture Context and Language
-    current_moisture = iot_data.get("moisture", 0)
+    # Call LLM with Moisture Context (None if sensor is offline) and Language
+    current_moisture = get_live_moisture()
     guidance = llm_handler.get_agricultural_guidance(disease_name, crop_type, moisture=current_moisture, language=language)
     
     # FINAL OUTPUT
@@ -107,7 +107,8 @@ def detect():
         "message": "Plant leaf detected and successfully analyzed.",
         "prediction_results": prediction,
         "guidance": guidance.get("full_guidance", "Guidance not available."),
-        "moisture": current_moisture
+        "moisture": current_moisture,
+        "is_sensor_online": current_moisture is not None
     })
 
 # ---------------------------------------------------------------
@@ -150,11 +151,12 @@ def chat():
     user_context = data.get('user_context')
 
     # If moisture is available in server IoT memory, attach it to user_context if missing
+    live_moist = get_live_moisture()
     if user_context and isinstance(user_context, dict):
         if 'iot_moisture' not in user_context:
-            user_context['iot_moisture'] = iot_data.get('moisture')
+            user_context['iot_moisture'] = live_moist
     elif not user_context:
-        user_context = {'iot_moisture': iot_data.get('moisture')}
+        user_context = {'iot_moisture': live_moist}
 
     try:
         if hasattr(llm_handler, 'get_rag_chat_reply'):
@@ -186,12 +188,26 @@ def chat():
         return jsonify({"error": err_msg, "success": False}), 500
 
 # ---------------------------------------------------------------
-# IOT MONITORING - Moisture Sensor Integration
+# IOT MONITORING - Moisture Sensor Integration & Timeout Tracking
 # ---------------------------------------------------------------
+import time
+
+IOT_TIMEOUT_SECONDS = 120  # Sensor is considered offline if no update for 2 minutes
+
 iot_data = {
     "moisture": 0,
-    "last_updated": "Never"
+    "last_updated": "Never",
+    "last_timestamp": 0
 }
+
+def get_live_moisture():
+    """Returns live moisture float if sensor was updated within last 2 minutes, else None (Offline)."""
+    last_ts = iot_data.get("last_timestamp", 0)
+    if not last_ts:
+        return None
+    if (time.time() - last_ts) > IOT_TIMEOUT_SECONDS:
+        return None
+    return iot_data.get("moisture")
 
 @app.route('/update_moisture', methods=['POST'])
 def update_moisture():
@@ -202,16 +218,28 @@ def update_moisture():
     import datetime
     try:
         iot_data["moisture"] = float(data['moisture'])
+        iot_data["last_timestamp"] = time.time()
     except (ValueError, TypeError):
         return jsonify({"error": "Invalid moisture value"}), 400
     
     iot_data["last_updated"] = datetime.datetime.now().strftime("%H:%M:%S")
     
-    return jsonify({"success": True, "received": iot_data["moisture"]})
+    return jsonify({
+        "success": True, 
+        "received": iot_data["moisture"],
+        "is_online": True
+    })
 
 @app.route('/get_moisture', methods=['GET'])
 def get_moisture():
-    return jsonify(iot_data)
+    live_moist = get_live_moisture()
+    is_online = live_moist is not None
+    return jsonify({
+        "moisture": live_moist if is_online else 0,
+        "live_moisture": live_moist,
+        "is_online": is_online,
+        "last_updated": iot_data.get("last_updated", "Never")
+    })
 
 if __name__ == '__main__':
     # Threaded=True for responsiveness when running locally

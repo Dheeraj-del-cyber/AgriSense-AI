@@ -363,7 +363,15 @@ def get_agricultural_guidance(disease_name, crop_type="plant", moisture=None, la
         local = get_local_advisory_json(disease_name)
         return {"full_guidance": json.dumps(local), "success": True, "offline_fallback": True}
 
-    moisture_context = f"The current soil moisture level is {moisture}%." if moisture is not None else "Soil moisture data is unavailable."
+    if moisture is not None:
+        moisture_context = f"The live IoT telemetry sensor reports soil moisture at {moisture}%."
+    else:
+        moisture_context = (
+            "IMPORTANT TELEMETRY STATUS: The IoT soil moisture sensor is currently OFFLINE (no active signal). "
+            "CRITICAL ADAPTIVE INSTRUCTION: Do NOT assume the soil is 0% or dry! Do NOT instruct the farmer to irrigate or add water "
+            "simply because sensor telemetry is offline. Focus treatment recommendations directly on the diagnosed disease pathogen, "
+            "and advise the farmer to manually inspect the root zone moisture before deciding to water."
+        )
     
     prompt = f"""A farmer has a {crop_type} plant with '{disease_name}'. 
 {moisture_context}

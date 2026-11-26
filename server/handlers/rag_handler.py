@@ -122,7 +122,7 @@ def retrieve_user_context(query: str, user_context: Optional[Dict[str, Any]], ma
             conf = s.get("confidence")
             conf_str = f"{round(float(conf), 1)}%" if conf is not None else "N/A"
             moist = s.get("moisture")
-            moist_str = f"{moist}%" if moist is not None else "Not recorded"
+            moist_str = f"{moist}%" if (moist is not None and str(moist).lower() not in ("offline", "none")) else "Sensor Offline (--%)"
             scan_date = format_date_str(s.get("createdAt") or s.get("date"))
 
             scan_info = f"  [{i}] Crop/Condition: {diag} | Confidence: {conf_str} | Soil Moisture: {moist_str} | Date: {scan_date}"
