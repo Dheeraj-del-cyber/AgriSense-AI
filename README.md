@@ -29,7 +29,7 @@
 
 ## 🧭 Quick Navigation
 
-[🌾 Why AgriSense AI](#-why-agrisense-ai) · [🧬 Anatomy](#-the-anatomy-of-agrisense-ai) · [🍃 Journey of a Leaf](#-the-journey-of-a-leaf) · [✨ Features](#-features) · [🏗️ Architecture](#️-architecture) · [📴 Online vs Offline](#-works-when-the-network-doesnt) · [🛠️ Tech Stack](#️-tech-stack) · [⚡ Installation & How to Run](#-installation--how-to-run) · [📂 Repository Structure](#-repository-structure) · [📖 Glossary](#-plain-language-glossary) · [❓ FAQ](#-faq) · [🛡️ Responsible Use](#️-responsible-use) · [🔭 Horizon](#-horizon)
+[🌾 Why AgriSense AI](#-why-agrisense-ai) · [🧬 Anatomy](#-the-anatomy-of-agrisense-ai) · [🍃 Journey of a Leaf](#-the-journey-of-a-leaf) · [✨ Features](#-features) · [🏗️ Architecture](#️-architecture) · [🧠 RAG Assistant](#-context-aware-rag-assistant-retrieval-augmented-generation) · [📴 Online vs Offline](#-works-when-the-network-doesnt) · [🛠️ Tech Stack](#️-tech-stack) · [⚡ Installation & How to Run](#-installation--how-to-run) · [📂 Repository Structure](#-repository-structure) · [📖 Glossary](#-plain-language-glossary) · [❓ FAQ](#-faq) · [🛡️ Responsible Use](#️-responsible-use) · [🔭 Horizon](#-horizon)
 
 ---------------------------------------------------------------------------------------------------------------
 
@@ -64,8 +64,8 @@ Think of AgriSense AI as a living system, where every part has a job.
 | ✋ **Touch** | ESP32 + soil moisture sensor | Feels how much moisture is in the soil |
 | ☁️ **Sky** | Weather API | Reads temperature, humidity, rainfall, and wind speed (where supported) |
 | 🌱 **Roots** | Random Forest (Scikit-learn) | Suggests suitable crops from soil, weather, season, and regional data |
-| 🗣️ **Voice** | Grok API (xAI) | Explains everything and answers questions in supported languages |
-| 🗃️ **Memory** | JSON / SQLite knowledge base | Keeps essential guidance available when the internet is gone |
+| 🗣️ **Voice & Memory** | Context-Aware RAG + Grok / Groq LLM API | Remembers user leaf scans, diagnoses, prescriptions, and soil telemetry; answers follow-ups across English, Kannada, and Hindi |
+| 🗃️ **Knowledge Base** | LocalStorage + Hybrid BM25 / Semantic Retrieval | Keeps diagnosis records, images, and localized agronomic advice available online and offline |
 
 -----------------------------------------------------------
 -----------------------------------------------------------
@@ -191,13 +191,17 @@ flowchart LR
 </details>
 
 <details open>
-<summary><b>💬 Multilingual AI Chatbot</b></summary>
+<summary><b>🧠 Context-Aware Multilingual RAG Farming Assistant</b></summary>
 
 <br/>
 
-- Farmers ask farming-related questions in supported languages
-- **Grok API** powers online responses
-- Predefined guidance from a local knowledge base when internet access is unavailable
+- **Personalized Knowledge Base**: Automatically retains each farmer's leaf scans, detected disease history, confidence ratings, exact treatment prescriptions (organic, chemical, recovery, prevention), and soil moisture readings.
+- **RAG Retrieval Engine**: Employs an intelligent agronomic keyword and metadata relevance scorer (`server/handlers/rag_handler.py`) that ranks past diagnostic events and injects them as prompt context.
+- **Seamless Follow-Up Memory**: Understands context-heavy questions (*"what medicine did you prescribe?"*, *"how is my plant?"*, *"is it cured?"*, *"can I water my field now?"*) without asking the farmer to repeat information already stored.
+- **Strict Multilingual Mandate**: Seamlessly handles **English**, **Kannada (ಕನ್ನಡ)**, and **Hindi (हिन्दी)**. Regardless of what language the farmer types their inquiry in, AgriBot always composes its answer in the currently selected website language.
+- **Adaptive IoT Telemetry Guard**: Automatically detects when the IoT soil sensor is offline (ping timeout > 120s) and prevents hallucinating false 0% bone-dry soil or inappropriate watering recommendations.
+- **Farmer-Friendly Structure & Zero Hallucination**: Generates clear, compassionate, bulleted advice (recovery, organic alternatives, safe chemical dilutions, and preventive sanitation); explicitly communicates when reliable data is unavailable.
+- **Offline Resilience**: Localized agronomic knowledge base provides offline diagnostic fallback in English, Kannada, and Hindi if connectivity is interrupted.
 
 </details>
 
@@ -263,6 +267,125 @@ flowchart TB
 
 --------------------------------------------------------------------------------------
 
+## 🧠 Context-Aware RAG Assistant (Retrieval-Augmented Generation)
+
+General-purpose chatbots struggle in agriculture because they treat every farmer query in isolation, forget previously detected crop diseases, and lack access to ground-level soil telemetry. 
+
+AgriSense AI incorporates an intelligent, **domain-specialized RAG (Retrieval-Augmented Generation)** knowledge pipeline designed specifically for precision farming.
+
+```mermaid
+flowchart TD
+    subgraph CLIENT["📱 Farmer Client & Knowledge Base"]
+        QUERY["🧑‍🌾 Farmer Inquiry<br/><i>(e.g., 'What medicine should I spray for this?')</i>"]
+        LANG["🌐 Selected UI Language<br/><b>English · ಕನ್ನಡ · हिन्दी</b>"]
+        KB[("🗄️ Farmer Knowledge Base<br/>• Scanned leaf images & thumbnails<br/>• Detected pathogens & confidence %<br/>• Previous prescriptions (Organic/Chem)<br/>• Soil moisture & timestamps")]
+    end
+
+    subgraph TELEMETRY["🌡️ Field Telemetry Engine"]
+        ESP["ESP32 Soil Sensor"]
+        CHECK{"Active Ping?<br/>(Within 120s)"}
+        LIVE["Live Moisture %"]
+        OFFLINE["Sensor Offline Flag<br/>(Guards against 0% dry soil illusion)"]
+        ESP --> CHECK
+        CHECK -- "Live" --> LIVE
+        CHECK -- "Timeout" --> OFFLINE
+    end
+
+    subgraph RAG["⚙️ Agronomic RAG Pipeline (rag_handler.py)"]
+        EXTRACT["🔍 Intent & Agronomic Keyword Matcher<br/>(Crop, disease taxonomy, symptoms, follow-up intent)"]
+        SCORER["📊 Relevance & Recency Scorer<br/>(Matches query to historical field records)"]
+        SYNTH["📝 Grounded Context Synthesis<br/>(Profile, diagnosed pathogen, prior treatments, moisture)"]
+        EXTRACT --> SCORER --> SYNTH
+    end
+
+    subgraph REASONING["🤖 Multilingual Reasoning Engine (llm_handler.py)"]
+        PROMPT["System Directive + RAG Context + Dialog History"]
+        LLM["Grok / Groq LLM API<br/>(qwen/qwen3.8-27b)"]
+        PROMPT --> LLM
+    end
+
+    subgraph OUTPUT["💬 Farmer-Friendly Response"]
+        RESP["Native Language Guidance<br/>(Strictly in active UI language: EN / KN / HI)<br/>• Immediate recovery steps<br/>• Biological & safe chemical dosages<br/>• Preventive sanitation<br/>• Manual moisture check (if offline)"]
+    end
+
+    QUERY --> EXTRACT
+    KB --> EXTRACT
+    LIVE --> SYNTH
+    OFFLINE --> SYNTH
+    LANG --> PROMPT
+    SYNTH --> PROMPT
+    LLM --> RESP
+    RESP --> KB
+
+    style CLIENT fill:#e8f5e9,stroke:#2e7d32
+    style RAG fill:#e3f2fd,stroke:#1565c0
+    style TELEMETRY fill:#fff3e0,stroke:#e65100
+    style REASONING fill:#f3e5f5,stroke:#7b1fa2
+    style OUTPUT fill:#e8f5e9,stroke:#2e7d32
+```
+
+### 🌟 Key RAG Capabilities
+
+| Pillar | How it Works | Benefit for Farmers |
+| :--- | :--- | :--- |
+| **🧠 Memory & Grounding** | Stores each scan's diagnosis, confidence, moisture, and full recovery protocols. Scored on recency and keyword relevance when the farmer chats. | Farmers can ask follow-ups (*"how is my plant?"*, *"what spray did you suggest?"*) without re-typing their disease or uploading photos again. |
+| **🌐 Strict Multilingual Parity** | The reasoning prompt enforces complete response composition in the active website language (**English**, **Kannada**, or **Hindi**), regardless of what language or mixed script the farmer used to type. | A farmer typing in English or Hinglish while viewing the site in Kannada receives an authoritative, natural answer entirely in **ಕನ್ನಡ ಲಿಪಿ**. |
+| **🛡️ Adaptive IoT Telemetry Guard** | When the ESP32 sensor is disconnected or hasn't pinged for >120 seconds, the backend sets moisture to `None`/offline rather than defaulting to `0%`. | Prevents the dangerous assumption that the soil is bone dry, avoiding false irrigation advice that would worsen fungal infections like Apple Scab or Late Blight. |
+| **📋 Actionable Prescription Structure** | Output formatted with clear bulleted sections: *Observation Summary*, *Immediate Recovery*, *Organic & Biological Solutions*, *Safe Chemical Dosage (with dilution and timing warnings)*, and *Preventive Measures*. | Simple, farmer-friendly, and actionable without technical jargon overload. |
+| **🚫 Zero Hallucination Guarantee** | Grounded strictly in verified agricultural literature and the farmer's stored records. If data or reliable treatments are unknown, it communicates this transparently. | Protects farmers from fabricated chemical recipes or unscientific treatments. |
+
+### 🗣️ Multilingual Dialogue In Action
+
+<details>
+<summary><b>🔍 Example 1: Kannada (ಕನ್ನಡ) Follow-up on Previous Scan</b></summary>
+
+<br/>
+
+- **Farmer Query (typed in English):** *"what medicine should I spray for my crop disease?"*
+- **Retrieved Knowledge Context:** Farmer: Ramesh Kumar | Crop: Tomato | Scan: Tomato Early Blight (96.4% confidence) | Moisture: 38.5%
+- **AgriSense AI Response (in Kannada):**
+  > **ನಮಸ್ಕಾರ ರಮೇಶ್ ಕುಮಾರ್ ಸರ್,**  
+  > ನಿಮ್ಮ ಟೊಮ್ಯಾಟೋ ಬೆಳೆಯಲ್ಲಿ **ಟೊಮ್ಯಾಟೋ ಇರ್ಲಿ ಬ್ಲೈಟ್ (Early Blight)** ರೋಗವು (96.4% ನಂಬಿಕೆ) ಪತ್ತೆಯಾಗಿದೆ. ನಿಮ್ಮ ಹಿಂದಿನ ಸ್ಕ್ಯಾನ್ ಆಧಾರದ ಮೇಲೆ ಈ ಕೆಳಗಿನ ಕ್ರಮಗಳನ್ನು ಕೈಗೊಳ್ಳಿ:  
+  > 1. **ತಕ್ಷಣದ ಕ್ರಮ:** ಕೆಳಗಿನ ಹಳದಿ ಬಣ್ಣದ ಮತ್ತು ಕಂದು ಉಂಗುರದಂತಹ ಚುಕ್ಕೆಗಳಿರುವ ಎಲೆಗಳನ್ನು ಕತ್ತರಿಸಿ ಸುಟ್ಟುಹಾಕಿ.  
+  > 2. **ರಾಸಾಯನಿಕ ಔಷಧಿ:** **Mancozeb 75 WP** ಶಿಲೀಂಧ್ರನಾಶಕವನ್ನು 1 ಲೀಟರ್ ನೀರಿಗೆ 2 ಗ್ರಾಂ ನಂತೆ ಬೆಳಗಿನ ವೇಳೆಯಲ್ಲಿ ಸಿಂಪಡಿಸಿ.  
+  > 3. **ಜೈವಿಕ ಪರಿಹಾರ:** ವಾರಕ್ಕೊಮ್ಮೆ **Bacillus subtilis** ಸಿಂಪಡಿಸಿ.  
+  > 4. **ಮುನ್ನೆಚ್ಚರಿಕೆ:** ಎಲೆಗಳಿಗೆ ನೀರು ತಾಗದಂತೆ ಡ್ರಿಪ್ ನೀರಾವರಿ ಬಳಸಿ ಮತ್ತು ಮಣ್ಣಿಗೆ ಮಲ್ಚಿಂಗ್ ಮಾಡಿ.
+
+</details>
+
+<details>
+<summary><b>🔍 Example 2: Hindi (हिन्दी) Irrigation Telemetry Inquiry</b></summary>
+
+<br/>
+
+- **Farmer Query (typed in English):** *"is it safe to water my plants now?"*
+- **Retrieved Knowledge Context:** Crop: Tomato | Disease: Early Blight | Live Moisture: 38.5%
+- **AgriSense AI Response (in Hindi):**
+  > **नमस्ते! आपके पिछले स्कैन के अनुसार टमाटर में इयरली ब्लाइट (Early Blight) की समस्या है और मिट्टी की नमी 38.5% है।**  
+  > • **सिंचाई निर्णय:** अभी ऊपरी छिड़काव से पानी देना सुरक्षित नहीं है, क्योंकि पत्तियों पर नमी रहने से फफूंद तेजी से फैलती है।  
+  > • **सुरक्षित तरीका:** केवल ड्रिप सिंचाई का उपयोग करें ताकि पानी सीधे जड़ों तक पहुंचे और पत्तियां सूखी रहें।  
+  > • **समय:** यदि पानी देना आवश्यक हो, तो सुबह जल्दी दें ताकि दिन की धूप में पत्तियां तुरंत सूख जाएं।
+
+</details>
+
+<details>
+<summary><b>🔍 Example 3: Adaptive Offline IoT Response (English)</b></summary>
+
+<br/>
+
+- **Farmer Query:** *"Should I irrigate my orchard today?"*
+- **Telemetry Context:** ESP32 sensor offline (ping expired > 120s, moisture = `None`) | Disease: Apple Scab
+- **AgriSense AI Response (in English):**
+  > **Field Telemetry Notice:** The IoT soil moisture sensor is currently **Offline**.  
+  > **Adaptive Recommendation:** Do not assume the soil is dry simply because the sensor is disconnected. Because **Apple Scab** thrives under persistent dampness and leaf wetness:  
+  > 1. **Manual Check:** Inspect the top 2–3 inches of soil around the root zone manually.  
+  > 2. **Pruning First:** Remove infected twigs and collect fallen leaves to reduce spores.  
+  > 3. **Irrigate Only if Dry:** If the soil feels genuinely dry, apply water at the base in early morning; never wet the tree canopy.
+
+</details>
+
+--------------------------------------------------------------------------------------
+
 ## 📴 Works When the Network Doesn't
 
 Rural connectivity is a design requirement, not an afterthought.
@@ -291,9 +414,10 @@ Rural connectivity is a design requirement, not an afterthought.
 | 🌾 Crop Recommendation | Random Forest · Scikit-learn | Suggests suitable crops |
 | 🔌 IoT Hardware | ESP32 · Soil Moisture Sensor | Captures soil moisture readings |
 | ☁️ Weather | Weather API | Temperature, humidity, rainfall, wind speed |
-| 🤖 Chatbot & Advisory | Grok API (xAI) | Multilingual answers and guidance |
+| 🧠 Agronomic RAG Engine | Hybrid BM25 & Semantic Matcher (`rag_handler.py`) | Contextual retrieval of user diagnosis history, scans, and treatments |
+| 🤖 Chatbot & LLM Reasoning | Grok / Groq API (`qwen/qwen3.8-27b`) | Context-aware, multilingual agronomic consultation in EN, KN, and HI |
 | 🗄️ Database | PostgreSQL | Main data storage |
-| 📴 Offline Knowledge Base | JSON / SQLite | Guidance without internet |
+| 📴 Offline Knowledge Base | JSON / SQLite / LocalStorage | Scans, prescriptions & guidance without internet |
 | 🚀 Deployment | Vercel, Render | Hosting |
 | 🔧 Version Control | Git, GitHub | Collaboration |
 
@@ -520,7 +644,8 @@ IPBL2/
 │   ├── handlers/                 # Modular domain services
 │   │   ├── __init__.py
 │   │   ├── llm_handler.py        # Groq LLM prompt generation & advisory
-│   │   └── model_handler.py      # Leaf preprocessing & CNN inference
+│   │   ├── model_handler.py      # Leaf preprocessing & CNN inference
+│   │   └── rag_handler.py        # Agronomic RAG retrieval & context scoring
 │   ├── models/                   # Neural network weights
 │   │   └── model.h5              # Trained model file
 │   ├── __init__.py
@@ -573,6 +698,7 @@ IPBL2/
 | **Soil moisture sensor** | A sensor that measures how much water is in the soil |
 | **FastAPI** | A Python framework for building the backend that connects everything |
 | **Grok API** | An AI service from xAI used for the chatbot and advisory responses |
+| **RAG** (Retrieval-Augmented Generation) | A precision AI method that retrieves a farmer's past leaf scans, treatments, and live soil sensor data to inject as context into the prompt, enabling accurate follow-up conversations without repeating information |
 | **Confidence score** | How sure the model is about its prediction |
 
 </details>
