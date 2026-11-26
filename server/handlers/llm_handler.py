@@ -5,6 +5,7 @@ Integrates with Groq API for AI crop advisory and disease treatment plans.
 import os
 import requests
 import json
+from typing import Optional, Dict, Any, List
 try:
     from dotenv import load_dotenv
     # Load from current directory and server/.env
@@ -446,5 +447,155 @@ CRITICAL: You MUST respond in {language}. All values in the JSON output MUST be 
             "success": True,
             "offline_fallback": True
         }
+
+
+# =========================================================================
+# CONTEXT-AWARE MULTILINGUAL RAG CHATBOT ENGINE
+# =========================================================================
+
+try:
+    from handlers import rag_handler
+except ImportError:
+    try:
+        from server.handlers import rag_handler
+    except ImportError:
+        import rag_handler
+
+LANG_CONFIG = {
+    "kannada": {
+        "title": "Kannada",
+        "native": "ಕನ್ನಡ",
+        "script": "ಕನ್ನಡ ಲಿಪಿ",
+        "fallback_general": "ನಮಸ್ಕಾರ! ನಾನು AgriBot, ನಿಮ್ಮ ಕೃಷಿ ಸಹಾಯಕ. ತಂತ್ರಜ್ಞಾನ ಸಂಪರ್ಕದಲ್ಲಿ ತೊಂದರೆಯಾಗಿದೆ, ಆದರೆ ನಿಮ್ಮ ಬೆಳೆ ರಕ್ಷಣೆಗಾಗಿ ಅಗತ್ಯ ಸಲಹೆಗಳನ್ನು ಸದಾ ನೀಡಲು ಸಿದ್ಧ.",
+        "fallback_scanned": "ನಿಮ್ಮ ಇತ್ತೀಚಿನ ಸ್ಕ್ಯಾನ್ ಆಧಾರದ ಮೇಲೆ ({disease}):\n- **ತಕ್ಷಣದ ಚಿಕಿತ್ಸೆ**: ಸೋಂಕಿತ ಎಲೆಗಳನ್ನು ತೆಗೆದು ಸುಟ್ಟುಹಾಕಿ.\n- **ಜೈವಿಕ ಪರಿಹಾರ**: ಬೇವಿನ ಎಣ್ಣೆ (5 ಮಿ.ಲೀ/ಲೀ) ಅಥವಾ ಸುಡೊಮೊನಾಸ್ ಸಿಂಪಡಿಸಿ.\n- **ರಾಸಾಯನಿಕ ಪರಿಹಾರ**: ಶಿಫಾರಸು ಮಾಡಲಾದ ಶಿಲೀಂಧ್ರನಾಶಕವನ್ನು ಬೆಳಗಿನ ವೇಳೆಯಲ್ಲಿ ಮಾತ್ರ ಸಿಂಪಡಿಸಿ.\n- **ಮುನ್ನೆಚ್ಚರಿಕೆ**: ಗಿಡಗಳ ನಡುವೆ ಗಾಳಿಯಾಡುವಂತೆ ಸಮರುವಿಕೆ ಮಾಡಿ, ಅತಿಯಾದ ತೇವಾಂಶವನ್ನು ತಪ್ಪಿಸಿ.",
+        "fallback_unknown": "ಕ್ಷಮಿಸಿ, ವಿಶ್ವಾಸಾರ್ಹ ಮಾಹಿತಿ ಲಭ್ಯವಿಲ್ಲದಿದ್ದಾಗ ಊಹಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ. ದಯವಿಟ್ಟು ಸ್ಪಷ್ಟ ಎಲೆಯ ಫೋಟೋ ಅಥವಾ ಬೆಳೆಯ ವಿವರಗಳನ್ನು ಒದಗಿಸಿ."
+    },
+    "hindi": {
+        "title": "Hindi",
+        "native": "हिन्दी",
+        "script": "देवनागरी लिपि",
+        "fallback_general": "नमस्ते! मैं AgriBot, आपका कृषि सहायक हूँ। वर्तमान में सर्वर व्यस्त है, लेकिन आपकी फसल सुरक्षा और सलाह के लिए मैं तत्पर हूँ।",
+        "fallback_scanned": "आपकी हालिया जांच ({disease}) के अनुसार:\n- **तत्काल उपचार**: संक्रमित पत्तियों को तोड़कर नष्ट कर दें।\n- **जैविक उपाय**: नीम का तेल (5ml/L) या ट्राइकोडर्मा का छिड़काव करें।\n- **रासायनिक उपाय**: अनुशंसित फफूंदनाशक का सुबह के समय छिड़काव करें।\n- **रोकथाम**: खेत में उचित जल निकासी बनाए रखें और पौधों में हवा का संचार रहने दें।",
+        "fallback_unknown": "क्षमा करें, विश्वसनीय जानकारी उपलब्ध न होने पर मैं अनुमान नहीं लगा सकता। कृपया स्पष्ट फसल या रोग का नाम बताएं।"
+    },
+    "english": {
+        "title": "English",
+        "native": "English",
+        "script": "Latin Script",
+        "fallback_general": "Greetings! I am AgriBot, your personal farming assistant. The AI service is momentarily offline, but I can provide fundamental agronomic guidelines.",
+        "fallback_scanned": "Based on your recent scan for {disease}:\n- **Immediate Recovery**: Prune and safely dispose of heavily infected leaves.\n- **Organic Measure**: Apply cold-pressed neem oil (5ml/L) or bio-fungicide.\n- **Chemical Protection**: Apply recommended protective fungicide early in the morning.\n- **Prevention**: Maintain optimal plant spacing and avoid over-saturating soil moisture.",
+        "fallback_unknown": "Reliable information is currently unavailable for this specific query. Please provide a clear leaf image or specific crop details."
+    }
+}
+
+def resolve_language(lang_input: str) -> str:
+    """Normalizes input to 'english', 'hindi', or 'kannada'."""
+    val = str(lang_input or "english").strip().lower()
+    if val in ("kn", "kannada", "kan"):
+        return "kannada"
+    if val in ("hi", "hindi", "hin"):
+        return "hindi"
+    return "english"
+
+def get_rag_offline_fallback(query: str, user_context: Optional[dict] = None, language: str = "English") -> str:
+    """Generates an immediate, grounded offline fallback when Groq is unreachable."""
+    norm_lang = resolve_language(language)
+    cfg = LANG_CONFIG.get(norm_lang, LANG_CONFIG["english"])
+
+    scans = (user_context or {}).get("scans") or []
+    if scans:
+        latest = scans[0]
+        disease = latest.get("diagnosis", "Plant Disease")
+        return cfg["fallback_scanned"].format(disease=disease)
+
+    return cfg["fallback_general"]
+
+def get_rag_chat_reply(messages: list, user_context: Optional[dict] = None, language: str = "English") -> dict:
+    """
+    RAG-driven Conversational Assistant.
+    Retrieves user's diagnosis history, plant scans, and treatments,
+    injects them into Groq context, and enforces strict response in website language.
+    """
+    norm_lang = resolve_language(language)
+    cfg = LANG_CONFIG.get(norm_lang, LANG_CONFIG["english"])
+
+    # Extract latest user message
+    user_msgs = [m for m in messages if m.get("role") == "user"]
+    latest_query = user_msgs[-1]["content"] if user_msgs else ""
+
+    # 1. RETRIEVE RELEVANT USER KNOWLEDGE BASE CONTEXT
+    retrieved_context = rag_handler.retrieve_user_context(latest_query, user_context)
+
+    # 2. CONSTRUCT SYSTEM PROMPT WITH RAG MEMORY AND MULTILINGUAL DIRECTIVE
+    system_prompt = f"""You are AgriBot, the intelligent, context-aware RAG farming assistant on the AgriSense AI platform.
+You assist farmers with precision agriculture, disease diagnoses, treatment plans, preventive steps, and soil/irrigation guidance.
+
+=== RETRIEVED FARMER KNOWLEDGE BASE (RAG CONTEXT) ===
+{retrieved_context}
+======================================================
+
+CRITICAL INSTRUCTIONS:
+1. PERSONALIZED RAG MEMORY:
+   - Carefully review the farmer's retrieved diagnosis records, leaf scan history, and treatments above.
+   - If the user asks follow-up questions (e.g., "what should I spray?", "how is my plant?", "is it cured?", "what medicine did you recommend?", "will this disease spread?"), seamlessly ground your answer in their past diagnosed disease, previous prescriptions, and soil moisture WITHOUT asking them to repeat information they already provided.
+   - If they have no prior scans, or ask a general query, provide practical, expert agronomic advice directly.
+   - If reliable agricultural information or past data is unavailable, clearly communicate that honestly—never hallucinate or invent unverified chemical treatments.
+
+2. FARMER-FRIENDLY & ACTIONABLE:
+   - Keep answers simple, practical, empathetic, and farmer-friendly.
+   - Structure recommendations with clear headings or bullet points:
+     * Observation & Diagnosis summary
+     * Immediate Recovery / Action steps
+     * Organic & Biological Solutions (e.g., Neem oil, Trichoderma)
+     * Safe Chemical Dosage / Fungicide (with dilution and protective warnings)
+     * Preventive Field Measures (sanitation, moisture, spacing)
+
+3. STRICT MULTILINGUAL MANDATE:
+   - TARGET WEBSITE LANGUAGE: {cfg['title']} ({cfg['native']})
+   - MANDATORY: Regardless of what language the user typed their question in (even if typed in English, Hinglish, or mixed words), you MUST compose your ENTIRE reply in {cfg['title']} ({cfg['native']}) using {cfg['script']}.
+   - Do NOT provide untranslated English text unless it is an established international chemical/medicine product name (e.g. Mancozeb 75 WP, Trichoderma viride).
+
+4. DOMAIN BOUNDARIES:
+   - You only answer agricultural, horticultural, veterinary, soil, irrigation, weather, and farming questions. Politely decline non-farming topics in {cfg['title']}.
+"""
+
+    # Assemble conversation payload with sanitized history
+    # System prompt is always first
+    llm_messages = [{"role": "system", "content": system_prompt}]
+    
+    # Include up to last 8 conversation turns to respect token limits while keeping dialog context
+    conversation_turns = [m for m in messages if m.get("role") in ("user", "assistant")]
+    if len(conversation_turns) > 8:
+        conversation_turns = conversation_turns[-8:]
+
+    llm_messages.extend(conversation_turns)
+
+    payload = {
+        "model": GROQ_MODEL,
+        "messages": llm_messages,
+        "temperature": 0.45,
+        "max_tokens": 600
+    }
+
+    try:
+        response = post_groq(payload, timeout=20)
+        reply = response.json()['choices'][0]['message']['content'].strip()
+        return {
+            "reply": reply,
+            "success": True,
+            "language": cfg['title'],
+            "retrieved_context_used": bool(retrieved_context)
+        }
+    except Exception as e:
+        print(f"[llm_handler] Groq RAG chat failed ({e}). Providing localized fallback.")
+        fallback_reply = get_rag_offline_fallback(latest_query, user_context, language)
+        return {
+            "reply": fallback_reply,
+            "success": True,
+            "offline_fallback": True,
+            "language": cfg['title'],
+            "error_detail": str(e)
+        }
+
 
 

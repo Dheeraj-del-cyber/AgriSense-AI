@@ -660,11 +660,18 @@ function saveDiagnosticScan(data) {
             ? NaN
             : Number(data.prediction_results.confidence);
         const moisture = Number(AppState.lastMoisture);
+
+        let parsedGuidance = null;
+        try {
+            parsedGuidance = typeof data.guidance === 'string' ? JSON.parse(data.guidance) : data.guidance;
+        } catch (_) {}
+
         const record = {
             diagnosis: String(data.prediction_results.disease || 'Unknown'),
             confidence: Number.isFinite(confidence) ? confidence : null,
             moisture: AppState.lastMoisture && Number.isFinite(moisture) ? moisture : null,
             guidance: getHistoryGuidance(data.guidance),
+            guidanceDetails: parsedGuidance || null,
             createdAt: new Date().toISOString(),
             thumbnail: createScanThumbnail()
         };
@@ -1784,27 +1791,19 @@ Rules:
 
 function updateChatSystemPrompt(lang) {
     if (typeof chatHistory !== 'undefined' && chatHistory[0]) {
-        const langName = lang === 'hi' ? 'Hindi' : lang === 'kn' ? 'Kannada' : 'English';
-        chatHistory[0].content = `You are AgriBot, an elite agricultural scientist and field expert embedded in the "AgriSense AI" platform. 
+        const langName = lang === 'hi' ? 'Hindi (हिन्दी)' : lang === 'kn' ? 'Kannada (ಕನ್ನಡ)' : 'English';
+        chatHistory[0].content = `You are AgriBot, the context-aware RAG agronomic farming assistant embedded in AgriSense AI. 
         
-Your mission is to provide definitive, high-accuracy answers to ANY agricultural question. Your knowledge base is vast and covers:
-- In-depth crop science, genetics, and variety selection
-- Advanced pathology (fungal, bacterial, viral, and physiological disorders)
-- Soil chemistry, physics, and restorative biology
-- Modern and traditional fertilizer protocols (precision farming vs. organic)
-- Hydroponics, aquaponics, and greenhouse climate control
-- Global agricultural trends, market economics, and supply chain logistics
-- Veterinary basics for farm animals (cattle, poultry, goats, pigs)
-- Agricultural engineering, tool maintenance, and automation
-- Sustainable and regenerative practices (no-till, cover cropping, carbon farming)
+Your mission is to provide definitive, personalized, high-accuracy answers to ANY agricultural question.
+You have direct access to this farmer's retrieved knowledge base, past leaf scans, detected plant diseases, soil moisture telemetry, and prescription histories.
 
 Rules:
-1. AUTHORITY: Speak with the confidence of an expert, but keep it accessible for a farmer.
-2. ACCURACY: If a user asks an agricultural question, ANSWER IT FULLY. Do not decline agricultural queries.
-3. STRUCTURE: Use markdown-like formatting (bullet points, bold text) for readability.
-4. LANGUAGE: You MUST ALWAYS respond entirely in ${langName}. Do not use English unless the selected language is English.
-5. LIMITS: STRICTLY DECLINE ANY non-agricultural, non-rural, or programming/coding topics. If asked to write code or about unrelated subjects, refuse and remind the user that you only answer agriculture-related questions.
-6. STYLE: Maintain a precise, professional agronomic tone with bullet points for readability.`;
+1. PERSONALIZED RAG MEMORY: Seamlessly remember and reference the farmer's past diagnoses and treatments when they ask follow-up questions. Do not ask them to repeat information already available in their farm records.
+2. AUTHORITY & SIMPLICITY: Speak with the confidence of an expert agronomist, but keep advice simple, empathetic, and farmer-friendly.
+3. ACCURACY & NO HALLUCINATION: If reliable information is unavailable, state it clearly. Never invent chemical dosages without verified standards.
+4. STRUCTURE: Use clear formatting with bullet points and bold headers for recovery, organic solutions, chemical fungicides, and prevention.
+5. STRICT LANGUAGE MANDATE: You MUST ALWAYS respond entirely in ${langName}. Regardless of what language the farmer typed in, your full response must be in ${langName}.
+6. DOMAIN LIMITS: STRICTLY DECLINE non-agricultural topics (coding, general entertainment). You are solely dedicated to crop health, farming, and agronomy.`;
     }
 }
 
@@ -1975,13 +1974,79 @@ function toggleChatbot() {
     }
 }
 
-// Start hidden properly
+function getCurrentUserPhone() {
+    try {
+        const user = JSON.parse(localStorage.getItem('agri_active_user') || 'null');
+        if (user && user.phone) return String(user.phone);
+    } catch (_) {}
+    return 'guest';
+}
+
+function getUserKnowledgeContext() {
+    const phone = getCurrentUserPhone();
+    let user = null;
+    try {
+        user = JSON.parse(localStorage.getItem('agri_active_user') || 'null');
+    } catch (_) {}
+    let scans = [];
+    try {
+        scans = JSON.parse(localStorage.getItem(`agri_scan_history_${phone}`) || '[]');
+    } catch (_) {}
+
+    const formattedScans = Array.isArray(scans) ? scans.slice(0, 10).map(s => ({
+        diagnosis: s.diagnosis || 'Unknown',
+        confidence: s.confidence,
+        moisture: s.moisture,
+        createdAt: s.createdAt,
+        guidance: s.guidanceDetails || s.guidance || ''
+    })) : [];
+
+    return {
+        profile: user ? {
+            name: user.name || 'Farmer',
+            phone: user.phone,
+            location: user.location || user.farmLocation || 'Karnataka, India',
+            crops: user.crops || user.preferredCrops || []
+        } : null,
+        scans: formattedScans
+    };
+}
+
+function saveUserChatHistory() {
+    try {
+        const phone = getCurrentUserPhone();
+        const nonSystem = (chatHistory || []).filter(m => m.role !== 'system');
+        localStorage.setItem(`agri_chat_history_${phone}`, JSON.stringify(nonSystem.slice(-20)));
+    } catch (_) {}
+}
+
+function loadUserChatHistory() {
+    try {
+        const phone = getCurrentUserPhone();
+        const stored = JSON.parse(localStorage.getItem(`agri_chat_history_${phone}`) || '[]');
+        if (Array.isArray(stored) && stored.length > 0) {
+            chatHistory = [chatHistory[0], ...stored];
+            const container = document.getElementById('chatMessages');
+            if (container) {
+                container.innerHTML = '';
+                stored.forEach(msg => {
+                    appendChatMsg(msg.content, msg.role === 'user' ? 'user' : 'bot');
+                });
+                const sugg = document.getElementById('chatSuggestions');
+                if (sugg) sugg.style.display = 'none';
+            }
+        }
+    } catch (_) {}
+}
+
+// Start hidden properly & restore conversation history
 document.addEventListener('DOMContentLoaded', () => {
     const panel = document.getElementById('chatPanel');
     if (panel) {
         panel.classList.add('chat-hidden');
         panel.style.display = 'none';
     }
+    loadUserChatHistory();
 });
 
 function clearChat() {
@@ -1989,6 +2054,10 @@ function clearChat() {
     if (typeof chatHistory !== 'undefined' && chatHistory.length > 0) {
         chatHistory = [chatHistory[0]];
     }
+    const phone = getCurrentUserPhone();
+    try {
+        localStorage.removeItem(`agri_chat_history_${phone}`);
+    } catch (_) {}
 
     // Clear messages UI
     const container = document.getElementById('chatMessages');
@@ -2030,6 +2099,7 @@ async function sendChatMessage() {
     if (chatHistory.length > 22) {
         chatHistory = [chatHistory[0], ...chatHistory.slice(-20)];
     }
+    saveUserChatHistory();
 
     // Show animated typing dots
     const typingId = appendTypingIndicator();
@@ -2037,7 +2107,7 @@ async function sendChatMessage() {
     try {
         let reply;
         if (!navigator.onLine) {
-            // OFFLINE: use local knowledge
+            // OFFLINE: use context-aware local knowledge
             reply = getLocalFallback(msg);
         } else {
             reply = await callGroqAPI(chatHistory);
@@ -2045,6 +2115,7 @@ async function sendChatMessage() {
 
         // Add AI reply to history
         chatHistory.push({ role: 'assistant', content: reply });
+        saveUserChatHistory();
 
         removeTypingIndicator(typingId);
         appendChatMsg(reply, 'bot');
@@ -2054,6 +2125,7 @@ async function sendChatMessage() {
         // Try local knowledge first, show a proper error if not found
         const localReply = getLocalFallback(msg, true);
         chatHistory.push({ role: 'assistant', content: localReply });
+        saveUserChatHistory();
         appendChatMsg(localReply, 'bot');
     }
 
@@ -2062,14 +2134,21 @@ async function sendChatMessage() {
 
 async function callGroqAPI(messages) {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 20000); // 20s timeout
+    const timeout = setTimeout(() => controller.abort(), 25000); // 25s timeout
 
     try {
-        // Call our own Flask backend — no CORS issues, API key stays server-side
+        const plainLangName = AppState.currentLang === 'hi' ? 'Hindi' : AppState.currentLang === 'kn' ? 'Kannada' : 'English';
+        const userContext = getUserKnowledgeContext();
+
+        // Call our own Flask backend with RAG user_context and language
         const response = await fetch(`${API_BASE}/chat`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ messages }),
+            body: JSON.stringify({
+                messages,
+                language: plainLangName,
+                user_context: userContext
+            }),
             signal: controller.signal
         });
 
@@ -2085,7 +2164,7 @@ async function callGroqAPI(messages) {
         return data.reply;
     } catch (err) {
         clearTimeout(timeout);
-        if (err.name === 'AbortError') throw new Error('Request timed out after 20s');
+        if (err.name === 'AbortError') throw new Error('Request timed out after 25s');
         throw err;
     }
 }
@@ -2186,15 +2265,77 @@ const LOCAL_ADVISORY = {
     }
 };
 
-/* --- Offline Fallback (when no internet) --- */
+/* --- Context-Aware Multilingual Offline Fallback (when no internet or rate-limited) --- */
 function getLocalFallback(q, isApiError = false) {
     const lower = q.toLowerCase();
+    const lang = AppState.currentLang || 'en';
+    const userCtx = getUserKnowledgeContext();
+    const latestScan = userCtx && userCtx.scans && userCtx.scans[0];
 
-    for (const [disease, info] of Object.entries(LOCAL_ADVISORY)) {
-        if (lower.includes(disease.toLowerCase())) {
-            return `${disease} Management:\n• Immediate Recovery: ${info.recovery}\n• Biological & Organic: ${info.organic}\n• Chemical Therapeutics: ${info.chemical}\n• Cultural Prevention: ${info.prevention}`;
+    // Check if query is asking about previous scan, crop health, or treatment follow-up
+    const isFollowUp = latestScan && (
+        lower.includes('my plant') || lower.includes('my crop') || lower.includes('disease') ||
+        lower.includes('treatment') || lower.includes('spray') || lower.includes('cure') ||
+        lower.includes('cured') || lower.includes('scan') || lower.includes('medicine') ||
+        lower.includes(String(latestScan.diagnosis).toLowerCase())
+    );
+
+    if (isFollowUp) {
+        const diag = latestScan.diagnosis;
+        const details = latestScan.guidance && typeof latestScan.guidance === 'object' ? latestScan.guidance : null;
+        const recStr = details && details.recovery ? (Array.isArray(details.recovery) ? details.recovery[0] : details.recovery) : 'Prune infected leaves safely.';
+        const orgStr = details && details.organic ? (Array.isArray(details.organic) ? details.organic[0] : details.organic) : 'Apply cold-pressed neem oil (5ml/L).';
+        const chemStr = details && details.chemical ? (Array.isArray(details.chemical) ? details.chemical[0] : details.chemical) : 'Apply copper oxychloride early morning.';
+        const prevStr = details && details.prevention ? (Array.isArray(details.prevention) ? details.prevention[0] : details.prevention) : 'Ensure good airflow and avoid wetting leaves.';
+
+        if (lang === 'kn') {
+            return `ನಿಮ್ಮ ಇತ್ತೀಚಿನ ಸ್ಕ್ಯಾನ್ ಆಧಾರದ ಮೇಲೆ (${diag}):\n• **ತಕ್ಷಣದ ಕ್ರಮ**: ${recStr}\n• **ಜೈವಿಕ ಪರಿಹಾರ**: ${orgStr}\n• **ರಾಸಾಯನಿಕ ರಕ್ಷಣೆ**: ${chemStr}\n• **ಮುನ್ನೆಚ್ಚರಿಕೆ ಕ್ರಮ**: ${prevStr}`;
+        } else if (lang === 'hi') {
+            return `आपकी हालिया जांच (${diag}) के आधार पर:\n• **तत्काल उपाय**: ${recStr}\n• **जैविक समाधान**: ${orgStr}\n• **रासायनिक सुरक्षा**: ${chemStr}\n• **भविष्य की रोकथाम**: ${prevStr}`;
+        } else {
+            return `Based on your recent scan for ${diag}:\n• **Immediate Action**: ${recStr}\n• **Organic Solution**: ${orgStr}\n• **Chemical Protection**: ${chemStr}\n• **Preventive Care**: ${prevStr}`;
         }
     }
+
+    // Match known disease
+    for (const [disease, info] of Object.entries(LOCAL_ADVISORY)) {
+        if (lower.includes(disease.toLowerCase())) {
+            if (lang === 'kn') {
+                return `${disease} ನಿರ್ವಹಣಾ ಮಾರ್ಗದರ್ಶಿ:\n• ತಕ್ಷಣದ ಚಿಕಿತ್ಸೆ: ${info.recovery}\n• ಜೈವಿಕ ನಿಯಂತ್ರಣ: ${info.organic}\n• ರಾಸಾಯನಿಕ ಶಿಲೀಂಧ್ರನಾಶಕ: ${info.chemical}\n• ಕೃಷಿ ಮುನ್ನೆಚ್ಚರಿಕೆ: ${info.prevention}`;
+            } else if (lang === 'hi') {
+                return `${disease} प्रबंधन मार्गदर्शिका:\n• त्वरित उपचार: ${info.recovery}\n• जैविक नियंत्रण: ${info.organic}\n• रासायनिक सुरक्षा: ${info.chemical}\n• रोकथाम: ${info.prevention}`;
+            } else {
+                return `${disease} Management:\n• Immediate Recovery: ${info.recovery}\n• Biological & Organic: ${info.organic}\n• Chemical Therapeutics: ${info.chemical}\n• Cultural Prevention: ${info.prevention}`;
+            }
+        }
+    }
+
+    if (lang === 'kn') {
+        if (lower.includes('organic') || lower.includes('pest') || lower.includes('ಜೈವಿಕ') || lower.includes('ಕೀಟ')) {
+            return 'ಜೈವಿಕ ಕೀಟ ನಿರ್ವಹಣೆ: ಶುದ್ಧ ಬೇವಿನ ಎಣ್ಣೆ (0.5%), ಹಳದಿ ಅಂಟು ಬಲೆಗಳು ಮತ್ತು ಟ್ರೈಕೋಡರ್ಮಾ ಜೈವಿಕ ನಿಯಂತ್ರಕಗಳನ್ನು ಬಳಸಿ.';
+        }
+        if (lower.includes('fertilizer') || lower.includes('ಗೊಬ್ಬರ') || lower.includes('npk')) {
+            return 'NPK ಸಮತೋಲನ ಮಾರ್ಗಸೂಚಿ:\n• N (ಸಾರಜನಕ): ಸಸ್ಯದ ಹಸಿರು ಬೆಳವಣಿಗೆಗೆ\n• P (ರಂಜಕ): ಬೇರುಗಳ ಬಲವರ್ಧನೆ ಮತ್ತು ಹೂವು ಬಿಡಲು\n• K (ಪೊಟ್ಯಾಶ್): ರೋಗ ನಿರೋಧಕತೆ ಮತ್ತು ಗುಣಮಟ್ಟದ ಇಳುವರಿಗೆ';
+        }
+        if (lower.match(/^(hi|hello|hey|namaste|ನಮಸ್ಕಾರ)/)) {
+            return 'ನಮಸ್ಕಾರ! AgriSense ಕೃಷಿ ಸಹಾಯಕ್ಕೆ ಸ್ವಾಗತ. ನಿಮ್ಮ ಬೆಳೆ ರಕ್ಷಣೆ, ರೋಗ ಪತ್ತೆ ಅಥವಾ ಹೊಲದ ನಿರ್ವಹಣೆ ಕುರಿತು ಯಾವುದೇ ಪ್ರಶ್ನೆ ಕೇಳಿ.';
+        }
+        return 'ದಯವಿಟ್ಟು ನಿಮ್ಮ ಕೃಷಿ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ. ಉದಾಹರಣೆಗೆ:\n• "ಟೊಮೆಟೊ ಎಲೆ ಸುರುಟು ರೋಗಕ್ಕೆ ಮದ್ದು ಏನು?"\n• "ನನ್ನ ಗಿಡದ ಸ್ಕ್ಯಾನ್ ಬಗ್ಗೆ ಮುಂದಿನ ಕ್ರಮವೇನು?"';
+    }
+
+    if (lang === 'hi') {
+        if (lower.includes('organic') || lower.includes('pest') || lower.includes('जैविक') || lower.includes('कीट')) {
+            return 'जैविक कीट प्रबंधन: कोल्ड-प्रेस नीम का तेल (0.5%), ट्राइकोडर्मा और पीले चिपचिपे जाल का उपयोग करें।';
+        }
+        if (lower.includes('fertilizer') || lower.includes('खाद') || lower.includes('npk')) {
+            return 'NPK पोषक तत्व संतुलन:\n• N (नाइट्रोजन): पत्तियों और वानस्पतिक वृद्धि के लिए\n• P (फास्फोरस): जड़ों के विकास और फूलों के लिए\n• K (पोटेशियम): फल की गुणवत्ता और रोग प्रतिरोधक क्षमता के लिए';
+        }
+        if (lower.match(/^(hi|hello|hey|namaste|नमस्ते)/)) {
+            return 'नमस्ते! AgriSense कृषि सहायक में आपका स्वागत है। आप फसल रोग, रासायनिक मात्रा या खेती प्रबंधन के बारे में पूछ सकते हैं।';
+        }
+        return 'कृपया अपना कृषि संबंधी प्रश्न पूछें। जैसे:\n• "टमाटर में झुलसा रोग का उपचार क्या है?"\n• "मेरी पिछली जांच के बाद क्या करना चाहिए?"';
+    }
+
     if (lower.includes('organic') || lower.includes('pest')) return 'Organic Pest Management: Cold-pressed neem oil (0.5%), Bacillus thuringiensis, yellow bio-traps, and beneficial predator conservation.';
     if (lower.includes('fertilizer') || lower.includes('npk')) return 'NPK Agronomic Guidelines:\n• N (Nitrogen/Urea): Vegetative canopy growth\n• P (Phosphorus/DAP): Root-zone establishment and flowering\n• K (Potassium/MOP): Fruit sizing, brix value, and drought resistance';
     if (lower.includes('irrigat') || lower.includes('water')) return 'Irrigation Standards: Drip emitters at root crown offer >90% water efficiency. Water during early morning to minimize foliar wetness and fungal sporulation.';

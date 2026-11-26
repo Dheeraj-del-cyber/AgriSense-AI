@@ -137,7 +137,7 @@ def recommend_crop():
 
 
 # ---------------------------------------------------------------
-# CHATBOT ENDPOINT — Full conversational AI for agriculture
+# CHATBOT ENDPOINT — Context-Aware Multilingual RAG Farming Assistant
 # ---------------------------------------------------------------
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -146,39 +146,43 @@ def chat():
         return jsonify({"error": "No messages provided"}), 400
 
     messages = data['messages']
+    language = data.get('language', 'English')
+    user_context = data.get('user_context')
 
-    # Validate and cap history to stay safely under Groq's 8,000 TPM limit
-    if len(messages) > 8:
-        messages = [messages[0]] + messages[-6:]
-
-    payload = {
-        "model": getattr(llm_handler, 'GROQ_MODEL', 'qwen/qwen3.8-27b'),
-        "messages": messages,
-        "temperature": 0.6,
-        "max_tokens": 400
-    }
+    # If moisture is available in server IoT memory, attach it to user_context if missing
+    if user_context and isinstance(user_context, dict):
+        if 'iot_moisture' not in user_context:
+            user_context['iot_moisture'] = iot_data.get('moisture')
+    elif not user_context:
+        user_context = {'iot_moisture': iot_data.get('moisture')}
 
     try:
-        if hasattr(llm_handler, 'post_groq'):
-            response = llm_handler.post_groq(payload, timeout=20)
+        if hasattr(llm_handler, 'get_rag_chat_reply'):
+            res = llm_handler.get_rag_chat_reply(messages, user_context=user_context, language=language)
+            return jsonify({
+                "reply": res["reply"],
+                "success": True,
+                "language": res.get("language", language),
+                "offline_fallback": res.get("offline_fallback", False)
+            })
         else:
-            import requests as req
-            response = req.post(
-                llm_handler.GROQ_API_URL,
-                headers={"Authorization": f"Bearer {llm_handler.GROQ_API_KEY}"},
-                json=payload,
-                timeout=20
-            )
-            response.raise_for_status()
-
-        reply = response.json()['choices'][0]['message']['content'].strip()
-        return jsonify({"reply": reply, "success": True})
+            # Fallback legacy behavior
+            payload = {
+                "model": getattr(llm_handler, 'GROQ_MODEL', 'qwen/qwen3.8-27b'),
+                "messages": messages,
+                "temperature": 0.6,
+                "max_tokens": 400
+            }
+            response = llm_handler.post_groq(payload, timeout=20)
+            reply = response.json()['choices'][0]['message']['content'].strip()
+            return jsonify({"reply": reply, "success": True})
 
     except Exception as e:
         print(f"Chat API Error: {e}")
+        # Localized error fallback
         err_msg = str(e)
         if "429" in err_msg or "Too Many Requests" in err_msg:
-            err_msg = "⚠️ AI is currently at capacity (rate limited for a few seconds). Please wait 15-30 seconds and try again, or add a secondary free API key."
+            err_msg = "⚠️ AI is currently at capacity. Please wait a few seconds and try again."
         return jsonify({"error": err_msg, "success": False}), 500
 
 # ---------------------------------------------------------------
