@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Production Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=phase141">
+    <link rel="stylesheet" href="css/style.css?v=phase142">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -527,7 +527,23 @@
 
                 <div class="hero-trajectory" aria-hidden="true">
                     <svg class="trajectory-svg" viewBox="0 0 1000 100" preserveAspectRatio="none">
+                        <defs>
+                            <radialGradient id="moonAuraGradient">
+                                <stop offset="47%" stop-color="#f5f7fc" stop-opacity="0"></stop>
+                                <stop offset="54%" stop-color="#f5f7fc" stop-opacity="0.42"></stop>
+                                <stop offset="68%" stop-color="#dce5f5" stop-opacity="0.2"></stop>
+                                <stop offset="100%" stop-color="#dce5f5" stop-opacity="0"></stop>
+                            </radialGradient>
+                        </defs>
                         <path id="trajectoryPath" class="trajectory-path" d="M 28 72 Q 500 2 972 72"></path>
+                        <g id="trajectorySunRays" class="trajectory-body trajectory-sun-rays" opacity="0">
+                            <g id="trajectorySunRaysAspect">
+                                <g class="sun-rays-rotating">
+                                    <image href="assets/images/sun-rays.png" x="-38" y="-38" width="76" height="76"
+                                        preserveAspectRatio="xMidYMid meet"></image>
+                                </g>
+                            </g>
+                        </g>
                         <g id="trajectorySun" class="trajectory-body trajectory-sun" opacity="0">
                             <circle class="celestial-halo sun-halo" r="20"></circle>
                             <g id="trajectorySunImage">
@@ -536,10 +552,15 @@
                             </g>
                         </g>
                         <g id="trajectoryMoon" class="trajectory-body trajectory-moon" opacity="0">
+                            <g id="trajectoryMoonAuraAspect">
+                                <circle class="moon-aura" r="40" fill="url(#moonAuraGradient)"></circle>
+                            </g>
                             <circle class="celestial-halo moon-halo" r="20"></circle>
                             <g id="trajectoryMoonImage">
-                                <image href="assets/images/moon%20(1).png" x="-18" y="-18" width="36" height="36"
-                                    preserveAspectRatio="xMidYMid meet"></image>
+                                <g class="moon-rotating">
+                                    <image href="assets/images/moon%20(1).png" x="-18" y="-18" width="36" height="36"
+                                        preserveAspectRatio="xMidYMid meet"></image>
+                                </g>
                             </g>
                         </g>
                     </svg>
@@ -1625,7 +1646,7 @@
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="config.js"></script>
-    <script src="js/script.js?v=phase141"></script>
+    <script src="js/script.js?v=phase142"></script>
 </body>
 
 </html>

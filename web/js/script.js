@@ -3602,6 +3602,7 @@ let sunTrajectoryTimer = null;
 let sunTrajectoryPath = null;
 let sunTrajectoryPathLength = 0;
 let sunTrajectorySun = null;
+let sunTrajectoryRays = null;
 let sunTrajectoryMoon = null;
 let sunTrajectoryRoot = null;
 let cachedSunEventsKey = '';
@@ -3737,6 +3738,10 @@ function updateSunTrajectory(now = new Date()) {
     const sunPoint = sunTrajectoryPath.getPointAtLength(sunTrajectoryPathLength * sunProgress);
     const moonPoint = sunTrajectoryPath.getPointAtLength(sunTrajectoryPathLength * moonProgress);
 
+    if (sunTrajectoryRays) {
+        sunTrajectoryRays.setAttribute('transform', `translate(${sunPoint.x} ${sunPoint.y})`);
+        sunTrajectoryRays.setAttribute('opacity', String(sunOpacity));
+    }
     sunTrajectorySun.setAttribute('transform', `translate(${sunPoint.x} ${sunPoint.y})`);
     sunTrajectoryMoon.setAttribute('transform', `translate(${moonPoint.x} ${moonPoint.y})`);
     sunTrajectorySun.setAttribute('opacity', String(sunOpacity));
@@ -3770,6 +3775,7 @@ function startSunTrajectory() {
     sunTrajectoryPath = document.getElementById('trajectoryPath');
     sunTrajectoryPathLength = sunTrajectoryPath ? sunTrajectoryPath.getTotalLength() : 0;
     sunTrajectorySun = document.getElementById('trajectorySun');
+    sunTrajectoryRays = document.getElementById('trajectorySunRays');
     sunTrajectoryMoon = document.getElementById('trajectoryMoon');
     if (!sunTrajectoryPath || !sunTrajectorySun || !sunTrajectoryMoon ||
         !sunTrajectoryRoot || document.hidden ||
@@ -3782,7 +3788,7 @@ function startSunTrajectory() {
     if (trajectorySvg) {
         const bounds = trajectorySvg.getBoundingClientRect();
         const yScale = bounds.height > 0 ? (bounds.width / 1000) / (bounds.height / 100) : 1;
-        ['trajectoryMoonImage', 'trajectorySunImage'].forEach(id => {
+        ['trajectoryMoonImage', 'trajectoryMoonAuraAspect', 'trajectorySunImage', 'trajectorySunRaysAspect'].forEach(id => {
             const imageGroup = document.getElementById(id);
             if (imageGroup) imageGroup.setAttribute('transform', `scale(1 ${yScale})`);
         });
