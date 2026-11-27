@@ -346,7 +346,14 @@ function applyLanguage(lang) {
     // Elements with data-i18n
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (dict[key]) el.textContent = dict[key];
+        if (dict[key]) {
+            const targetSpan = el.querySelector('span');
+            if (targetSpan && el.querySelector('svg')) {
+                targetSpan.textContent = dict[key];
+            } else {
+                el.textContent = dict[key];
+            }
+        }
     });
 
     // Placeholders

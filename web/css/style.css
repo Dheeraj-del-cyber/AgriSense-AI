@@ -600,21 +600,36 @@ ol {
 .btn-back {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.45rem 0.875rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
+    gap: 0.45rem;
+    padding: 0.5rem 0.95rem;
+    background: #ffffff;
+    border: 1.5px solid #111827;
     border-radius: var(--radius-md);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    transition: background var(--transition-fast), border-color var(--transition-fast);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #000000;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    cursor: pointer;
+}
+
+.btn-back svg {
+    stroke: #000000;
+    stroke-width: 2.5;
+    flex-shrink: 0;
+}
+
+.btn-back span {
+    color: #000000;
+    font-weight: 700;
+    line-height: 1;
 }
 
 .btn-back:hover {
-    background: var(--surface-subtle);
-    border-color: var(--border-hover);
-    color: var(--text-primary);
+    background: #f1f5f9;
+    border-color: #000000;
+    color: #000000;
+    transform: translateX(-2px);
 }
 
 .btn-full {
