@@ -4433,11 +4433,7 @@ function renderSmartShop() {
             return `
                 <div class="product-card product-card-split ${isTopMatch ? 'top-match' : ''}">
                     <div class="product-card-img-wrap">
-                        <div class="product-badge-overlay">
-                            <span class="match-score-badge ${scoreClass}">
-                                ${prod.score}%
-                            </span>
-                        </div>
+                        <div class="product-badge-overlay"><span class="match-score-badge ${scoreClass}">${prod.score}%</span></div>
                         <img src="${prod.image}" alt="${prod.name}" class="product-img" loading="lazy">
                     </div>
 
