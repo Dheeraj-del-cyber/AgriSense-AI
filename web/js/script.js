@@ -465,7 +465,7 @@ function setupPhotoButtons() {
     const chooseBtn = document.getElementById('choosePhotoBtn');
     const hint = document.getElementById('uploadHintText');
 
-    if (chooseBtn) chooseBtn.style.display = 'block';
+    if (chooseBtn) chooseBtn.style.display = '';
     if (hint) hint.textContent = 'Click to browse files from your computer.';
 }
 
@@ -589,7 +589,7 @@ function resetDetection() {
     document.getElementById('uploadControls').classList.remove('hidden');
     document.getElementById('analyzeControls').classList.add('hidden');
     const chooseBtn = document.getElementById('choosePhotoBtn');
-    if (chooseBtn) chooseBtn.style.display = 'block';
+    if (chooseBtn) chooseBtn.style.display = '';
     document.getElementById('fileInput').value = '';
     const cameraInput = document.getElementById('cameraInput');
     if (cameraInput) cameraInput.value = '';
