@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Production Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=phase98">
+    <link rel="stylesheet" href="css/style.css?v=phase99">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -1045,6 +1045,108 @@
         </div>
     </main>
 
+    <!-- SCREEN 6: Precision Agri-Shop (Desktop ML Recommendation Store) -->
+    <main class="screen" id="screenShop">
+        <div class="container">
+            <div class="screen-header-bar">
+                <button class="btn-back" onclick="navigateTo('screenHome')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span data-i18n="back">Back</span>
+                </button>
+                <div class="screen-title-group">
+                    <span class="screen-kicker">PRECISION AGRI-STORE</span>
+                    <h2 class="screen-heading" data-i18n="shopTitle">Smart Crop Pharmacy & Store</h2>
+                </div>
+            </div>
+
+            <!-- Smart AI Prescription Context Banner -->
+            <div id="shopPrescriptionBanner" class="shop-prescription-banner">
+                <div class="prescription-banner-left">
+                    <span class="prescription-badge">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                        AI Prescribed Matching
+                    </span>
+                    <div class="prescription-details">
+                        <h4 id="shopPrescriptionTitle">Prescriptions Synced to Recent Foliar Diagnosis</h4>
+                        <p id="shopPrescriptionDesc">Showing products matched to active disease symptoms, regional humidity risk, and soil status.</p>
+                    </div>
+                </div>
+                <div class="prescription-banner-right">
+                    <button class="btn-secondary btn-sm" onclick="resetShopFilters()" title="Explore all products">
+                        <span>Reset to All Products</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Smart ML Control & Filter Console -->
+            <div class="shop-control-console">
+                <div class="shop-control-group">
+                    <label class="shop-control-label" for="shopLocalitySelect">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        Locality & Zone
+                    </label>
+                    <select id="shopLocalitySelect" class="shop-select" onchange="applyShopFilters()">
+                        <option value="karnataka" selected>Karnataka & Deccan Plateau (High Humidity)</option>
+                        <option value="north">Northern Gangetic Plains (Sub-humid / Alluvial)</option>
+                        <option value="maharashtra">Maharashtra & Central Black Soil Zone</option>
+                        <option value="coastal">Western Coastal / Konkan (High Spore Pressure)</option>
+                        <option value="all">Pan-India (All Agro-Climatic Zones)</option>
+                    </select>
+                </div>
+
+                <div class="shop-control-group">
+                    <label class="shop-control-label" for="shopDiseaseSelect">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        Target Disease / Concern
+                    </label>
+                    <select id="shopDiseaseSelect" class="shop-select" onchange="applyShopFilters()">
+                        <option value="all">All Crop Concerns / General Health</option>
+                        <option value="early_blight">Early Blight (Alternaria Solani)</option>
+                        <option value="late_blight">Late Blight (Phytophthora Infestans)</option>
+                        <option value="bacterial_blight">Bacterial Leaf Blight / Canker</option>
+                        <option value="yellow_curl">Yellow Leaf Curl / Whitefly Vectors</option>
+                        <option value="powdery_mildew">Powdery Mildew / Rust Spores</option>
+                        <option value="root_rot">Root Rot / Damping Off</option>
+                        <option value="drought_stress">Low Moisture / Soil Water Deficit</option>
+                    </select>
+                </div>
+
+                <div class="shop-control-group">
+                    <label class="shop-control-label" for="shopSeveritySelect">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        Severity / Infection Stage
+                    </label>
+                    <select id="shopSeveritySelect" class="shop-select" onchange="applyShopFilters()">
+                        <option value="critical">Critical Outbreak (Urgent Curative Action)</option>
+                        <option value="moderate" selected>Moderate Spread (Targeted Eradication)</option>
+                        <option value="early">Early Symptoms (Bio-Control & Mild Treat)</option>
+                        <option value="preventive">Preventive Shield (Seasonal Spore Protection)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Smart Category Filters -->
+            <div class="shop-category-pills" id="shopCategoryPills">
+                <button class="shop-pill active" onclick="setShopCategory('all', this)">✨ All ML Prescriptions</button>
+                <button class="shop-pill" onclick="setShopCategory('cure', this)">🧪 Targeted Chemical Cures</button>
+                <button class="shop-pill" onclick="setShopCategory('organic', this)">🍃 100% Bio & Organic</button>
+                <button class="shop-pill" onclick="setShopCategory('nutrition', this)">⚡ Plant Recovery & Foliar</button>
+                <button class="shop-pill" onclick="setShopCategory('soil', this)">💧 Moisture & Soil Conditioners</button>
+            </div>
+
+            <!-- Real-Time ML Product Recommendations Grid -->
+            <div id="shopProductsGrid" class="shop-products-grid">
+                <!-- Dynamically populated by renderSmartShop() -->
+            </div>
+        </div>
+    </main>
+
     <!-- Floating AI Agronomist Consultation Drawer -->
     <div id="chatbotWidget">
         <div id="chatPanel" class="chat-hidden">
@@ -1363,6 +1465,62 @@
     <div id="mobDrawer" style="display:none;"></div>
     <div id="mobOverlay" style="display:none;"></div>
 
+    <!-- Smart Dosage Calculator & Order Modal -->
+    <div id="dosageOrderModal" class="dosage-modal-backdrop hidden" onclick="if(event.target===this) closeDosageModal()">
+        <div class="dosage-modal-card">
+            <div class="dosage-modal-header">
+                <div>
+                    <span class="dosage-modal-kicker">PRECISION DOSAGE CALCULATOR</span>
+                    <h3 id="modalProductName" class="dosage-modal-title">Product Name</h3>
+                </div>
+                <button class="dosage-modal-close" onclick="closeDosageModal()" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="dosage-modal-body">
+                <div class="dosage-field-group">
+                    <label class="dosage-label" for="farmAcresInput">Farm Field Area (Acres):</label>
+                    <div class="dosage-input-wrap">
+                        <input type="number" id="farmAcresInput" class="dosage-input" value="1.0" min="0.25" max="100" step="0.25" oninput="calculateDosageForModal()">
+                        <span class="dosage-input-unit">Acres</span>
+                    </div>
+                </div>
+
+                <div class="dosage-breakdown-card">
+                    <div class="breakdown-row">
+                        <span>Recommended Dosage:</span>
+                        <strong id="modalDosageRate">2.5 g / L</strong>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Required Spray Volume:</span>
+                        <strong id="modalWaterVolume">200 Litres</strong>
+                    </div>
+                    <div class="breakdown-row">
+                        <span>Required Quantity:</span>
+                        <strong id="modalProductQty" class="text-emerald">1 Pack (500g)</strong>
+                    </div>
+                    <div class="breakdown-row total-row">
+                        <span>Estimated Total (₹):</span>
+                        <strong id="modalTotalPrice">₹740</strong>
+                    </div>
+                </div>
+
+                <div class="dealer-locator-info">
+                    <div class="dealer-badge">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <span>Available at <strong>Kaveri Agro-Kendra & 8 nearby dealers</strong> (Within 12km)</span>
+                    </div>
+                    <p class="dealer-note">Express delivery available to your farm within 24 hours.</p>
+                </div>
+            </div>
+            <div class="dosage-modal-footer">
+                <button class="btn-secondary" onclick="closeDosageModal()">Cancel</button>
+                <button class="btn-primary" onclick="confirmShopOrder()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    <span>Confirm Order via Local Dealer</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Liquid Glass SVG Filters -->
     <svg style="position: absolute; width: 0; height: 0; pointer-events: none; overflow: hidden;" aria-hidden="true">
         <filter id="container-glass" x="0%" y="0%" width="100%" height="100%">
@@ -1380,7 +1538,7 @@
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="config.js"></script>
-    <script src="js/script.js?v=phase97"></script>
+    <script src="js/script.js?v=phase99"></script>
 </body>
 
 </html>

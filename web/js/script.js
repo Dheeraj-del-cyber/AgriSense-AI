@@ -20,7 +20,7 @@ const AppState = {
 /* --- Translations --- */
 const TRANSLATIONS = {
     en: {
-        navHome: 'Hub', navDetect: 'Diagnostics', navCrops: 'Crops', navScan: 'Start Scan',
+        navHome: 'Hub', navDetect: 'Diagnostics', navCrops: 'Crops', navScan: 'Start Scan', navShop: 'Shop', shopTitle: 'Smart Crop Pharmacy & Store',
         navBottomHub: 'Home', navBottomDetect: 'Detect', navBottomPlanner: 'Crop', navBottomIoT: 'Water', navBottomAdvisor: 'Advisor', navBottomProfile: 'Profile', navBottomAnalytics: 'Analytics', navBottomTools: 'Tools',
         heroBadge: 'Precision Agronomic Intelligence',
         heroTitle1: 'Healthy Crops', heroTitle2: 'Predictable Yields',
@@ -81,7 +81,7 @@ const TRANSLATIONS = {
         qaRecommend: 'Crop Planning', qaRecommendSub: 'Targeted cultivar selection'
     },
     hi: {
-        navHome: 'हब', navDetect: 'रोग पहचान', navCrops: 'फसलें', navScan: 'स्कैन शुरू करें',
+        navHome: 'हब', navDetect: 'रोग पहचान', navCrops: 'फसलें', navScan: 'स्कैन शुरू करें', navShop: 'दुकान', shopTitle: 'स्मार्ट फसल फार्मेसी व स्टोर',
         navBottomHub: 'होम', navBottomDetect: 'पहचान', navBottomPlanner: 'फसल', navBottomIoT: 'पानी', navBottomAdvisor: 'सलाहकार', navBottomProfile: 'प्रोफ़ाइल', navBottomAnalytics: 'विश्लेषण', navBottomTools: 'उपकरण',
         heroBadge: 'सटीक कृषि आसूचना',
         heroTitle1: 'स्वस्थ फसलें', heroTitle2: 'स्थिर उत्पादन',
@@ -142,7 +142,7 @@ const TRANSLATIONS = {
         qaRecommend: 'फसल योजना', qaRecommendSub: 'उत्कृष्ट फसल विकल्प'
     },
     kn: {
-        navHome: 'ಹಬ್', navDetect: 'ರೋಗ ಪತ್ತೆ', navCrops: 'ಬೆಳೆಗಳು', navScan: 'ಸ್ಕ್ಯಾನ್ ಪ್ರಾರಂಭಿಸಿ',
+        navHome: 'ಹಬ್', navDetect: 'ರೋಗ ಪತ್ತೆ', navCrops: 'ಬೆಳೆಗಳು', navScan: 'ಸ್ಕ್ಯಾನ್ ಪ್ರಾರಂಭಿಸಿ', navShop: 'ಅಂಗಡಿ', shopTitle: 'ಸ್ಮಾರ್ಟ್ ಬೆಳೆ ಔಷಧಾಲಯ ಮತ್ತು ಅಂಗಡಿ',
         navBottomHub: 'ಮುಖಪುಟ', navBottomDetect: 'ಪತ್ತೆ', navBottomPlanner: 'ಬೆಳೆ', navBottomIoT: 'ನೀರು', navBottomAdvisor: 'ಸಲಹೆಗಾರ', navBottomProfile: 'ಪ್ರೊಫೈಲ್', navBottomAnalytics: 'ವಿಶ್ಲೇಷಣೆ', navBottomTools: 'ಪರಿಕರ',
         heroBadge: 'ನಿಖರ ಕೃಷಿ ಮಾಹಿತಿ ವ್ಯವಸ್ಥೆ',
         heroTitle1: 'ಆರೋಗ್ಯಕರ ಬೆಳೆಗಳು', heroTitle2: 'ಸುಸ್ಥಿರ ಆದಾಯ',
@@ -305,6 +305,7 @@ function navigateTo(screenId) {
     if (screenId === 'screenDiseaseDetect') initUploadZone();
     if (screenId === 'screenIoT') startIoTMonioting();
     else stopIoTMonioting();
+    if (screenId === 'screenShop') renderSmartShop();
 }
 
 function navigateFromBottomNav(screenId, link) {
@@ -1352,6 +1353,14 @@ function renderRealDiseaseResult(data) {
         ${advisoryHtml}
 
         <div class="result-actions-strip">
+            <button class="btn-primary" onclick="openShopForDiagnosis('${(disease || '').replace(/'/g, "\\'")}', '${conf || 85}', '${type || 'disease'}')" style="display:inline-flex;align-items:center;gap:0.5rem;background:#059669;border-color:#059669;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span>Browse Prescribed Products in Store</span>
+            </button>
             <button class="btn-primary" onclick="navigateTo('screenDiseaseDetect')">Scan Another Foliage Specimen</button>
             <button class="btn-secondary" onclick="navigateTo('screenHome')">Return to Station Hub</button>
         </div>
@@ -3879,5 +3888,511 @@ function initHorizLoopCards() {
             track.style.animationPlayState = 'running';
         }, { passive: true });
     }
+}
+
+/* ==========================================================================
+   SCREEN 6: PRECISION AGRI-STORE (Smart ML Recommendation Engine)
+   ========================================================================== */
+
+const AGRI_PRODUCTS = [
+    {
+        id: 'prod_ridomil',
+        name: 'Ridomil Gold MZ 68 WG',
+        brand: 'Syngenta Agro',
+        activeIngredient: 'Mefenoxam 4% + Mancozeb 64% WG',
+        category: 'cure',
+        categoryLabel: 'Targeted Chemical Cure',
+        typeTag: 'Systemic & Contact Anti-Oomycete',
+        diseases: ['late_blight', 'root_rot'],
+        crops: ['Potato', 'Tomato', 'Grapes', 'Vegetables'],
+        severitySuitability: ['critical', 'moderate'],
+        climates: ['karnataka', 'coastal', 'north', 'all'],
+        moistureNeed: 'any',
+        price: 740,
+        packSize: '500 g',
+        rating: 4.9,
+        dosageRate: '2.5 g / L water',
+        sprayVolumePerAcre: 200,
+        dosePerAcreGrams: 500,
+        modeOfAction: 'Inhibits fungal RNA polymerase and halts sporangial germination within 2 hours.',
+        dealerAvailability: 'Available at 14 licensed dealers near your sub-district'
+    },
+    {
+        id: 'prod_amistar',
+        name: 'Amistar Top Broad-Spectrum',
+        brand: 'Syngenta Agro',
+        activeIngredient: 'Azoxystrobin 18.2% + Difenoconazole 11.4% SC',
+        category: 'cure',
+        categoryLabel: 'Targeted Chemical Cure',
+        typeTag: 'Broad-Spectrum Curative + Protective',
+        diseases: ['early_blight', 'powdery_mildew', 'bacterial_blight'],
+        crops: ['Tomato', 'Potato', 'Chilli', 'Rice', 'Maize'],
+        severitySuitability: ['critical', 'moderate', 'early'],
+        climates: ['karnataka', 'maharashtra', 'north', 'all'],
+        moistureNeed: 'any',
+        price: 890,
+        packSize: '200 ml',
+        rating: 4.8,
+        dosageRate: '1.0 ml / L water',
+        sprayVolumePerAcre: 200,
+        dosePerAcreGrams: 200,
+        modeOfAction: 'Dual-action strobilurin + triazole blocking cellular respiration and fungal ergosterol synthesis.',
+        dealerAvailability: 'In stock at 11 agro-centers with fast rural dispatch'
+    },
+    {
+        id: 'prod_copper',
+        name: 'Blitox 50 WP Copper Shield',
+        brand: 'Tata Rallis',
+        activeIngredient: 'Copper Oxychloride 50% WP',
+        category: 'cure',
+        categoryLabel: 'Targeted Chemical Cure',
+        typeTag: 'Protective Spore Neutralizer',
+        diseases: ['bacterial_blight', 'early_blight', 'late_blight'],
+        crops: ['Tomato', 'Potato', 'Pomegranate', 'Paddy', 'Citrus'],
+        severitySuitability: ['moderate', 'early', 'preventive'],
+        climates: ['karnataka', 'coastal', 'all'],
+        moistureNeed: 'any',
+        price: 380,
+        packSize: '500 g',
+        rating: 4.7,
+        dosageRate: '3.0 g / L water',
+        sprayVolumePerAcre: 200,
+        dosePerAcreGrams: 600,
+        modeOfAction: 'Denatures bacterial and fungal proteins upon contact, halting lesion expansion.',
+        dealerAvailability: 'Standard stock in all village cooperative credit societies'
+    },
+    {
+        id: 'prod_trichoderma',
+        name: 'Tricho-Bio Protectant (Bio-Fungicide)',
+        brand: 'Multiplex Bio',
+        activeIngredient: 'Trichoderma Viride 1.5% WP (2x10^8 CFU/g)',
+        category: 'organic',
+        categoryLabel: '100% Bio & Organic',
+        typeTag: 'Biological Antagonist & Root Colonizer',
+        diseases: ['root_rot', 'early_blight', 'all'],
+        crops: ['All Vegetable Crops', 'Pulses', 'Oilseeds', 'Cotton'],
+        severitySuitability: ['early', 'preventive', 'moderate'],
+        climates: ['karnataka', 'maharashtra', 'coastal', 'north', 'all'],
+        moistureNeed: 'optimal',
+        price: 240,
+        packSize: '1.0 kg',
+        rating: 4.8,
+        dosageRate: '5.0 g / L water (or 2.5 kg/acre soil application)',
+        sprayVolumePerAcre: 200,
+        dosePerAcreGrams: 1000,
+        modeOfAction: 'Parasitizes pathogen hyphae and secretes antibiotic gliotoxin to guard root zones naturally.',
+        dealerAvailability: 'Organic farmers federation outlet & local mandis'
+    },
+    {
+        id: 'prod_neem',
+        name: 'NeemGuard 10,000 PPM Azadirachtin',
+        brand: 'EcoAgri Organic',
+        activeIngredient: 'Cold-Pressed Pure Neem Extract 1.0% EC',
+        category: 'organic',
+        categoryLabel: '100% Bio & Organic',
+        typeTag: 'Vector & Pest Repellent',
+        diseases: ['yellow_curl', 'early', 'all'],
+        crops: ['Tomato', 'Chilli', 'Okra', 'Brinjal', 'Cotton'],
+        severitySuitability: ['early', 'preventive', 'moderate'],
+        climates: ['karnataka', 'north', 'maharashtra', 'all'],
+        moistureNeed: 'any',
+        price: 460,
+        packSize: '500 ml',
+        rating: 4.7,
+        dosageRate: '2.5 ml / L water',
+        sprayVolumePerAcre: 200,
+        dosePerAcreGrams: 500,
+        modeOfAction: 'Anti-feedant; disrupts whitefly/aphid reproductive cycles that vector leaf curl virus.',
+        dealerAvailability: 'Immediate pickup available across 16 district hubs'
+    },
+    {
+        id: 'prod_custodia',
+        name: 'Custodia Curative Fungicide',
+        brand: 'ADAMA Agricultural Solutions',
+        activeIngredient: 'Azoxystrobin 11% + Tebuconazole 18.3% w/w SC',
+        category: 'cure',
+        categoryLabel: 'Targeted Chemical Cure',
+        typeTag: 'Broad Systemic Eradicant',
+        diseases: ['early_blight', 'late_blight', 'powdery_mildew'],
+        crops: ['Chilli', 'Tomato', 'Potato', 'Onion', 'Rice'],
+        severitySuitability: ['critical', 'moderate'],
+        climates: ['karnataka', 'north', 'maharashtra', 'coastal', 'all'],
+        moistureNeed: 'any',
+        price: 950,
+        packSize: '250 ml',
+        rating: 4.9,
+        dosageRate: '1.5 ml / L water',
+        sprayVolumePerAcre: 200,
+        dosePerAcreGrams: 300,
+        modeOfAction: 'Fast translaminar penetration curing deep-seated vascular fungal infections.',
+        dealerAvailability: 'Available at certified agro-chemical dealers'
+    },
+    {
+        id: 'prod_bio_npk',
+        name: 'NutriVigor Foliar Recovery Tonic',
+        brand: 'Coromandel Agrico',
+        activeIngredient: 'Chelated Micronutrients (Fe, Zn, B) + Bio-Active Humic Acids 15%',
+        category: 'nutrition',
+        categoryLabel: 'Plant Recovery & Foliar',
+        typeTag: 'Chlorophyll Restorative Tonic',
+        diseases: ['all', 'yellow_curl', 'early_blight'],
+        crops: ['All Crops', 'Horticulture', 'Vegetables'],
+        severitySuitability: ['early', 'moderate', 'critical', 'preventive'],
+        climates: ['all', 'karnataka', 'north', 'maharashtra', 'coastal'],
+        moistureNeed: 'any',
+        price: 340,
+        packSize: '1.0 L',
+        rating: 4.8,
+        dosageRate: '3.0 ml / L water',
+        sprayVolumePerAcre: 200,
+        dosePerAcreGrams: 600,
+        modeOfAction: 'Accelerates vegetative cellular regeneration and reverses yellowing post-pathogen stress.',
+        dealerAvailability: 'High stock availability in regional agro-depots'
+    },
+    {
+        id: 'prod_hydrosmart',
+        name: 'HydroSmart Agri-Polymer Moisture Shield',
+        brand: 'KrishiTech Innovations',
+        activeIngredient: 'Cross-linked Potassium Polyacrylate Hydrogel',
+        category: 'soil',
+        categoryLabel: 'Moisture & Soil Conditioners',
+        typeTag: 'Root-Zone Water Reservoir',
+        diseases: ['drought_stress', 'root_rot', 'all'],
+        crops: ['All Crops', 'Vegetables', 'Dryland Agriculture'],
+        severitySuitability: ['moderate', 'early', 'preventive'],
+        climates: ['karnataka', 'maharashtra', 'north', 'all'],
+        moistureNeed: 'deficit',
+        price: 520,
+        packSize: '1.0 kg',
+        rating: 4.9,
+        dosageRate: '1.0 kg per acre mixed into root zone soil',
+        sprayVolumePerAcre: 0,
+        dosePerAcreGrams: 1000,
+        modeOfAction: 'Absorbs and retains 400x its weight in water, buffering against soil moisture drought drops.',
+        dealerAvailability: 'Precision irrigation & hardware retailers'
+    },
+    {
+        id: 'prod_streptomycin',
+        name: 'Plantomycin Pure Bactericide',
+        brand: 'Aries Agro',
+        activeIngredient: 'Streptomycin Sulphate 9% + Tetracycline Hydrochloride 1%',
+        category: 'cure',
+        categoryLabel: 'Targeted Chemical Cure',
+        typeTag: 'Systemic Antibiotic for Vascular Bacteria',
+        diseases: ['bacterial_blight'],
+        crops: ['Rice', 'Cotton', 'Tomato', 'Potato', 'Citrus'],
+        severitySuitability: ['critical', 'moderate'],
+        climates: ['karnataka', 'coastal', 'north', 'all'],
+        moistureNeed: 'any',
+        price: 180,
+        packSize: '100 g',
+        rating: 4.9,
+        dosageRate: '0.5 g / L water',
+        sprayVolumePerAcre: 200,
+        dosePerAcreGrams: 100,
+        modeOfAction: 'Inhibits bacterial protein translation, eradicating bacterial blight and black arm cankers.',
+        dealerAvailability: 'Specialty plant protection counters'
+    },
+    {
+        id: 'prod_seaweed',
+        name: 'BioZyme Seaweed Bio-Stimulant',
+        brand: 'Biostadt India',
+        activeIngredient: 'Ascophyllum Nodosum Marine Algae Extract + Amino Acids',
+        category: 'nutrition',
+        categoryLabel: 'Plant Recovery & Foliar',
+        typeTag: 'Immunity & Vascular Strengthener',
+        diseases: ['all', 'early', 'drought_stress'],
+        crops: ['All Fruit & Vegetable Crops'],
+        severitySuitability: ['early', 'preventive', 'moderate'],
+        climates: ['all', 'karnataka', 'north', 'maharashtra'],
+        moistureNeed: 'any',
+        price: 490,
+        packSize: '500 ml',
+        rating: 4.8,
+        dosageRate: '2.0 ml / L water',
+        sprayVolumePerAcre: 200,
+        dosePerAcreGrams: 400,
+        modeOfAction: 'Stimulates endogenous phytoalexins, boosting natural plant immune defense against spores.',
+        dealerAvailability: 'Certified organic agro-dealers across Karnataka and Maharashtra'
+    }
+];
+
+let currentShopCategory = 'all';
+let currentSelectedModalProduct = null;
+
+function computeProductMatchScore(product, context) {
+    let score = 55;
+
+    // 1. Disease Matching
+    if (context.disease && context.disease !== 'all') {
+        if (product.diseases.includes(context.disease)) {
+            score += 30;
+        } else if (product.diseases.includes('all')) {
+            score += 10;
+        } else {
+            score -= 22;
+        }
+    } else {
+        score += 15;
+    }
+
+    // 2. Severity Fit
+    if (context.severity && product.severitySuitability.includes(context.severity)) {
+        score += 14;
+    }
+
+    // 3. Locality / Climatic Zone Fit
+    if (context.locality && (product.climates.includes(context.locality) || product.climates.includes('all'))) {
+        score += 8;
+    }
+
+    // 4. Live Soil Moisture Telemetry Cross-Referencing
+    const liveMoist = AppState.lastMoisture;
+    if (liveMoist !== null) {
+        if (liveMoist < 30 && (product.id === 'prod_hydrosmart' || product.category === 'soil')) {
+            score += 18;
+        } else if (liveMoist > 75 && (product.diseases.includes('root_rot') || product.id === 'prod_ridomil')) {
+            score += 12;
+        }
+    }
+
+    return Math.min(99, Math.max(62, score));
+}
+
+function openShopForDiagnosis(disease, conf, type) {
+    let diseaseKey = 'all';
+    const dLower = (disease || '').toLowerCase();
+    if (dLower.includes('early blight')) diseaseKey = 'early_blight';
+    else if (dLower.includes('late blight')) diseaseKey = 'late_blight';
+    else if (dLower.includes('bacterial') || dLower.includes('canker')) diseaseKey = 'bacterial_blight';
+    else if (dLower.includes('yellow') || dLower.includes('curl')) diseaseKey = 'yellow_curl';
+    else if (dLower.includes('mildew') || dLower.includes('rust')) diseaseKey = 'powdery_mildew';
+    else if (dLower.includes('rot') || dLower.includes('wilt')) diseaseKey = 'root_rot';
+
+    let severity = 'moderate';
+    const cNum = Number(conf);
+    if (!isNaN(cNum) && cNum > 82) severity = 'critical';
+    else if (!isNaN(cNum) && cNum < 65) severity = 'early';
+
+    AppState.shopFilter = {
+        disease: diseaseKey,
+        diseaseName: disease,
+        severity: severity,
+        fromScan: true
+    };
+
+    navigateTo('screenShop');
+    renderSmartShop();
+}
+
+function renderSmartShop() {
+    const grid = document.getElementById('shopProductsGrid');
+    if (!grid) return;
+
+    const localitySelect = document.getElementById('shopLocalitySelect');
+    const diseaseSelect = document.getElementById('shopDiseaseSelect');
+    const severitySelect = document.getElementById('shopSeveritySelect');
+    const banner = document.getElementById('shopPrescriptionBanner');
+    const bannerTitle = document.getElementById('shopPrescriptionTitle');
+    const bannerDesc = document.getElementById('shopPrescriptionDesc');
+
+    // Sync from active diagnosis if present
+    if (AppState.shopFilter && AppState.shopFilter.fromScan) {
+        if (diseaseSelect && AppState.shopFilter.disease) {
+            diseaseSelect.value = AppState.shopFilter.disease;
+        }
+        if (severitySelect && AppState.shopFilter.severity) {
+            severitySelect.value = AppState.shopFilter.severity;
+        }
+        if (banner && bannerTitle) {
+            banner.style.display = 'flex';
+            bannerTitle.textContent = `Prescriptions Tailored to: ${AppState.shopFilter.diseaseName}`;
+            const sevText = AppState.shopFilter.severity === 'critical' ? 'Critical Outbreak' : 'Active Symptoms';
+            bannerDesc.textContent = `Prioritizing targeted eradicants and bio-shields formulated for ${sevText} under local microclimate telemetry.`;
+        }
+    } else {
+        if (banner) {
+            banner.style.display = 'flex';
+            if (bannerTitle) bannerTitle.textContent = 'Smart Precision Crop Pharmacy';
+            if (bannerDesc) bannerDesc.textContent = 'Products dynamically ranked by disease match score, regional climate risks, and live IoT telemetry.';
+        }
+    }
+
+    const context = {
+        locality: localitySelect ? localitySelect.value : 'karnataka',
+        disease: diseaseSelect ? diseaseSelect.value : 'all',
+        severity: severitySelect ? severitySelect.value : 'moderate'
+    };
+
+    // Calculate dynamic scores and sort
+    const scoredProducts = AGRI_PRODUCTS.map(p => {
+        const score = computeProductMatchScore(p, context);
+        return { ...p, score };
+    }).filter(p => {
+        if (currentShopCategory === 'all') return true;
+        return p.category === currentShopCategory;
+    });
+
+    scoredProducts.sort((a, b) => b.score - a.score);
+
+    if (scoredProducts.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1rem; background: var(--surface); border-radius: var(--radius-lg); border: 1px dashed var(--border);">
+                <p style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">No products found for this specific filter combination.</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Try switching category to "All ML Prescriptions" or resetting disease focus.</p>
+                <button class="btn-primary" style="margin-top: 1rem;" onclick="resetShopFilters()">Reset Filters</button>
+            </div>
+        `;
+        return;
+    }
+
+    grid.innerHTML = scoredProducts.map((prod, idx) => {
+        const isTopMatch = idx === 0 && prod.score >= 85;
+        const scoreClass = prod.score >= 88 ? 'match-high' : 'match-mid';
+
+        const cropTags = (prod.crops || []).slice(0, 3).map(c => `<span class="target-chip">${c}</span>`).join('');
+
+        return `
+            <div class="product-card ${isTopMatch ? 'top-match' : ''}">
+                <div>
+                    <div class="product-badge-row">
+                        <span class="match-score-badge ${scoreClass}">
+                            ★ ${prod.score}% AI Match
+                        </span>
+                        <span class="category-tag">${prod.categoryLabel}</span>
+                    </div>
+
+                    <h3 class="product-name">${prod.name}</h3>
+                    <div class="product-active-sub">${prod.activeIngredient}</div>
+
+                    <div class="product-target-chips">
+                        <span class="target-chip" style="background:#e0f2fe;color:#0369a1;font-weight:700;">${prod.typeTag}</span>
+                        ${cropTags}
+                    </div>
+
+                    <div class="product-specs">
+                        <div class="spec-item">
+                            <span>Recommended Rate:</span>
+                            <strong>${prod.dosageRate}</strong>
+                        </div>
+                        <div class="spec-item">
+                            <span>Mode of Action:</span>
+                            <strong style="text-align:right;max-width:60%">${prod.modeOfAction}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card-footer">
+                    <div class="dealer-stock-pill">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span>${prod.dealerAvailability}</span>
+                    </div>
+
+                    <div class="product-price-action-row">
+                        <div class="product-price-block">
+                            <span class="product-price-val">₹${prod.price}</span>
+                            <span class="product-pack-size">Per ${prod.packSize}</span>
+                        </div>
+                        <button type="button" class="btn-dosage-calc" onclick="openDosageModal('${prod.id}')">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="8" y1="12" x2="16" y2="12"></line>
+                                <line x1="12" y1="8" x2="12" y2="16"></line>
+                            </svg>
+                            <span>Dose & Order</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function applyShopFilters() {
+    if (AppState.shopFilter) {
+        AppState.shopFilter.fromScan = false;
+    }
+    renderSmartShop();
+}
+
+function setShopCategory(cat, btn) {
+    currentShopCategory = cat;
+    document.querySelectorAll('#shopCategoryPills .shop-pill').forEach(p => p.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderSmartShop();
+}
+
+function resetShopFilters() {
+    AppState.shopFilter = null;
+    const localitySelect = document.getElementById('shopLocalitySelect');
+    const diseaseSelect = document.getElementById('shopDiseaseSelect');
+    const severitySelect = document.getElementById('shopSeveritySelect');
+    if (localitySelect) localitySelect.value = 'karnataka';
+    if (diseaseSelect) diseaseSelect.value = 'all';
+    if (severitySelect) severitySelect.value = 'moderate';
+    currentShopCategory = 'all';
+    document.querySelectorAll('#shopCategoryPills .shop-pill').forEach((p, idx) => {
+        p.classList.toggle('active', idx === 0);
+    });
+    renderSmartShop();
+}
+
+/* Dosage & Order Modal Functions */
+function openDosageModal(productId) {
+    const prod = AGRI_PRODUCTS.find(p => p.id === productId);
+    if (!prod) return;
+
+    currentSelectedModalProduct = prod;
+
+    const modal = document.getElementById('dosageOrderModal');
+    const nameEl = document.getElementById('modalProductName');
+    const rateEl = document.getElementById('modalDosageRate');
+
+    if (nameEl) nameEl.textContent = `${prod.name} (${prod.brand})`;
+    if (rateEl) rateEl.textContent = prod.dosageRate;
+
+    calculateDosageForModal();
+
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeDosageModal() {
+    const modal = document.getElementById('dosageOrderModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+}
+
+function calculateDosageForModal() {
+    if (!currentSelectedModalProduct) return;
+
+    const acresInput = document.getElementById('farmAcresInput');
+    const acres = acresInput ? Math.max(0.1, parseFloat(acresInput.value) || 1.0) : 1.0;
+
+    const waterVol = document.getElementById('modalWaterVolume');
+    const qtyEl = document.getElementById('modalProductQty');
+    const priceEl = document.getElementById('modalTotalPrice');
+
+    const totalWater = Math.round(acres * (currentSelectedModalProduct.sprayVolumePerAcre || 200));
+    if (waterVol) waterVol.textContent = totalWater > 0 ? `${totalWater} Litres` : 'Direct Soil Incorporation';
+
+    const packsNeeded = Math.max(1, Math.ceil(acres));
+    const totalPrice = packsNeeded * currentSelectedModalProduct.price;
+
+    if (qtyEl) qtyEl.textContent = `${packsNeeded} Unit (${packsNeeded * 500 >= 1000 ? (packsNeeded * 0.5).toFixed(1) + ' kg' : (packsNeeded * 500) + ' g/ml'})`;
+    if (priceEl) priceEl.textContent = `₹${totalPrice.toLocaleString('en-IN')}`;
+}
+
+function confirmShopOrder() {
+    if (!currentSelectedModalProduct) return;
+    const acresInput = document.getElementById('farmAcresInput');
+    const acres = acresInput ? acresInput.value : '1.0';
+
+    alert(`🎉 Order Request Placed Successfully!\n\nProduct: ${currentSelectedModalProduct.name}\nQuantity: ${Math.ceil(acres)} pack(s) for ${acres} Acre(s)\n\nNearest Authorized Center: Kaveri Agro-Kendra has reserved your stock.\nA rural dispatch agent will contact your mobile within 30 minutes for delivery.`);
+    closeDosageModal();
 }
 

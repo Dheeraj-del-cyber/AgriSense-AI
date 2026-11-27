@@ -5534,3 +5534,504 @@ body.mobile-home-fixed .farm-footer,
         transform: translateX(-50%) !important;
     }
 }
+
+/* ==========================================================================
+   SCREEN 6: PRECISION AGRI-STORE (Desktop ML Recommendation System)
+   ========================================================================== */
+.shop-prescription-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 1.15rem 1.4rem;
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+    border: 1.5px solid #a7f3d0;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.08);
+}
+
+.prescription-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.prescription-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    background: #059669;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: var(--radius-pill);
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+}
+
+.prescription-details h4 {
+    margin: 0 0 0.2rem 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #064e3b;
+}
+
+.prescription-details p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #047857;
+    line-height: 1.35;
+}
+
+.shop-control-console {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    box-shadow: var(--sh-xs);
+}
+
+.shop-control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.shop-control-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.shop-select {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    background: #ffffff;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1e293b;
+    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    cursor: pointer;
+}
+
+.shop-select:focus {
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+}
+
+.shop-category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.shop-pill {
+    padding: 0.5rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.shop-pill:hover {
+    border-color: #059669;
+    color: #059669;
+    background: #f0fdf4;
+}
+
+.shop-pill.active {
+    background: #059669;
+    color: #ffffff;
+    border-color: #059669;
+    box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+}
+
+.shop-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    box-shadow: var(--sh-xs);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--sh-md);
+    border-color: #10b981;
+}
+
+.product-card.top-match {
+    border-color: #34d399;
+    background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+}
+
+.product-card.top-match::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #059669, #10b981);
+}
+
+.product-badge-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+}
+
+.match-score-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.match-high {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #86efac;
+}
+
+.match-mid {
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+
+.category-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.product-name {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.25;
+}
+
+.product-active-sub {
+    font-size: 0.8125rem;
+    color: #059669;
+    font-weight: 700;
+    margin-bottom: 0.85rem;
+}
+
+.product-target-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+}
+
+.target-chip {
+    padding: 0.2rem 0.5rem;
+    background: #f1f5f9;
+    color: #334155;
+    font-size: 0.72rem;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+.product-specs {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 0.75rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.spec-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.spec-item span {
+    color: var(--text-muted);
+}
+
+.spec-item strong {
+    color: var(--text-primary);
+}
+
+.product-card-footer {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 0.85rem;
+}
+
+.dealer-stock-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    color: #047857;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.product-price-action-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.product-price-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-price-val {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #111827;
+}
+
+.product-pack-size {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+.btn-dosage-calc {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.95rem;
+    background: #059669;
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-dosage-calc:hover {
+    background: #047857;
+    transform: translateY(-1px);
+}
+
+/* Dosage Calculator Modal */
+.dosage-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    transition: opacity 0.2s ease;
+}
+
+.dosage-modal-backdrop.hidden {
+    display: none !important;
+}
+
+.dosage-modal-card {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 520px;
+    overflow: hidden;
+    animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPop {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.dosage-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: #f8fafc;
+}
+
+.dosage-modal-kicker {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    color: #059669;
+    letter-spacing: 0.08em;
+}
+
+.dosage-modal-title {
+    margin: 0.2rem 0 0 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.dosage-modal-close {
+    background: transparent;
+    border: none;
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0 0.25rem;
+}
+
+.dosage-modal-close:hover {
+    color: #111827;
+}
+
+.dosage-modal-body {
+    padding: 1.5rem;
+}
+
+.dosage-field-group {
+    margin-bottom: 1.25rem;
+}
+
+.dosage-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+}
+
+.dosage-input-wrap {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.25rem 0.75rem;
+    background: #ffffff;
+}
+
+.dosage-input-wrap:focus-within {
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+}
+
+.dosage-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1e293b;
+    padding: 0.4rem 0;
+}
+
+.dosage-input-unit {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.dosage-breakdown-card {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.breakdown-row.total-row {
+    border-top: 1.5px dashed var(--border);
+    padding-top: 0.6rem;
+    margin-top: 0.25rem;
+    font-size: 1.05rem;
+    color: var(--text-primary);
+}
+
+.breakdown-row.total-row strong {
+    color: #059669;
+    font-size: 1.2rem;
+}
+
+.dealer-locator-info {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+}
+
+.dealer-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    color: #166534;
+    margin-bottom: 0.25rem;
+}
+
+.dealer-note {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #15803d;
+}
+
+.dosage-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+    background: #f8fafc;
+}
