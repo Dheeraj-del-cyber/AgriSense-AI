@@ -4418,7 +4418,7 @@ function renderSmartShop() {
                 <div>
                     <div class="product-badge-row">
                         <span class="match-score-badge ${scoreClass}">
-                            ★ ${prod.score}% AI Match
+                            ${prod.score}%
                         </span>
                         <span class="category-tag">${prod.categoryLabel}</span>
                     </div>
