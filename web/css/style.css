@@ -1101,7 +1101,7 @@ ol {
         transform: rotate(14deg);
     }
     4% {
-        opacity: 1;
+        opacity: 0.82;
     }
     12% {
         left: 12%;
@@ -1136,7 +1136,7 @@ ol {
     94% {
         left: 100%;
         top: 20%;
-        opacity: 1;
+        opacity: 0.82;
         transform: rotate(-4deg);
     }
     100% {
