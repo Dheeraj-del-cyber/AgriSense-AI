@@ -2389,13 +2389,7 @@ function stopIoTMonioting() {
 }
 
 function initializeGaugeTilt() {
-    const status = document.getElementById('gaugeTiltStatus');
-    if (!status) return;
-
     if (!window.isSecureContext || !window.DeviceOrientationEvent) {
-        status.textContent = !window.isSecureContext
-            ? 'Phone motion requires a secure (HTTPS) connection.'
-            : 'Phone motion is not available on this device.';
         return;
     }
 
@@ -2428,28 +2422,20 @@ function initializeGaugeTilt() {
         }
     } catch (error) {
         console.error('Phone motion permission error:', error);
-        status.textContent = 'Could not access phone motion. Check browser permissions.';
         return;
     }
 
     if (permissionRequests.length > 0) {
-        status.textContent = 'Allow motion access to enable the water response.';
         Promise.all(permissionRequests).then(() => {
             if (orientationNeedsPermission && !gaugeTiltPermissionGranted) {
-                status.textContent = 'Motion access was denied. Allow it in browser settings, then reopen Water.';
                 return;
             }
             startGaugeTilt();
-            if (motionNeedsPermission && !gaugeMotionPermissionGranted) {
-                status.textContent = 'Tilt response is active; shake response needs motion access.';
-            }
         }).catch(error => {
             console.error('Phone motion permission error:', error);
             if (!orientationNeedsPermission) {
                 startGaugeTilt();
-                return;
             }
-            status.textContent = 'Could not access phone motion. Check browser permissions.';
         });
         return;
     }
@@ -2469,14 +2455,6 @@ function startGaugeTilt() {
         window.addEventListener('devicemotion', handleGaugeShake, true);
     }
     document.getElementById('moistureGaugeTrack')?.classList.add('tilt-active');
-
-    const status = document.getElementById('gaugeTiltStatus');
-    if (status) status.textContent = 'Waiting for phone motion...';
-    gaugeTiltEventTimer = setTimeout(() => {
-        if (gaugeTiltEnabled && !gaugeTiltHasSensorData && status) {
-            status.textContent = 'No motion data received. Check HTTPS and browser sensor permissions.';
-        }
-    }, 1800);
 }
 
 function stopGaugeTilt() {
@@ -2506,11 +2484,6 @@ function stopGaugeTilt() {
         waterFill.style.setProperty('--water-tilt-angle', '0deg');
         waterFill.style.setProperty('--water-tilt-x', '0px');
         waterFill.style.setProperty('--water-tilt-y', '0px');
-    }
-
-    const status = document.getElementById('gaugeTiltStatus');
-    if (status && AppState.currentScreen === 'screenIoT') {
-        status.textContent = 'Tilt or shake your phone to move the water.';
     }
 }
 
@@ -2602,8 +2575,6 @@ function markGaugeSensorData() {
         clearTimeout(gaugeTiltEventTimer);
         gaugeTiltEventTimer = null;
     }
-    const status = document.getElementById('gaugeTiltStatus');
-    if (status) status.textContent = 'Motion connected. Tilt or shake your phone to move the water.';
 }
 
 function queueGaugeTiltFrame() {
