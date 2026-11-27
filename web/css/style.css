@@ -4980,10 +4980,50 @@ body.mobile-home-fixed .farm-footer,
         color: #ffe28a;
     }
 
+    .sun-rays-rotating {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: sunRaysRotation 24s linear infinite;
+    }
+
+    @keyframes sunRaysRotation {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
     .sun-halo {
         fill: #ffd35a;
         opacity: 0.2;
         filter: blur(5px);
+    }
+
+    .moon-aura {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: moonAuraPulse 4.5s ease-in-out infinite;
+    }
+
+    .moon-rotating {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: moonRotation 60s linear infinite;
+    }
+
+    @keyframes moonRotation {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes moonAuraPulse {
+        0%, 100% {
+            opacity: 0.82;
+        }
+
+        50% {
+            opacity: 1;
+        }
     }
 
     .moon-halo {
