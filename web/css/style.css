@@ -4582,6 +4582,7 @@ body.mobile-home-fixed .farm-footer,
     }
 
     #screenHome {
+        position: relative;
         height: 100dvh;
         max-height: 100dvh;
         height: 100vh;
@@ -4592,6 +4593,17 @@ body.mobile-home-fixed .farm-footer,
         box-sizing: border-box;
         background: #ffffff !important;
         background-color: #ffffff !important;
+    }
+
+    .home-creeper-banner {
+        top: 0 !important;
+        z-index: 10 !important;
+    }
+
+    .home-creeper-img {
+        max-height: 50px !important;
+        object-fit: cover;
+        object-position: top center;
     }
 
     #screenHome .station-overview {
@@ -5342,6 +5354,33 @@ body.mobile-home-fixed .farm-footer,
     #screenHome.active .hub-hero {
         animation-delay: 60ms;
     }
+}
+
+/* --- Home Screen Creeper Garland (Hub Screen Only) --- */
+#screenHome {
+    position: relative;
+}
+
+.home-creeper-banner {
+    position: absolute;
+    top: var(--nav-height, 60px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    pointer-events: none;
+    z-index: 20;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.home-creeper-img {
+    width: 100%;
+    height: auto;
+    max-height: 80px;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.08));
 }
 
 @media (min-width: 769px) {
