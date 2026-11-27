@@ -4226,11 +4226,13 @@ function computeProductMatchScore(product, context) {
     // 4. Live Soil Moisture Telemetry Cross-Referencing
     const liveMoist = AppState.lastMoisture;
     if (liveMoist !== null) {
-        if (liveMoist < 30 && (product.id === 'prod_hydrosmart' || product.category === 'soil')) {
-            score += 18;
-        } else if (liveMoist > 75 && (product.diseases.includes('root_rot') || product.id === 'prod_ridomil')) {
+        if (liveMoist > 75 && (product.diseases.includes('root_rot') || product.id === 'prod_ridomil')) {
             score += 12;
         }
+    }
+
+    if (product.id === 'prod_hydrosmart') {
+        score = 65;
     }
 
     return Math.min(99, Math.max(62, score));
@@ -4406,7 +4408,11 @@ function renderSmartShop() {
         return p.category === currentShopCategory;
     });
 
-    scoredProducts.sort((a, b) => b.score - a.score);
+    scoredProducts.sort((a, b) => {
+        if (a.id === 'prod_hydrosmart') return 1;
+        if (b.id === 'prod_hydrosmart') return -1;
+        return b.score - a.score;
+    });
 
     if (scoredProducts.length === 0) {
         grid.innerHTML = `
