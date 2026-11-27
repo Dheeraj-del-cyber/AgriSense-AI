@@ -4413,8 +4413,6 @@ function renderSmartShop() {
         const isTopMatch = idx === 0 && prod.score >= 85;
         const scoreClass = prod.score >= 88 ? 'match-high' : 'match-mid';
 
-        const cropTags = (prod.crops || []).slice(0, 3).map(c => `<span class="target-chip">${c}</span>`).join('');
-
         return `
             <div class="product-card ${isTopMatch ? 'top-match' : ''}">
                 <div>
@@ -4427,22 +4425,6 @@ function renderSmartShop() {
 
                     <h3 class="product-name">${prod.name}</h3>
                     <div class="product-active-sub">${prod.activeIngredient}</div>
-
-                    <div class="product-target-chips">
-                        <span class="target-chip" style="background:#e0f2fe;color:#0369a1;font-weight:700;">${prod.typeTag}</span>
-                        ${cropTags}
-                    </div>
-
-                    <div class="product-specs">
-                        <div class="spec-item">
-                            <span>Recommended Rate:</span>
-                            <strong>${prod.dosageRate}</strong>
-                        </div>
-                        <div class="spec-item">
-                            <span>Mode of Action:</span>
-                            <strong style="text-align:right;max-width:60%">${prod.modeOfAction}</strong>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="product-card-footer">
