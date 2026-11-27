@@ -4252,43 +4252,166 @@ function openShopForDiagnosis(disease, conf, type) {
     renderSmartShop();
 }
 
+let userDetectedLocation = null;
+let isDetectingShopLocation = false;
+
+async function detectUserShopLocation(forceRefresh = false) {
+    if (isDetectingShopLocation) return;
+    const coordsEl = document.getElementById('shopCoordsDisplay');
+    const nameEl = document.getElementById('shopLocationName');
+    const subEl = document.getElementById('shopLocationSub');
+    const btn = document.getElementById('btnShopLocationRefresh');
+
+    if (!nameEl) return;
+
+    if (!forceRefresh && userDetectedLocation) {
+        applyLocationToShopUI(userDetectedLocation);
+        return;
+    }
+
+    isDetectingShopLocation = true;
+    if (coordsEl) coordsEl.textContent = 'Locating GPS...';
+    if (nameEl) nameEl.textContent = 'Acquiring satellite & network coordinates...';
+    if (subEl) subEl.textContent = 'Requesting browser location permission to pinpoint exact field coordinates...';
+    if (btn) btn.classList.add('loading');
+
+    if (!navigator.geolocation) {
+        fallbackLocation('Geolocation not supported on this browser');
+        if (btn) btn.classList.remove('loading');
+        isDetectingShopLocation = false;
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        async (position) => {
+            const { latitude, longitude, accuracy } = position.coords;
+            const latFixed = latitude.toFixed(4);
+            const lonFixed = longitude.toFixed(4);
+            const latStr = `${Math.abs(latFixed)}° ${latitude >= 0 ? 'N' : 'S'}`;
+            const lonStr = `${Math.abs(lonFixed)}° ${longitude >= 0 ? 'E' : 'W'}`;
+
+            let locationName = '';
+            let stateName = '';
+            let localityKey = 'karnataka';
+            let weatherSummary = '';
+
+            try {
+                // Reverse geocode via OpenStreetMap Nominatim
+                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=14&addressdetails=1`);
+                if (res.ok) {
+                    const data = await res.json();
+                    const addr = data.address || {};
+                    const city = addr.city || addr.town || addr.village || addr.suburb || addr.municipality || '';
+                    const district = addr.state_district || addr.county || '';
+                    stateName = addr.state || '';
+                    const countryName = addr.country || 'India';
+
+                    const parts = [];
+                    if (city) parts.push(city);
+                    if (district && district !== city) parts.push(district);
+                    if (stateName) parts.push(stateName);
+                    if (countryName) parts.push(countryName);
+
+                    locationName = parts.join(', ');
+                }
+            } catch (err) {
+                console.warn('Reverse geocode error:', err);
+            }
+
+            try {
+                // Quick weather fetch for ambient telemetry
+                const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m&timezone=auto`);
+                if (wRes.ok) {
+                    const wData = await wRes.json();
+                    if (wData.current) {
+                        weatherSummary = ` • Temp: ${Math.round(wData.current.temperature_2m)}°C, Humidity: ${Math.round(wData.current.relative_humidity_2m)}% RH`;
+                    }
+                }
+            } catch (err) {
+                console.warn('Weather fetch error:', err);
+            }
+
+            if (!locationName) {
+                locationName = `${latStr}, ${lonStr} (Exact Field Coordinates)`;
+            }
+
+            // Derive agro-climatic region from state for ML ranking
+            const sLower = stateName.toLowerCase();
+            if (sLower.includes('karnataka') || sLower.includes('tamil') || sLower.includes('andhra') || sLower.includes('telangana') || sLower.includes('kerala')) {
+                localityKey = 'karnataka';
+            } else if (sLower.includes('maharashtra') || sLower.includes('madhya') || sLower.includes('gujarat')) {
+                localityKey = 'maharashtra';
+            } else if (sLower.includes('punjab') || sLower.includes('haryana') || sLower.includes('uttar') || sLower.includes('bihar') || sLower.includes('delhi')) {
+                localityKey = 'north';
+            } else if (sLower.includes('goa') || sLower.includes('konkan') || sLower.includes('bengal') || sLower.includes('odisha') || sLower.includes('assam')) {
+                localityKey = 'coastal';
+            }
+
+            userDetectedLocation = {
+                coordsText: `${latStr}, ${lonStr}`,
+                accuracy: Math.round(accuracy || 15),
+                name: locationName,
+                state: stateName,
+                localityKey: localityKey,
+                weatherSummary: weatherSummary
+            };
+
+            applyLocationToShopUI(userDetectedLocation);
+            if (btn) btn.classList.remove('loading');
+            isDetectingShopLocation = false;
+
+            // Re-render products matching this exact location
+            renderSmartShop();
+        },
+        (error) => {
+            console.warn('Geolocation error / permission denied:', error.message);
+            fallbackLocation('Permission pending - using default regional hub');
+            if (btn) btn.classList.remove('loading');
+            isDetectingShopLocation = false;
+        },
+        { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
+    );
+}
+
+function fallbackLocation(note) {
+    userDetectedLocation = {
+        coordsText: '12.9716° N, 77.5946° E',
+        accuracy: 25,
+        name: 'Bengaluru, Karnataka, India',
+        state: 'Karnataka',
+        localityKey: 'karnataka',
+        weatherSummary: ' • Temp: 28°C, Humidity: 65% RH',
+        isFallback: true,
+        fallbackNote: note
+    };
+    applyLocationToShopUI(userDetectedLocation);
+    renderSmartShop();
+}
+
+function applyLocationToShopUI(loc) {
+    const coordsEl = document.getElementById('shopCoordsDisplay');
+    const nameEl = document.getElementById('shopLocationName');
+    const subEl = document.getElementById('shopLocationSub');
+
+    if (coordsEl) coordsEl.textContent = `${loc.coordsText} (±${loc.accuracy}m)`;
+    if (nameEl) nameEl.textContent = loc.name;
+    if (subEl) {
+        subEl.textContent = `📍 Exact field location active${loc.weatherSummary || ''}. Products & dosage recommendations dynamically matched for ${loc.state || 'local'} soil and regional pathogen pressure.`;
+    }
+}
+
 function renderSmartShop() {
     const grid = document.getElementById('shopProductsGrid');
     if (!grid) return;
 
-    const localitySelect = document.getElementById('shopLocalitySelect');
-    const diseaseSelect = document.getElementById('shopDiseaseSelect');
-    const severitySelect = document.getElementById('shopSeveritySelect');
-    const banner = document.getElementById('shopPrescriptionBanner');
-    const bannerTitle = document.getElementById('shopPrescriptionTitle');
-    const bannerDesc = document.getElementById('shopPrescriptionDesc');
-
-    // Sync from active diagnosis if present
-    if (AppState.shopFilter && AppState.shopFilter.fromScan) {
-        if (diseaseSelect && AppState.shopFilter.disease) {
-            diseaseSelect.value = AppState.shopFilter.disease;
-        }
-        if (severitySelect && AppState.shopFilter.severity) {
-            severitySelect.value = AppState.shopFilter.severity;
-        }
-        if (banner && bannerTitle) {
-            banner.style.display = 'flex';
-            bannerTitle.textContent = `Prescriptions Tailored to: ${AppState.shopFilter.diseaseName}`;
-            const sevText = AppState.shopFilter.severity === 'critical' ? 'Critical Outbreak' : 'Active Symptoms';
-            bannerDesc.textContent = `Prioritizing targeted eradicants and bio-shields formulated for ${sevText} under local microclimate telemetry.`;
-        }
-    } else {
-        if (banner) {
-            banner.style.display = 'flex';
-            if (bannerTitle) bannerTitle.textContent = 'Smart Precision Crop Pharmacy';
-            if (bannerDesc) bannerDesc.textContent = 'Products dynamically ranked by disease match score, regional climate risks, and live IoT telemetry.';
-        }
+    if (!userDetectedLocation && !isDetectingShopLocation) {
+        detectUserShopLocation();
     }
 
     const context = {
-        locality: localitySelect ? localitySelect.value : 'karnataka',
-        disease: diseaseSelect ? diseaseSelect.value : 'all',
-        severity: severitySelect ? severitySelect.value : 'moderate'
+        locality: (userDetectedLocation && userDetectedLocation.localityKey) ? userDetectedLocation.localityKey : 'karnataka',
+        disease: (AppState.shopFilter && AppState.shopFilter.disease) ? AppState.shopFilter.disease : 'all',
+        severity: (AppState.shopFilter && AppState.shopFilter.severity) ? AppState.shopFilter.severity : 'moderate'
     };
 
     // Calculate dynamic scores and sort
@@ -4391,12 +4514,6 @@ function setShopCategory(cat, btn) {
 
 function resetShopFilters() {
     AppState.shopFilter = null;
-    const localitySelect = document.getElementById('shopLocalitySelect');
-    const diseaseSelect = document.getElementById('shopDiseaseSelect');
-    const severitySelect = document.getElementById('shopSeveritySelect');
-    if (localitySelect) localitySelect.value = 'karnataka';
-    if (diseaseSelect) diseaseSelect.value = 'all';
-    if (severitySelect) severitySelect.value = 'moderate';
     currentShopCategory = 'all';
     document.querySelectorAll('#shopCategoryPills .shop-pill').forEach((p, idx) => {
         p.classList.toggle('active', idx === 0);

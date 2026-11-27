@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Production Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=phase101">
+    <link rel="stylesheet" href="css/style.css?v=phase103">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -1108,71 +1108,37 @@
                 </div>
             </div>
 
-            <!-- Smart AI Prescription Context Banner -->
-            <div id="shopPrescriptionBanner" class="shop-prescription-banner">
-                <div class="prescription-banner-left">
-                    <span class="prescription-badge">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            <!-- User Exact Location Card (Desktop) -->
+            <div class="shop-location-card" id="shopLocationCard">
+                <div class="shop-location-main">
+                    <div class="shop-location-pin-wrap">
+                        <span class="shop-location-pulse"></span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
                         </svg>
-                        AI Prescribed Matching
-                    </span>
-                    <div class="prescription-details">
-                        <h4 id="shopPrescriptionTitle">Prescriptions Synced to Recent Foliar Diagnosis</h4>
-                        <p id="shopPrescriptionDesc">Showing products matched to active disease symptoms, regional humidity risk, and soil status.</p>
+                    </div>
+                    <div class="shop-location-details">
+                        <div class="shop-location-header">
+                            <span class="shop-location-badge">
+                                <span class="badge-live-dot"></span>
+                                User Exact Location
+                            </span>
+                            <span class="shop-coords-badge" id="shopCoordsDisplay">Detecting GPS...</span>
+                        </div>
+                        <h3 class="shop-location-name" id="shopLocationName">Detecting exact farm location...</h3>
+                        <p class="shop-location-sub" id="shopLocationSub">Locality telemetry calibrates disease risk, fungal humidity pressure & regional medicine availability.</p>
                     </div>
                 </div>
-                <div class="prescription-banner-right">
-                    <button class="btn-secondary btn-sm" onclick="resetShopFilters()" title="Explore all products">
-                        <span>Reset to All Products</span>
+                <div class="shop-location-actions">
+                    <button type="button" class="btn-location-refresh" onclick="detectUserShopLocation(true)" id="btnShopLocationRefresh" title="Recalibrate GPS">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                        <span>Update GPS</span>
                     </button>
-                </div>
-            </div>
-
-            <!-- Smart ML Control & Filter Console -->
-            <div class="shop-control-console">
-                <div class="shop-control-group">
-                    <label class="shop-control-label" for="shopLocalitySelect">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        Locality & Zone
-                    </label>
-                    <select id="shopLocalitySelect" class="shop-select" onchange="applyShopFilters()">
-                        <option value="karnataka" selected>Karnataka & Deccan Plateau (High Humidity)</option>
-                        <option value="north">Northern Gangetic Plains (Sub-humid / Alluvial)</option>
-                        <option value="maharashtra">Maharashtra & Central Black Soil Zone</option>
-                        <option value="coastal">Western Coastal / Konkan (High Spore Pressure)</option>
-                        <option value="all">Pan-India (All Agro-Climatic Zones)</option>
-                    </select>
-                </div>
-
-                <div class="shop-control-group">
-                    <label class="shop-control-label" for="shopDiseaseSelect">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                        Target Disease / Concern
-                    </label>
-                    <select id="shopDiseaseSelect" class="shop-select" onchange="applyShopFilters()">
-                        <option value="all">All Crop Concerns / General Health</option>
-                        <option value="early_blight">Early Blight (Alternaria Solani)</option>
-                        <option value="late_blight">Late Blight (Phytophthora Infestans)</option>
-                        <option value="bacterial_blight">Bacterial Leaf Blight / Canker</option>
-                        <option value="yellow_curl">Yellow Leaf Curl / Whitefly Vectors</option>
-                        <option value="powdery_mildew">Powdery Mildew / Rust Spores</option>
-                        <option value="root_rot">Root Rot / Damping Off</option>
-                        <option value="drought_stress">Low Moisture / Soil Water Deficit</option>
-                    </select>
-                </div>
-
-                <div class="shop-control-group">
-                    <label class="shop-control-label" for="shopSeveritySelect">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                        Severity / Infection Stage
-                    </label>
-                    <select id="shopSeveritySelect" class="shop-select" onchange="applyShopFilters()">
-                        <option value="critical">Critical Outbreak (Urgent Curative Action)</option>
-                        <option value="moderate" selected>Moderate Spread (Targeted Eradication)</option>
-                        <option value="early">Early Symptoms (Bio-Control & Mild Treat)</option>
-                        <option value="preventive">Preventive Shield (Seasonal Spore Protection)</option>
-                    </select>
                 </div>
             </div>
 
@@ -1583,7 +1549,7 @@
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="config.js"></script>
-    <script src="js/script.js?v=phase102"></script>
+    <script src="js/script.js?v=phase103"></script>
 </body>
 
 </html>
