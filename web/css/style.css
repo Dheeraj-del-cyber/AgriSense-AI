@@ -1054,12 +1054,12 @@ ol {
 .hero-butterfly {
     position: absolute;
     left: -8%;
-    top: 36%;
+    top: 58%;
     width: 32px;
     height: 26px;
     pointer-events: none;
     filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
-    animation: butterfly-drift 14s cubic-bezier(0.38, 0, 0.22, 1) infinite;
+    animation: butterfly-drift 26s cubic-bezier(0.42, 0, 0.25, 1) infinite;
     will-change: transform, left, top, opacity;
 }
 
@@ -1094,56 +1094,118 @@ ol {
 }
 
 @keyframes butterfly-drift {
+    /* --- Pass 1: Enters low, rises in a gentle soaring arc across to upper right --- */
     0% {
         left: -8%;
-        top: 42%;
+        top: 58%;
         opacity: 0;
-        transform: rotate(14deg);
-    }
-    4% {
-        opacity: 0.82;
-    }
-    12% {
-        left: 12%;
-        top: 34%;
         transform: rotate(-6deg);
     }
-    24% {
-        left: 28%;
-        top: 44%;
-        transform: rotate(16deg);
+    3% {
+        opacity: 0.82;
+        left: 2%;
+        top: 52%;
+        transform: rotate(-12deg);
     }
-    38% {
-        left: 46%;
-        top: 26%;
-        transform: rotate(-10deg);
-    }
-    52% {
-        left: 62%;
+    10% {
+        left: 20%;
         top: 38%;
-        transform: rotate(14deg);
+        opacity: 0.82;
+        transform: rotate(-14deg);
     }
-    68% {
-        left: 76%;
-        top: 22%;
-        transform: rotate(-8deg);
-    }
-    82% {
-        left: 88%;
-        top: 32%;
-        transform: rotate(12deg);
-    }
-    94% {
-        left: 100%;
-        top: 20%;
+    18% {
+        left: 42%;
+        top: 28%;
         opacity: 0.82;
         transform: rotate(-4deg);
     }
-    100% {
-        left: 108%;
-        top: 18%;
+    26% {
+        left: 62%;
+        top: 24%;
+        opacity: 0.82;
+        transform: rotate(4deg);
+    }
+    34% {
+        left: 80%;
+        top: 30%;
+        opacity: 0.82;
+        transform: rotate(14deg);
+    }
+    40% {
+        left: 94%;
+        top: 20%;
+        opacity: 0.82;
+        transform: rotate(-10deg);
+    }
+    45% {
+        left: 106%;
+        top: 15%;
+        opacity: 0.82;
+        transform: rotate(-12deg);
+    }
+    47% {
+        left: 110%;
+        top: 14%;
         opacity: 0;
-        transform: rotate(0deg);
+        transform: rotate(-12deg);
+    }
+
+    /* --- Pause: Butterfly has flown off --- */
+    51% {
+        left: -8%;
+        top: 22%;
+        opacity: 0;
+        transform: rotate(12deg);
+    }
+
+    /* --- Pass 2: Re-enters from a completely DIFFERENT place (upper-left), swoops low near crops, drifts out mid-height --- */
+    54% {
+        left: 2%;
+        top: 24%;
+        opacity: 0.82;
+        transform: rotate(14deg);
+    }
+    62% {
+        left: 24%;
+        top: 35%;
+        opacity: 0.82;
+        transform: rotate(16deg);
+    }
+    70% {
+        left: 48%;
+        top: 50%;
+        opacity: 0.82;
+        transform: rotate(2deg);
+    }
+    77% {
+        left: 64%;
+        top: 46%;
+        opacity: 0.82;
+        transform: rotate(-12deg);
+    }
+    85% {
+        left: 78%;
+        top: 38%;
+        opacity: 0.82;
+        transform: rotate(-4deg);
+    }
+    92% {
+        left: 92%;
+        top: 43%;
+        opacity: 0.82;
+        transform: rotate(8deg);
+    }
+    97% {
+        left: 104%;
+        top: 47%;
+        opacity: 0.82;
+        transform: rotate(10deg);
+    }
+    100% {
+        left: 110%;
+        top: 48%;
+        opacity: 0;
+        transform: rotate(10deg);
     }
 }
 
@@ -1151,7 +1213,7 @@ ol {
     .hero-butterfly {
         width: 44px;
         height: 36px;
-        animation-duration: 16s;
+        animation-duration: 28s;
     }
 }
 
