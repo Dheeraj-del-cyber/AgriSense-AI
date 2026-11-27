@@ -3778,6 +3778,16 @@ function startSunTrajectory() {
         return;
     }
 
+    const trajectorySvg = sunTrajectoryRoot.querySelector('.trajectory-svg');
+    if (trajectorySvg) {
+        const bounds = trajectorySvg.getBoundingClientRect();
+        const yScale = bounds.height > 0 ? (bounds.width / 1000) / (bounds.height / 100) : 1;
+        ['trajectoryMoonImage', 'trajectorySunImage'].forEach(id => {
+            const imageGroup = document.getElementById(id);
+            if (imageGroup) imageGroup.setAttribute('transform', `scale(1 ${yScale})`);
+        });
+    }
+
     updateSunTrajectory(new Date());
     scheduleSunTrajectoryUpdate();
 }

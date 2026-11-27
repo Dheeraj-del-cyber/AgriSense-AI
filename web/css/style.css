@@ -4915,26 +4915,10 @@ body.mobile-home-fixed .farm-footer,
         color: #ffe28a;
     }
 
-    .sun-rays {
-        fill: none;
-    }
-
-    .sun-disc {
-        fill: #ffe28a;
-        stroke: rgba(255, 255, 255, 0.72);
-        stroke-width: 1;
-    }
-
     .sun-halo {
         fill: #ffd35a;
         opacity: 0.2;
         filter: blur(5px);
-    }
-
-    .moon-disc {
-        fill: #e5eeff;
-        stroke: rgba(255, 255, 255, 0.72);
-        stroke-width: 0.8;
     }
 
     .moon-halo {
