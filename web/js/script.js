@@ -4424,7 +4424,6 @@ function renderSmartShop() {
                     </div>
 
                     <h3 class="product-name">${prod.name}</h3>
-                    <div class="product-active-sub">${prod.activeIngredient}</div>
                 </div>
 
                 <div class="product-card-footer">
