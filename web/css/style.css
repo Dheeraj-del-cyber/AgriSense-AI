@@ -5380,6 +5380,25 @@ body.mobile-home-fixed .farm-footer,
 
 @media (min-width: 769px) {
     .home-creeper-banner {
+        display: block !important;
+        position: absolute !important;
+        top: var(--nav-height, 60px) !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 110px !important;
+        pointer-events: none !important;
+        z-index: 1 !important;
+        background-image: url('../assets/images/creeper.png') !important;
+        background-repeat: repeat-x !important;
+        background-position: top left !important;
+        background-size: auto 110px !important;
+        overflow: hidden !important;
+        line-height: 0 !important;
+        filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
+    }
+
+    .home-creeper-banner .home-creeper-img {
         display: none !important;
     }
     body:has(#screenHome.active) {
