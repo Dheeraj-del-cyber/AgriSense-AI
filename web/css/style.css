@@ -5731,23 +5731,25 @@ body.mobile-home-fixed .farm-footer,
 .match-score-badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    padding: 0.25rem 0.6rem;
-    border-radius: var(--radius-pill);
-    font-size: 0.75rem;
-    font-weight: 800;
+    gap: 0.25rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 0px !important;
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 1.1;
+    border: 1px solid #000000 !important;
 }
 
 .match-high {
     background: #dcfce7;
     color: #15803d;
-    border: 1px solid #86efac;
+    border: 1px solid #000000 !important;
 }
 
 .match-mid {
     background: #e0f2fe;
     color: #0369a1;
-    border: 1px solid #bae6fd;
+    border: 1px solid #000000 !important;
 }
 
 .category-tag {
