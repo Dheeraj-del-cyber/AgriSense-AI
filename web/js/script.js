@@ -3967,6 +3967,7 @@ const AGRI_PRODUCTS = [
         name: 'Ridomil Gold MZ 68 WG',
         brand: 'Syngenta Agro',
         activeIngredient: 'Mefenoxam 4% + Mancozeb 64% WG',
+        image: 'assets/images/products/ridomil_gold.jpg',
         category: 'cure',
         categoryLabel: 'Targeted Chemical Cure',
         typeTag: 'Systemic & Contact Anti-Oomycete',
@@ -4412,6 +4413,50 @@ function renderSmartShop() {
     grid.innerHTML = scoredProducts.map((prod, idx) => {
         const isTopMatch = idx === 0 && prod.score >= 85;
         const scoreClass = prod.score >= 88 ? 'match-high' : 'match-mid';
+
+        if (prod.image) {
+            return `
+                <div class="product-card product-card-split ${isTopMatch ? 'top-match' : ''}">
+                    <div class="product-card-img-wrap">
+                        <div class="product-badge-overlay">
+                            <span class="match-score-badge ${scoreClass}">
+                                ${prod.score}%
+                            </span>
+                        </div>
+                        <img src="${prod.image}" alt="${prod.name}" class="product-img" loading="lazy">
+                    </div>
+
+                    <div class="product-card-bottom-info">
+                        <div>
+                            <div class="category-tag">${prod.categoryLabel}</div>
+                            <h3 class="product-name" title="${prod.name}">${prod.name}</h3>
+                        </div>
+
+                        <div class="product-card-footer">
+                            <div class="dealer-stock-pill">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                <span>${prod.dealerAvailability}</span>
+                            </div>
+
+                            <div class="product-price-action-row">
+                                <div class="product-price-block">
+                                    <span class="product-price-val">₹${prod.price}</span>
+                                    <span class="product-pack-size">Per ${prod.packSize}</span>
+                                </div>
+                                <button type="button" class="btn-dosage-calc" onclick="openDosageModal('${prod.id}')">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                                    </svg>
+                                    <span>Dose & Order</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
 
         return `
             <div class="product-card ${isTopMatch ? 'top-match' : ''}">
