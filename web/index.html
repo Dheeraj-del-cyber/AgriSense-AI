@@ -673,11 +673,9 @@
                                     <line x1="12" y1="3" x2="12" y2="15"></line>
                                 </svg>
                             </div>
-                            <h3 class="upload-title" data-i18n="uploadTitle">Upload Foliage Specimen</h3>
-                            <p class="upload-drag-hint" data-i18n="uploadDrag">Drag and drop image or browse file system
-                            </p>
-                            <span class="upload-formats-badge" data-i18n="uploadFormats">JPEG / PNG formats supported
-                                (up to 8 MB)</span>
+                            <h3 class="upload-title" data-i18n="uploadTitle">Upload Leaf Image</h3>
+                            <p class="upload-drag-hint" data-i18n="uploadDrag">Choose photo from your phone</p>
+                            <span class="upload-formats-badge" data-i18n="uploadFormats">JPEG / PNG formats supported</span>
                         </div>
                         <img id="imagePreview" class="cam-img" alt="Specimen Preview" style="display:none;">
                         <video id="cameraVideo" class="camera-video" autoplay muted playsinline
@@ -724,8 +722,7 @@
                                 <span data-i18n="btnChoosePhoto">Browse Image File</span>
                             </button>
                         </div>
-                        <p id="uploadHintText" class="upload-footnote" data-i18n="uploadHint">Ensure foliage is flat,
-                            sharp, and in natural daylight.</p>
+                        <p id="uploadHintText" class="upload-footnote" style="display: none;"></p>
                     </div>
 
                     <!-- Analysis Controls -->
@@ -1027,9 +1024,9 @@
                     <canvas id="moistureChart"></canvas>
                 </div>
                 <div class="chart-legend">
-                    <span class="legend-item"><span class="legend-dot dot-dry"></span> Deficit (&lt;30%)</span>
-                    <span class="legend-item"><span class="legend-dot dot-opt"></span> Optimal (30–75%)</span>
-                    <span class="legend-item"><span class="legend-dot dot-wet"></span> Saturated (&gt;75%)</span>
+                    <span class="legend-item"><span class="legend-dot dot-dry"></span><span>Deficit<br>(&lt;30%)</span></span>
+                    <span class="legend-item"><span class="legend-dot dot-opt"></span><span>Optimal (30–75%)</span></span>
+                    <span class="legend-item"><span class="legend-dot dot-wet"></span><span>Saturated<br>(&gt;75%)</span></span>
                 </div>
             </div>
 
@@ -1586,7 +1583,7 @@
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="config.js"></script>
-    <script src="js/script.js?v=phase101"></script>
+    <script src="js/script.js?v=phase102"></script>
 </body>
 
 </html>
