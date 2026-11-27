@@ -4257,7 +4257,6 @@ let isDetectingShopLocation = false;
 
 async function detectUserShopLocation(forceRefresh = false) {
     if (isDetectingShopLocation) return;
-    const coordsEl = document.getElementById('shopCoordsDisplay');
     const nameEl = document.getElementById('shopLocationName');
     const btn = document.getElementById('btnShopLocationRefresh');
 
@@ -4269,7 +4268,6 @@ async function detectUserShopLocation(forceRefresh = false) {
     }
 
     isDetectingShopLocation = true;
-    if (coordsEl) coordsEl.textContent = 'Locating GPS...';
     if (nameEl) nameEl.textContent = 'Acquiring satellite & network coordinates...';
     if (btn) btn.classList.add('loading');
 
@@ -4371,10 +4369,7 @@ function fallbackLocation(note) {
 }
 
 function applyLocationToShopUI(loc) {
-    const coordsEl = document.getElementById('shopCoordsDisplay');
     const nameEl = document.getElementById('shopLocationName');
-
-    if (coordsEl) coordsEl.textContent = `${loc.coordsText} (±${loc.accuracy}m)`;
     if (nameEl) nameEl.textContent = loc.name;
 }
 

@@ -5623,52 +5623,10 @@ body.mobile-home-fixed .farm-footer,
     min-width: 0;
 }
 
-.shop-location-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-}
-
-.shop-location-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.725rem;
-    font-weight: 700;
-    color: #065f46;
-    background: #ecfdf5;
-    border: 1px solid #a7f3d0;
-    padding: 0.2rem 0.6rem;
-    border-radius: var(--radius-pill);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-.badge-live-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #10b981;
-    box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
-    display: inline-block;
-}
-
-.shop-coords-badge {
-    font-size: 0.75rem;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-weight: 600;
-    color: #475569;
-    background: #f1f5f9;
-    padding: 0.2rem 0.55rem;
-    border-radius: 6px;
-    border: 1px solid #e2e8f0;
-}
-
 .shop-location-name {
-    margin: 0.15rem 0 0 0;
-    font-size: 1.25rem;
-    font-weight: 800;
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
     color: #0f172a;
     line-height: 1.3;
     white-space: nowrap;
