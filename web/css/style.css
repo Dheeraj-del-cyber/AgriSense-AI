@@ -459,6 +459,10 @@ ol {
     cursor: pointer;
 }
 
+.desktop-only-nav-item {
+    display: none !important;
+}
+
 .bottom-nav-link::before {
     content: '';
     position: absolute;
@@ -4643,6 +4647,11 @@ body.mobile-home-fixed .farm-footer,
             radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.3), transparent 60%);
     }
 
+    .hub-big-card.card-shop {
+        background: linear-gradient(135deg, rgba(5, 150, 105, 0.95), rgba(4, 47, 46, 0.96)),
+            radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.35), transparent 60%);
+    }
+
     .big-card-top {
         display: flex;
         align-items: center;
@@ -5432,6 +5441,10 @@ body.mobile-home-fixed .farm-footer,
 
     .bottom-nav {
         max-width: 720px;
+    }
+
+    .desktop-only-nav-item {
+        display: flex !important;
     }
 
     .bottom-nav-grass {

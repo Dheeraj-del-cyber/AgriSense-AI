@@ -21,7 +21,7 @@ const AppState = {
 const TRANSLATIONS = {
     en: {
         navHome: 'Hub', navDetect: 'Diagnostics', navCrops: 'Crops', navScan: 'Start Scan', navShop: 'Shop', shopTitle: 'Smart Crop Pharmacy & Store',
-        navBottomHub: 'Home', navBottomDetect: 'Detect', navBottomPlanner: 'Crop', navBottomIoT: 'Water', navBottomAdvisor: 'Advisor', navBottomProfile: 'Profile', navBottomAnalytics: 'Analytics', navBottomTools: 'Tools',
+        navBottomHub: 'Home', navBottomDetect: 'Detect', navBottomPlanner: 'Crop', navBottomIoT: 'Water', navBottomShop: 'Shop', navBottomAdvisor: 'Advisor', navBottomProfile: 'Profile', navBottomAnalytics: 'Analytics', navBottomTools: 'Tools',
         heroBadge: 'Precision Agronomic Intelligence',
         heroTitle1: 'Healthy Crops', heroTitle2: 'Predictable Yields',
         heroDesc: 'Clinical foliar disease diagnosis, real-time root-zone telemetry, and verified agronomic protocols.',
@@ -82,7 +82,7 @@ const TRANSLATIONS = {
     },
     hi: {
         navHome: 'हब', navDetect: 'रोग पहचान', navCrops: 'फसलें', navScan: 'स्कैन शुरू करें', navShop: 'दुकान', shopTitle: 'स्मार्ट फसल फार्मेसी व स्टोर',
-        navBottomHub: 'होम', navBottomDetect: 'पहचान', navBottomPlanner: 'फसल', navBottomIoT: 'पानी', navBottomAdvisor: 'सलाहकार', navBottomProfile: 'प्रोफ़ाइल', navBottomAnalytics: 'विश्लेषण', navBottomTools: 'उपकरण',
+        navBottomHub: 'होम', navBottomDetect: 'पहचान', navBottomPlanner: 'फसल', navBottomIoT: 'पानी', navBottomShop: 'दुकान', navBottomAdvisor: 'सलाहकार', navBottomProfile: 'प्रोफ़ाइल', navBottomAnalytics: 'विश्लेषण', navBottomTools: 'उपकरण',
         heroBadge: 'सटीक कृषि आसूचना',
         heroTitle1: 'स्वस्थ फसलें', heroTitle2: 'स्थिर उत्पादन',
         heroDesc: 'सटीक फसल रोग पहचान, वास्तविक समय मिट्टी नमी ट्रैकिंग, और सत्यापित कृषि उपचार।',
@@ -143,7 +143,7 @@ const TRANSLATIONS = {
     },
     kn: {
         navHome: 'ಹಬ್', navDetect: 'ರೋಗ ಪತ್ತೆ', navCrops: 'ಬೆಳೆಗಳು', navScan: 'ಸ್ಕ್ಯಾನ್ ಪ್ರಾರಂಭಿಸಿ', navShop: 'ಅಂಗಡಿ', shopTitle: 'ಸ್ಮಾರ್ಟ್ ಬೆಳೆ ಔಷಧಾಲಯ ಮತ್ತು ಅಂಗಡಿ',
-        navBottomHub: 'ಮುಖಪುಟ', navBottomDetect: 'ಪತ್ತೆ', navBottomPlanner: 'ಬೆಳೆ', navBottomIoT: 'ನೀರು', navBottomAdvisor: 'ಸಲಹೆಗಾರ', navBottomProfile: 'ಪ್ರೊಫೈಲ್', navBottomAnalytics: 'ವಿಶ್ಲೇಷಣೆ', navBottomTools: 'ಪರಿಕರ',
+        navBottomHub: 'ಮುಖಪುಟ', navBottomDetect: 'ಪತ್ತೆ', navBottomPlanner: 'ಬೆಳೆ', navBottomIoT: 'ನೀರು', navBottomShop: 'ಅಂಗಡಿ', navBottomAdvisor: 'ಸಲಹೆಗಾರ', navBottomProfile: 'ಪ್ರೊಫೈಲ್', navBottomAnalytics: 'ವಿಶ್ಲೇಷಣೆ', navBottomTools: 'ಪರಿಕರ',
         heroBadge: 'ನಿಖರ ಕೃಷಿ ಮಾಹಿತಿ ವ್ಯವಸ್ಥೆ',
         heroTitle1: 'ಆರೋಗ್ಯಕರ ಬೆಳೆಗಳು', heroTitle2: 'ಸುಸ್ಥಿರ ಆದಾಯ',
         heroDesc: 'ಸಸ್ಯ ರೋಗಗಳ ನಿಖರ ಪತ್ತೆ, ನೈಜ ಸಮಯದ ಮಣ್ಣಿನ ತೇವಾಂಶ ಮೇಲ್ವಿಚಾರಣೆ ಮತ್ತು ಕೃಷಿ ಮಾರ್ಗದರ್ಶನ.',
