@@ -2693,7 +2693,7 @@ function setIoTOffline(lastUpdated = '--:--:--') {
         badge.textContent = offlineText;
     }
     if (recBox) {
-        recBox.textContent = '';
+        recBox.textContent = 'Live soil moisture monitoring is unavailable.';
     }
     if (gradeEl) {
         gradeEl.textContent = offlineText;
@@ -2808,15 +2808,15 @@ function updateIoTUI(data) {
         if (moisture < 30) {
             badge.classList.add('status-dry');
             badge.textContent = dict.iotDry || 'Too Dry';
-            if (recBox) recBox.textContent = '';
+            if (recBox) recBox.textContent = dict.iotDryRec || 'Soil moisture is critically low. Initiate targeted irrigation to prevent plant dehydration and vascular stress.';
         } else if (moisture >= 30 && moisture <= 75) {
             badge.classList.add('status-good');
             badge.textContent = dict.iotOpt || 'Optimal';
-            if (recBox) recBox.textContent = '';
+            if (recBox) recBox.textContent = dict.iotOptRec || 'Root-zone moisture is balanced. Transpiration and nutrient uptake conditions are ideal.';
         } else {
             badge.classList.add('status-wet');
             badge.textContent = dict.iotWet || 'Too Wet';
-            if (recBox) recBox.textContent = '';
+            if (recBox) recBox.textContent = dict.iotWetRec || 'Soil is waterlogged. Suspend irrigation and verify field drainage to prevent root hypoxia and fungal proliferation.';
         }
     }
 

@@ -2392,7 +2392,7 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: 1.25rem;
-    min-height: 120px;
+    min-height: 88px;
     display: flex;
     align-items: center;
     font-size: 0.9375rem;
@@ -2642,7 +2642,7 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
 /* Weather + Health Bottom Grid */
 .iot-bottom-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 1.5rem;
 }
 
