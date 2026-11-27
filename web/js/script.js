@@ -4454,11 +4454,11 @@ function renderSmartShop() {
                                 </div>
                                 <button type="button" class="btn-dosage-calc" onclick="openDosageModal('${prod.id}')">
                                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                        <line x1="8" y1="12" x2="16" y2="12"></line>
-                                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                                        <path d="M16 10a4 4 0 0 1-8 0"></path>
                                     </svg>
-                                    <span>Dose & Order</span>
+                                    <span>Buy Now</span>
                                 </button>
                             </div>
                         </div>
@@ -4493,11 +4493,11 @@ function renderSmartShop() {
                         </div>
                         <button type="button" class="btn-dosage-calc" onclick="openDosageModal('${prod.id}')">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="8" y1="12" x2="16" y2="12"></line>
-                                <line x1="12" y1="8" x2="12" y2="16"></line>
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
                             </svg>
-                            <span>Dose & Order</span>
+                            <span>Buy Now</span>
                         </button>
                     </div>
                 </div>
