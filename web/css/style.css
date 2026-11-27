@@ -5378,6 +5378,10 @@ body.mobile-home-fixed .farm-footer,
     display: none;
 }
 
+.desktop-creeper-strip {
+    display: none;
+}
+
 @media (min-width: 769px) {
     .home-creeper-banner {
         display: block !important;
@@ -5392,17 +5396,41 @@ body.mobile-home-fixed .farm-footer,
         height: 110px !important;
         pointer-events: none !important;
         z-index: 1 !important;
-        background-image: url('../assets/images/creeper.png') !important;
-        background-repeat: repeat-x !important;
-        background-position: top left !important;
-        background-size: auto 110px !important;
         overflow: hidden !important;
         line-height: 0 !important;
+        background: transparent !important;
         filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
     }
 
     .home-creeper-banner .home-creeper-img {
         display: none !important;
+    }
+
+    .desktop-creeper-strip {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+        width: max-content !important;
+        height: 110px !important;
+        pointer-events: none !important;
+        line-height: 0 !important;
+    }
+
+    .desktop-creeper-strip .desktop-creeper-item {
+        display: block !important;
+        flex: 0 0 auto !important;
+        height: 110px !important;
+        width: auto !important;
+        max-height: 110px !important;
+        object-fit: contain !important;
+        pointer-events: none !important;
+        user-select: none !important;
+    }
+
+    .desktop-creeper-strip .desktop-creeper-item + .desktop-creeper-item {
+        margin-left: -44px !important;
     }
     body:has(#screenHome.active) {
         background: #ffffff !important;
