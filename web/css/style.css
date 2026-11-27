@@ -4596,10 +4596,12 @@ body.mobile-home-fixed .farm-footer,
     }
 
     .home-creeper-banner {
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
+        top: -14px !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) !important;
+        width: 122% !important;
+        max-width: none !important;
         z-index: 1 !important;
         pointer-events: none !important;
         overflow: hidden !important;
@@ -5376,10 +5378,11 @@ body.mobile-home-fixed .farm-footer,
 
 .home-creeper-banner {
     position: absolute;
-    top: var(--nav-height, 60px);
-    left: 0;
-    right: 0;
-    width: 100%;
+    top: calc(var(--nav-height, 60px) - 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 115%;
+    max-width: none;
     pointer-events: none;
     z-index: 1;
     overflow: hidden;
