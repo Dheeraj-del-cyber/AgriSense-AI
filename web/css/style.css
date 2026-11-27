@@ -96,6 +96,11 @@ html {
     text-rendering: optimizeLegibility;
 }
 
+html,
+body {
+    cursor: url('../assets/images/hover.svg') 0 0, auto;
+}
+
 body {
     background-color: var(--bg-canvas);
     color: var(--text-primary);
@@ -105,6 +110,37 @@ body {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom interactive cursor */
+a,
+button,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+select,
+summary,
+.btn,
+.nav-link,
+.bottom-nav-link,
+.lang-pill-item,
+.product-card,
+.card-clickable,
+.dealer-stock-pill,
+.crop-tag,
+.disease-tag,
+.cursor-pointer,
+[onclick] {
+    cursor: url('../assets/images/hover.svg') 0 0, pointer !important;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="email"],
+textarea {
+    cursor: text;
 }
 
 img,
