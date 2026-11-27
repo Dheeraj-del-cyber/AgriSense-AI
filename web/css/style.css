@@ -5676,13 +5676,6 @@ body.mobile-home-fixed .farm-footer,
     text-overflow: ellipsis;
 }
 
-.shop-location-sub {
-    margin: 0;
-    font-size: 0.85rem;
-    color: #64748b;
-    line-height: 1.4;
-}
-
 .shop-location-actions {
     display: flex;
     align-items: center;

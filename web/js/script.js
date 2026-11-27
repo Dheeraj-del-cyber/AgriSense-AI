@@ -4259,7 +4259,6 @@ async function detectUserShopLocation(forceRefresh = false) {
     if (isDetectingShopLocation) return;
     const coordsEl = document.getElementById('shopCoordsDisplay');
     const nameEl = document.getElementById('shopLocationName');
-    const subEl = document.getElementById('shopLocationSub');
     const btn = document.getElementById('btnShopLocationRefresh');
 
     if (!nameEl) return;
@@ -4272,7 +4271,6 @@ async function detectUserShopLocation(forceRefresh = false) {
     isDetectingShopLocation = true;
     if (coordsEl) coordsEl.textContent = 'Locating GPS...';
     if (nameEl) nameEl.textContent = 'Acquiring satellite & network coordinates...';
-    if (subEl) subEl.textContent = 'Requesting browser location permission to pinpoint exact field coordinates...';
     if (btn) btn.classList.add('loading');
 
     if (!navigator.geolocation) {
@@ -4293,7 +4291,6 @@ async function detectUserShopLocation(forceRefresh = false) {
             let locationName = '';
             let stateName = '';
             let localityKey = 'karnataka';
-            let weatherSummary = '';
 
             try {
                 // Reverse geocode via OpenStreetMap Nominatim
@@ -4318,19 +4315,6 @@ async function detectUserShopLocation(forceRefresh = false) {
                 console.warn('Reverse geocode error:', err);
             }
 
-            try {
-                // Quick weather fetch for ambient telemetry
-                const wRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m&timezone=auto`);
-                if (wRes.ok) {
-                    const wData = await wRes.json();
-                    if (wData.current) {
-                        weatherSummary = ` • Temp: ${Math.round(wData.current.temperature_2m)}°C, Humidity: ${Math.round(wData.current.relative_humidity_2m)}% RH`;
-                    }
-                }
-            } catch (err) {
-                console.warn('Weather fetch error:', err);
-            }
-
             if (!locationName) {
                 locationName = `${latStr}, ${lonStr} (Exact Field Coordinates)`;
             }
@@ -4352,8 +4336,7 @@ async function detectUserShopLocation(forceRefresh = false) {
                 accuracy: Math.round(accuracy || 15),
                 name: locationName,
                 state: stateName,
-                localityKey: localityKey,
-                weatherSummary: weatherSummary
+                localityKey: localityKey
             };
 
             applyLocationToShopUI(userDetectedLocation);
@@ -4380,7 +4363,6 @@ function fallbackLocation(note) {
         name: 'Bengaluru, Karnataka, India',
         state: 'Karnataka',
         localityKey: 'karnataka',
-        weatherSummary: ' • Temp: 28°C, Humidity: 65% RH',
         isFallback: true,
         fallbackNote: note
     };
@@ -4391,13 +4373,9 @@ function fallbackLocation(note) {
 function applyLocationToShopUI(loc) {
     const coordsEl = document.getElementById('shopCoordsDisplay');
     const nameEl = document.getElementById('shopLocationName');
-    const subEl = document.getElementById('shopLocationSub');
 
     if (coordsEl) coordsEl.textContent = `${loc.coordsText} (±${loc.accuracy}m)`;
     if (nameEl) nameEl.textContent = loc.name;
-    if (subEl) {
-        subEl.textContent = `📍 Exact field location active${loc.weatherSummary || ''}. Products & dosage recommendations dynamically matched for ${loc.state || 'local'} soil and regional pathogen pressure.`;
-    }
 }
 
 function renderSmartShop() {
