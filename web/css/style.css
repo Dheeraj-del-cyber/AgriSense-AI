@@ -5789,9 +5789,20 @@ body.mobile-home-fixed .farm-footer,
 
 .product-badge-overlay {
     position: absolute;
-    top: 8px;
-    left: 8px;
+    top: 0;
+    left: 0;
     z-index: 2;
+}
+
+.product-badge-overlay .match-score-badge {
+    border-top: none !important;
+    border-left: none !important;
+    border-right: 1px solid #000000 !important;
+    border-bottom: 1px solid #000000 !important;
+    border-radius: 0px !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0.18rem 0.45rem !important;
 }
 
 .product-card-bottom-info {
@@ -6274,13 +6285,13 @@ body.mobile-home-fixed .farm-footer,
     }
 
     .product-badge-overlay {
-        top: 6px !important;
-        left: 6px !important;
+        top: 0 !important;
+        left: 0 !important;
     }
 
-    .match-score-badge {
+    .product-badge-overlay .match-score-badge {
         font-size: 0.58rem !important;
-        padding: 0.1rem 0.3rem !important;
+        padding: 0.12rem 0.35rem !important;
     }
 
     .product-card-bottom-info {
