@@ -5877,18 +5877,6 @@ body.mobile-home-fixed .farm-footer,
         animation: desktop-grass-sway 6.6s cubic-bezier(0.44, 0.05, 0.55, 0.95) infinite !important;
     }
 
-    .desktop-grass-strip .desktop-grass-item:nth-child(2n) {
-        animation-delay: -1.2s !important;
-    }
-
-    .desktop-grass-strip .desktop-grass-item:nth-child(3n) {
-        animation-delay: -2.4s !important;
-    }
-
-    .desktop-grass-strip .desktop-grass-item:nth-child(4n) {
-        animation-delay: -3.6s !important;
-    }
-
     .desktop-grass-strip .desktop-grass-item + .desktop-grass-item {
         margin-left: -48px !important;
     }
