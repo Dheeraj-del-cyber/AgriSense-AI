@@ -43,8 +43,8 @@ const TRANSLATIONS = {
         step2Title: 'Neural Analysis', step2Desc: 'CNN evaluates pathogen signature with confidence scoring.',
         step3Title: 'Apply Treatment', step3Desc: 'Follow structured biological, chemical, and preventive protocols.',
         back: 'Back', pageDetect: 'Disease Detection',
-        uploadTitle: 'Upload Foliage Specimen', uploadDrag: 'Drag and drop image or browse file system',
-        uploadFormats: 'JPEG / PNG formats supported (up to 8 MB)', uploadHint: 'Ensure foliage is flat, sharp, and in natural daylight.',
+        uploadTitle: 'Upload Leaf Image', uploadDrag: 'Choose photo from your phone',
+        uploadFormats: 'JPEG / PNG formats supported', uploadHint: 'Ensure foliage is flat, sharp, and in natural daylight.',
         btnTakePhoto: 'Capture with Camera', btnChoosePhoto: 'Browse Image File',
         retake: 'Cancel', analyze: 'Continue',
         scanStepsTitle: 'Diagnostic Operating Procedure',
@@ -466,7 +466,10 @@ function setupPhotoButtons() {
     const hint = document.getElementById('uploadHintText');
 
     if (chooseBtn) chooseBtn.style.display = '';
-    if (hint) hint.textContent = 'Click to browse files from your computer.';
+    if (hint) {
+        hint.textContent = '';
+        hint.style.display = 'none';
+    }
 }
 
 function triggerUpload() {
@@ -2884,65 +2887,129 @@ function drawMoistureChart() {
     const canvas = document.getElementById('moistureChart');
     if (!canvas) return;
     const wrap = canvas.parentElement;
-    const W = wrap.clientWidth || 400;
-    const H = wrap.clientHeight || 120;
-    canvas.width = W;
-    canvas.height = H;
+    const cssW = wrap.clientWidth || 400;
+    const cssH = wrap.clientHeight || 176;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(cssW * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    canvas.style.width = cssW + 'px';
+    canvas.style.height = cssH + 'px';
     const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, W, H);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
 
-    if (IoTHistory.length < 2) return;
+    const left = 54;
+    const right = 16;
+    const top = 16;
+    const bottom = 20;
+    const plotW = Math.max(1, cssW - left - right);
+    const plotH = Math.max(1, cssH - top - bottom);
+    const yFor = value => top + plotH - (value / 100) * plotH;
+    const wetY = yFor(75);
+    const dryY = yFor(30);
 
-    const dryY = H - (30 / 100) * H;
-    const wetY = H - (75 / 100) * H;
+    ctx.fillStyle = 'rgba(239, 68, 68, 0.13)';
+    ctx.fillRect(left, dryY, plotW, top + plotH - dryY);
+    ctx.fillStyle = 'rgba(34, 197, 94, 0.12)';
+    ctx.fillRect(left, wetY, plotW, dryY - wetY);
+    ctx.fillStyle = 'rgba(14, 165, 233, 0.08)';
+    ctx.fillRect(left, top, plotW, wetY - top);
 
-    // Zone backgrounds
-    ctx.fillStyle = 'rgba(239,68,68,0.07)'; ctx.fillRect(0, dryY, W, H - dryY);
-    ctx.fillStyle = 'rgba(34,197,94,0.07)'; ctx.fillRect(0, wetY, W, dryY - wetY);
-    ctx.fillStyle = 'rgba(14,165,233,0.07)'; ctx.fillRect(0, 0, W, wetY);
-
-    // Threshold lines
-    ctx.setLineDash([5, 5]);
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(239,68,68,0.35)'; ctx.beginPath(); ctx.moveTo(0, dryY); ctx.lineTo(W, dryY); ctx.stroke();
-    ctx.strokeStyle = 'rgba(14,165,233,0.35)'; ctx.beginPath(); ctx.moveTo(0, wetY); ctx.lineTo(W, wetY); ctx.stroke();
-    ctx.setLineDash([]);
-
-    const stepX = (IoTHistory.length > 1) ? W / (IoTHistory.length - 1) : W;
-
-    // Gradient fill
-    const grad = ctx.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0, 'rgba(3,169,244,0.25)');
-    grad.addColorStop(1, 'rgba(3,169,244,0.01)');
-    ctx.beginPath();
-    IoTHistory.forEach((v, i) => {
-        const x = i * stepX, y = H - (v / 100) * H;
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    ctx.font = '600 12px Inter, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#8a9290';
+    [100, 75, 30, 0].forEach(value => {
+        const y = yFor(value);
+        ctx.fillText(value + '%', left - 10, y);
+        ctx.beginPath();
+        ctx.moveTo(left, y);
+        ctx.lineTo(left + plotW, y);
+        ctx.strokeStyle = value === 30 ? 'rgba(239,68,68,0.20)' : 'rgba(148,163,184,0.28)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
     });
-    ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
-    ctx.fillStyle = grad; ctx.fill();
 
-    // Line
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgba(3,169,244,0.9)';
-    ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    IoTHistory.forEach((v, i) => {
-        const x = i * stepX, y = H - (v / 100) * H;
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    if (IoTHistory.length === 0) return;
+
+    const points = IoTHistory.map((value, index) => {
+        const x = IoTHistory.length === 1
+            ? left + plotW
+            : left + (index / (IoTHistory.length - 1)) * plotW;
+        return { x, y: yFor(Math.max(0, Math.min(100, value))), value };
     });
+
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+        const previous = points[i - 1];
+        const current = points[i];
+        const midX = (previous.x + current.x) / 2;
+        ctx.bezierCurveTo(midX, previous.y, midX, current.y, current.x, current.y);
+    }
+
+    ctx.save();
+    ctx.lineTo(points[points.length - 1].x, top + plotH);
+    ctx.lineTo(points[0].x, top + plotH);
+    ctx.closePath();
+    const areaGradient = ctx.createLinearGradient(0, top, 0, top + plotH);
+    areaGradient.addColorStop(0, 'rgba(34,197,94,0.68)');
+    areaGradient.addColorStop(1, 'rgba(34,197,94,0.12)');
+    ctx.fillStyle = areaGradient;
+    ctx.fill();
+    ctx.restore();
+
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+        const previous = points[i - 1];
+        const current = points[i];
+        const midX = (previous.x + current.x) / 2;
+        ctx.bezierCurveTo(midX, previous.y, midX, current.y, current.x, current.y);
+    }
+    ctx.strokeStyle = '#22c55e';
+    ctx.lineWidth = 3;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
     ctx.stroke();
 
-    // Dots
-    IoTHistory.forEach((v, i) => {
-        const x = i * stepX, y = H - (v / 100) * H;
-        const isLast = i === IoTHistory.length - 1;
+    points.forEach((point, index) => {
+        const isLast = index === points.length - 1;
         ctx.beginPath();
-        ctx.arc(x, y, isLast ? 5 : 3, 0, Math.PI * 2);
-        ctx.fillStyle = v < 30 ? '#ef4444' : v > 75 ? '#0ea5e9' : '#22c55e';
+        ctx.arc(point.x, point.y, isLast ? 6 : 4, 0, Math.PI * 2);
+        ctx.fillStyle = point.value < 30 ? '#ef4444' : point.value > 75 ? '#0ea5e9' : '#22c55e';
         ctx.fill();
-        if (isLast) { ctx.strokeStyle = 'white'; ctx.lineWidth = 2; ctx.stroke(); }
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
     });
+
+    const latest = points[points.length - 1];
+    const status = latest.value < 30 ? 'Deficit' : latest.value > 75 ? 'Saturated' : 'Optimal';
+    const label = `${Math.round(latest.value)}% • ${status}`;
+    ctx.font = '700 14px Inter, sans-serif';
+    const labelWidth = ctx.measureText(label).width + 18;
+    const labelHeight = 34;
+    let labelX = latest.x - labelWidth - 10;
+    if (labelX < left) labelX = latest.x - labelWidth / 2;
+    labelX = Math.max(left, Math.min(cssW - labelWidth - 6, labelX));
+    const labelY = Math.max(4, latest.y - 48);
+
+    ctx.shadowColor = 'rgba(15, 23, 42, 0.16)';
+    ctx.shadowBlur = 8;
+    ctx.shadowOffsetY = 3;
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.roundRect(labelX, labelY, labelWidth, labelHeight, 8);
+    ctx.fill();
+    ctx.shadowColor = 'transparent';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#3e4a47';
+    ctx.fillText(label, labelX + labelWidth / 2, labelY + labelHeight / 2);
 }
+
+window.addEventListener('resize', drawMoistureChart, { passive: true });
 
 function updateHealthScore(moisture) {
     let score, grade, tip;
