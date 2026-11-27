@@ -5678,38 +5678,6 @@ body.mobile-home-fixed .farm-footer,
     to { transform: rotate(360deg); }
 }
 
-.shop-category-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.shop-pill {
-    padding: 0.5rem 1rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-pill);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-}
-
-.shop-pill:hover {
-    border-color: #059669;
-    color: #059669;
-    background: #f0fdf4;
-}
-
-.shop-pill.active {
-    background: #059669;
-    color: #ffffff;
-    border-color: #059669;
-    box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
-}
-
 .shop-products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
