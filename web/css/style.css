@@ -5386,6 +5386,9 @@ body.mobile-home-fixed .farm-footer,
         left: 0 !important;
         right: 0 !important;
         width: 100% !important;
+        width: 100vw !important;
+        max-width: none !important;
+        transform: none !important;
         height: 110px !important;
         pointer-events: none !important;
         z-index: 1 !important;
