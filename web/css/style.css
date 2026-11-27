@@ -5568,6 +5568,27 @@ body.mobile-home-fixed .farm-footer,
         object-position: bottom left !important;
         filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.48)) !important;
         user-select: none !important;
+        transform-origin: 40% 92% !important;
+        animation: scarecrow-breeze 5.5s ease-in-out infinite !important;
+        will-change: transform;
+    }
+
+    @keyframes scarecrow-breeze {
+        0% {
+            transform: rotate(0deg) translateY(0);
+        }
+        28% {
+            transform: rotate(1.8deg) translateY(-4px);
+        }
+        55% {
+            transform: rotate(-1deg) translateY(-1px);
+        }
+        80% {
+            transform: rotate(-1.8deg) translateY(-5px);
+        }
+        100% {
+            transform: rotate(0deg) translateY(0);
+        }
     }
 
     .bottom-nav {
