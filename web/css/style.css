@@ -4596,6 +4596,8 @@ body.mobile-home-fixed .farm-footer,
     }
 
     .home-creeper-banner {
+        display: block !important;
+        position: absolute !important;
         top: -14px !important;
         left: 50% !important;
         right: auto !important;
@@ -5371,35 +5373,15 @@ body.mobile-home-fixed .farm-footer,
     }
 }
 
-/* --- Home Screen Creeper Garland (Hub Screen Only) --- */
-#screenHome {
-    position: relative;
-}
-
+/* --- Home Screen Creeper Garland (Mobile Only) --- */
 .home-creeper-banner {
-    position: absolute;
-    top: calc(var(--nav-height, 60px) - 10px);
-    left: 50%;
-    transform: translateX(-50%);
-    width: 115%;
-    max-width: none;
-    pointer-events: none;
-    z-index: 1;
-    overflow: hidden;
-    line-height: 0;
-}
-
-.home-creeper-img {
-    width: 100%;
-    height: auto;
-    max-height: none;
-    object-fit: contain;
-    object-position: top center;
-    display: block;
-    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.12));
+    display: none;
 }
 
 @media (min-width: 769px) {
+    .home-creeper-banner {
+        display: none !important;
+    }
     body:has(#screenHome.active) {
         background: #ffffff !important;
         background-color: #ffffff !important;
