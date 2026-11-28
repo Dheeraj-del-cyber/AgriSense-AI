@@ -6866,36 +6866,52 @@ body.mobile-home-fixed .farm-footer,
         display: flex !important;
     }
 
-    /* Mobile Language Island: Attached Profile Icon (Positioned up on the island) */
+    /* Mobile Language Island Spacing to comfortably fit attached top dome */
+    #screenHome .hero-lang-bar {
+        margin-top: 1.65rem !important;
+    }
+
+    /* Mobile Language Island: Attached Top Profile Dome/Tab (Matching sketch) */
     .lang-island-profile-btn {
         display: inline-flex !important;
         align-items: center;
         justify-content: center;
+        gap: 5px !important;
         position: absolute !important;
-        top: -18px !important;
-        right: 10px !important;
+        bottom: calc(100% - 2px) !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
         z-index: 10 !important;
-        width: 32px !important;
-        height: 32px !important;
-        min-width: 32px !important;
-        padding: 0 !important;
+        height: 25px !important;
+        padding: 0 14px !important;
         margin: 0 !important;
         border: 1px solid rgba(255, 255, 255, 0.45) !important;
+        border-bottom: none !important;
         outline: none !important;
-        border-radius: 50% !important;
+        border-radius: 13px 13px 0 0 !important;
         color: #ffffff !important;
-        background: rgba(255, 255, 255, 0.25) !important;
+        background: rgba(255, 255, 255, 0.22) !important;
         -webkit-backdrop-filter: blur(8px) !important;
         backdrop-filter: blur(8px) !important;
-        -webkit-box-shadow: inset 2px 2px 0px -2px rgba(255, 255, 255, 0.85), inset 0 0 3px 1px rgba(255, 255, 255, 0.7), 0 4px 10px rgba(0, 0, 0, 0.3) !important;
-        box-shadow: inset 2px 2px 0px -2px rgba(255, 255, 255, 0.85), inset 0 0 3px 1px rgba(255, 255, 255, 0.7), 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+        -webkit-box-shadow: inset 1.5px 1.5px 0px -1px rgba(255, 255, 255, 0.9), inset 0 0 3px 1px rgba(255, 255, 255, 0.7), 0 -3px 8px rgba(0, 0, 0, 0.2) !important;
+        box-shadow: inset 1.5px 1.5px 0px -1px rgba(255, 255, 255, 0.9), inset 0 0 3px 1px rgba(255, 255, 255, 0.7), 0 -3px 8px rgba(0, 0, 0, 0.2) !important;
         cursor: pointer !important;
         user-select: none !important;
         transition: transform 0.2s ease, background-color 0.2s ease !important;
+        white-space: nowrap !important;
     }
 
     .lang-island-profile-btn:active {
-        transform: scale(0.92) !important;
-        background: rgba(255, 255, 255, 0.4) !important;
+        transform: translateX(-50%) scale(0.95) !important;
+        background: rgba(255, 255, 255, 0.35) !important;
+    }
+
+    .lang-island-profile-text {
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.4px !important;
+        color: #ffffff !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+        line-height: 1 !important;
     }
 }
