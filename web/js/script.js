@@ -15,6 +15,156 @@ const AppState = {
     cameraStream: null
 };
 
+let homeGyroEnabled = false;
+let homeGyroBaseline = null;
+let homeGyroPermissionPending = false;
+let homeBackgroundTarget = { x: 0, y: 0 };
+let homeBackgroundCurrent = { x: 0, y: 0 };
+let homeBackgroundVelocity = { x: 0, y: 0 };
+let homeBackgroundFrame = null;
+let homeBackgroundLastTime = null;
+
+function clampHomeGyro(value, limit) {
+    return Math.max(-limit, Math.min(limit, value));
+}
+
+function setHomeBackgroundOffset(x, y) {
+    homeBackgroundTarget.x = clampHomeGyro(x, 14);
+    homeBackgroundTarget.y = clampHomeGyro(y, 14);
+
+    if (homeBackgroundFrame === null) {
+        homeBackgroundLastTime = null;
+        homeBackgroundFrame = requestAnimationFrame(animateHomeBackground);
+    }
+}
+
+function animateHomeBackground(timestamp) {
+    homeBackgroundFrame = null;
+    const hero = document.querySelector('#screenHome .hub-hero');
+    if (!hero || AppState.currentScreen !== 'screenHome') {
+        homeBackgroundLastTime = null;
+        return;
+    }
+
+    if (homeBackgroundLastTime === null) homeBackgroundLastTime = timestamp;
+    const elapsed = Math.min((timestamp - homeBackgroundLastTime) / 16.67, 2);
+    homeBackgroundLastTime = timestamp;
+
+    const stiffness = 0.105;
+    const damping = 0.78;
+
+    const xForce = (homeBackgroundTarget.x - homeBackgroundCurrent.x) * stiffness;
+    const yForce = (homeBackgroundTarget.y - homeBackgroundCurrent.y) * stiffness;
+    homeBackgroundVelocity.x = (homeBackgroundVelocity.x + xForce * elapsed) * Math.pow(damping, elapsed);
+    homeBackgroundVelocity.y = (homeBackgroundVelocity.y + yForce * elapsed) * Math.pow(damping, elapsed);
+    homeBackgroundCurrent.x += homeBackgroundVelocity.x * elapsed;
+    homeBackgroundCurrent.y += homeBackgroundVelocity.y * elapsed;
+
+    const closeEnough =
+        Math.abs(homeBackgroundTarget.x - homeBackgroundCurrent.x) < 0.025 &&
+        Math.abs(homeBackgroundTarget.y - homeBackgroundCurrent.y) < 0.025 &&
+        Math.abs(homeBackgroundVelocity.x) < 0.025 &&
+        Math.abs(homeBackgroundVelocity.y) < 0.025;
+
+    if (closeEnough) {
+        homeBackgroundCurrent.x = homeBackgroundTarget.x;
+        homeBackgroundCurrent.y = homeBackgroundTarget.y;
+        homeBackgroundVelocity.x = 0;
+        homeBackgroundVelocity.y = 0;
+    }
+
+    hero.style.setProperty('--home-bg-x', `${homeBackgroundCurrent.x.toFixed(2)}px`);
+    hero.style.setProperty('--home-bg-y', `${homeBackgroundCurrent.y.toFixed(2)}px`);
+
+    if (!closeEnough) {
+        homeBackgroundFrame = requestAnimationFrame(animateHomeBackground);
+    } else {
+        homeBackgroundLastTime = null;
+    }
+}
+
+function resetHomeBackgroundOffset() {
+    setHomeBackgroundOffset(0, 0);
+}
+
+function handleHomePointerParallax(event) {
+    if (AppState.currentScreen !== 'screenHome') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const hero = document.querySelector('#screenHome .hub-hero');
+    if (!hero) return;
+    const rect = hero.getBoundingClientRect();
+    if (!rect) return;
+
+    const relativeX = (event.clientX - rect.left) / rect.width - 0.5;
+    const relativeY = (event.clientY - rect.top) / rect.height - 0.5;
+    setHomeBackgroundOffset(relativeX * 15, relativeY * 15);
+}
+
+function handleHomeGyro(event) {
+    if (AppState.currentScreen !== 'screenHome') return;
+    if (!Number.isFinite(event.beta) || !Number.isFinite(event.gamma)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    if (!homeGyroBaseline) {
+        homeGyroBaseline = { beta: event.beta, gamma: event.gamma };
+        return;
+    }
+
+    const normalizeDelta = (value) => ((value + 180) % 360 + 360) % 360 - 180;
+    let pitch = normalizeDelta(event.beta - homeGyroBaseline.beta);
+    let roll = normalizeDelta(event.gamma - homeGyroBaseline.gamma);
+
+    const screenAngle = ((screen.orientation?.angle ?? window.orientation ?? 0) % 360 + 360) % 360;
+    if (screenAngle === 90) {
+        const originalRoll = roll;
+        roll = pitch;
+        pitch = -originalRoll;
+    } else if (screenAngle === 180) {
+        roll = -roll;
+        pitch = -pitch;
+    } else if (screenAngle === 270) {
+        const originalRoll = roll;
+        roll = -pitch;
+        pitch = originalRoll;
+    }
+
+    if (Math.abs(roll) < 0.8) roll = 0;
+    if (Math.abs(pitch) < 0.8) pitch = 0;
+    setHomeBackgroundOffset(roll * 0.28, pitch * 0.22);
+}
+
+function startHomeGyro() {
+    if (homeGyroEnabled) return;
+    homeGyroEnabled = true;
+    homeGyroBaseline = null;
+    window.addEventListener('deviceorientation', handleHomeGyro, true);
+}
+
+function stopHomeGyro() {
+    if (!homeGyroEnabled) return;
+    window.removeEventListener('deviceorientation', handleHomeGyro, true);
+    homeGyroEnabled = false;
+    homeGyroBaseline = null;
+    resetHomeBackgroundOffset();
+}
+
+async function requestHomeGyroPermissionOnce() {
+    if (homeGyroPermissionPending) return;
+    if (typeof window.DeviceOrientationEvent?.requestPermission !== 'function') {
+        startHomeGyro();
+        return;
+    }
+
+    homeGyroPermissionPending = true;
+    try {
+        const permission = await window.DeviceOrientationEvent.requestPermission();
+        if (permission === 'granted') startHomeGyro();
+    } catch (error) {
+        console.warn('Home gyroscope permission unavailable:', error);
+    }
+}
+
 
 
 /* --- Translations --- */
@@ -2071,6 +2221,20 @@ document.addEventListener('DOMContentLoaded', () => {
         panel.style.display = 'none';
     }
     loadUserChatHistory();
+
+    const homeHero = document.querySelector('#screenHome .hub-hero');
+    if (homeHero) {
+        homeHero.addEventListener('pointermove', handleHomePointerParallax);
+        homeHero.addEventListener('pointerleave', resetHomeBackgroundOffset);
+    }
+
+    if (window.DeviceOrientationEvent) {
+        if (typeof window.DeviceOrientationEvent.requestPermission !== 'function') {
+            startHomeGyro();
+        } else {
+            document.addEventListener('pointerdown', requestHomeGyroPermissionOnce, { once: true });
+        }
+    }
 });
 
 function clearChat() {
@@ -3899,10 +4063,14 @@ if (typeof originalNavigateTo === "function") {
         if (screenId === "screenHome") {
             updateFarmLighting();
             startSunTrajectory();
+            if (window.DeviceOrientationEvent && typeof window.DeviceOrientationEvent.requestPermission !== 'function') {
+                startHomeGyro();
+            }
             const track = document.querySelector('.hub-horiz-loop-track');
             if (track) track.style.animationPlayState = 'running';
         } else {
             stopSunTrajectory();
+            stopHomeGyro();
             const track = document.querySelector('.hub-horiz-loop-track');
             if (track) track.style.animationPlayState = 'paused';
         }
