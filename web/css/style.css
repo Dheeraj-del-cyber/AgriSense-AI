@@ -5194,6 +5194,26 @@ body.mobile-home-fixed .farm-footer,
         animation: sunRaysRotation 24s linear infinite;
     }
 
+    @media (min-width: 769px) {
+        #trajectorySunRaysAspect image {
+            x: -28px;
+            y: -28px;
+            width: 56px;
+            height: 56px;
+        }
+
+        #trajectorySunImage image {
+            x: -18px;
+            y: -18px;
+            width: 36px;
+            height: 36px;
+        }
+
+        #trajectorySun .sun-halo {
+            r: 16px;
+        }
+    }
+
     @keyframes sunRaysRotation {
         to {
             transform: rotate(360deg);
@@ -6830,5 +6850,11 @@ body.mobile-home-fixed .farm-footer,
     .btn-dosage-calc {
         padding: 0.25rem 0.4rem !important;
         font-size: 0.65rem !important;
+    }
+
+    /* Mobile Bottom Nav: Remove Profile button while keeping its layout space intact */
+    .bottom-nav-link.mobile-profile-btn {
+        visibility: hidden !important;
+        pointer-events: none !important;
     }
 }
