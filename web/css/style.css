@@ -6866,33 +6866,36 @@ body.mobile-home-fixed .farm-footer,
         display: flex !important;
     }
 
-    /* Mobile Language Island: Attached Profile Icon (Design confirmation preview) */
+    /* Mobile Language Island: Attached Profile Icon (Positioned up on the island) */
     .lang-island-profile-btn {
         display: inline-flex !important;
         align-items: center;
         justify-content: center;
-        position: relative;
-        z-index: 1;
-        width: 32px;
-        height: 32px;
-        min-width: 32px;
-        padding: 0;
-        margin-left: 4px;
-        border: none;
-        outline: none;
-        border-radius: 9999px;
-        color: #ffffff;
-        background: rgba(255, 255, 255, 0.16);
-        -webkit-box-shadow: inset 2px 2px 0px -2px rgba(255, 255, 255, 0.75), inset 0 0 3px 1px rgba(255, 255, 255, 0.7);
-        box-shadow: inset 2px 2px 0px -2px rgba(255, 255, 255, 0.75), inset 0 0 3px 1px rgba(255, 255, 255, 0.7);
-        cursor: pointer;
-        user-select: none;
-        transition: transform 0.2s ease, background-color 0.2s ease;
-        flex-shrink: 0;
+        position: absolute !important;
+        top: -18px !important;
+        right: 10px !important;
+        z-index: 10 !important;
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 1px solid rgba(255, 255, 255, 0.45) !important;
+        outline: none !important;
+        border-radius: 50% !important;
+        color: #ffffff !important;
+        background: rgba(255, 255, 255, 0.25) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-box-shadow: inset 2px 2px 0px -2px rgba(255, 255, 255, 0.85), inset 0 0 3px 1px rgba(255, 255, 255, 0.7), 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+        box-shadow: inset 2px 2px 0px -2px rgba(255, 255, 255, 0.85), inset 0 0 3px 1px rgba(255, 255, 255, 0.7), 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+        cursor: pointer !important;
+        user-select: none !important;
+        transition: transform 0.2s ease, background-color 0.2s ease !important;
     }
 
     .lang-island-profile-btn:active {
-        transform: scale(0.93);
-        background: rgba(255, 255, 255, 0.3);
+        transform: scale(0.92) !important;
+        background: rgba(255, 255, 255, 0.4) !important;
     }
 }
