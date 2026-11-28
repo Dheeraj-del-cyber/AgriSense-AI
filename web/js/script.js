@@ -4059,7 +4059,7 @@ if (typeof originalNavigateTo === "function") {
 }
 
 // ==========================================
-// HORIZONTAL MOVING CARDS LOOP CONTROLLER
+// HORIZONTAL MOVING CARDS LOOP CONTROLLER (DYNAMIC ARCH)
 // ==========================================
 function initHorizLoopCards() {
     const track = document.querySelector('.hub-horiz-loop-track');
