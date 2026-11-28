@@ -1,1 +1,1 @@
-window.API_BASE = "https://ipbl-p70f.onrender.com";
+window.API_BASE = "http://127.0.0.1:5000";
