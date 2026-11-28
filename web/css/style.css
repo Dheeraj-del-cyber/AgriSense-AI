@@ -3843,6 +3843,16 @@ body.chat-scroll-lock {
     padding: 1.25rem;
 }
 
+.auth-overlay {
+    overflow-y: auto;
+    background:
+        radial-gradient(ellipse at 18% 18%, rgba(87, 167, 107, 0.28), transparent 38%),
+        radial-gradient(ellipse at 82% 82%, rgba(42, 116, 75, 0.3), transparent 42%),
+        rgba(6, 27, 17, 0.78);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
 .loading-screen {
     background:
         radial-gradient(ellipse at 50% 42%, rgba(52, 126, 78, 0.2), transparent 55%),
@@ -4008,41 +4018,103 @@ body.chat-scroll-lock {
 
 /* Auth Dialog */
 .auth-card {
+    position: relative;
+    isolation: isolate;
     width: 100%;
     max-width: 420px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 2rem;
-    box-shadow: var(--sh-modal);
+    overflow: hidden;
+    background: linear-gradient(160deg, #ffffff 0%, #f6faf6 100%);
+    border: 1px solid rgba(218, 232, 220, 0.95);
+    border-radius: 22px;
+    padding: 1.35rem 1.65rem 1.55rem;
+    box-shadow: 0 28px 75px rgba(2, 20, 12, 0.34), 0 6px 20px rgba(14, 66, 38, 0.18);
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 0.9rem;
+}
+
+.auth-card::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0 0 auto;
+    height: 164px;
+    border-radius: 0 0 42% 12% / 0 0 28px 28px;
+    background:
+        radial-gradient(circle at 88% 20%, rgba(173, 224, 172, 0.18), transparent 22%),
+        radial-gradient(circle at 16% 88%, rgba(122, 190, 133, 0.16), transparent 30%),
+        linear-gradient(128deg, #103d29 0%, #1b6542 58%, #28764c 100%);
+}
+
+.auth-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.auth-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 30px;
+    color: rgba(255, 255, 255, 0.96);
+}
+
+.auth-brand-mark {
+    width: 28px;
+    height: 28px;
+    padding: 3px;
+    object-fit: contain;
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.auth-brand-name {
+    font-size: 0.91rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.auth-brand-name strong {
+    color: #b7e5a7;
+}
+
+.auth-brand-tag {
+    margin-left: 0.25rem;
+    padding-left: 0.65rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.76);
+    font-size: 0.57rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
 }
 
 .auth-header {
     text-align: center;
+    padding-bottom: 0.15rem;
 }
 
 .auth-heading {
     font-size: 1.375rem;
     font-weight: 800;
-    color: var(--text-primary);
+    color: #ffffff;
+    letter-spacing: -0.035em;
 }
 
 .auth-subheading {
     font-size: 0.8125rem;
-    color: var(--text-muted);
+    color: rgba(255, 255, 255, 0.78);
     margin-top: 0.25rem;
 }
 
 .auth-toggle {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    background: var(--surface-subtle);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 3px;
+    background: #edf4ee;
+    border: 1px solid #dce9de;
+    border-radius: 10px;
+    padding: 4px;
 }
 
 .auth-toggle-btn {
@@ -4050,20 +4122,54 @@ body.chat-scroll-lock {
     font-size: 0.8125rem;
     font-weight: 600;
     color: var(--text-muted);
-    border-radius: var(--radius-sm);
+    border-radius: 7px;
     transition: all var(--transition-fast);
 }
 
 .auth-toggle-btn.active {
-    background: var(--surface);
-    color: var(--text-primary);
-    box-shadow: var(--sh-xs);
+    background: #ffffff;
+    color: var(--g-900);
+    box-shadow: 0 2px 6px rgba(16, 55, 33, 0.12);
 }
 
 .auth-form {
     display: flex;
     flex-direction: column;
-    gap: 0.875rem;
+    gap: 0.75rem;
+}
+
+.auth-card .input-group {
+    gap: 0.3rem;
+}
+
+.auth-card .input-group label {
+    color: #345441;
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.auth-card .input-group input {
+    padding: 0.62rem 0.8rem;
+    border-color: #dce8de;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.88);
+}
+
+.auth-card .input-group input:focus {
+    border-color: #43835b;
+    box-shadow: 0 0 0 3px rgba(45, 125, 75, 0.12);
+}
+
+.auth-card .btn-primary {
+    min-height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background: linear-gradient(115deg, #1d7148, #12442e);
+    box-shadow: 0 7px 16px rgba(18, 68, 46, 0.2);
+}
+
+.auth-card .btn-primary:hover {
+    background: linear-gradient(115deg, #248254, #164e35);
 }
 
 .forgot-link {
@@ -4078,6 +4184,86 @@ body.chat-scroll-lock {
     color: var(--accent-rose);
     font-weight: 600;
     text-align: center;
+}
+
+@media (max-width: 480px) {
+    .auth-overlay {
+        align-items: flex-start;
+        padding: 0.6rem 0.75rem;
+    }
+
+    .auth-card {
+        gap: 0.55rem;
+        margin: auto 0;
+        padding: 0.8rem 1rem 1rem;
+        border-radius: 19px;
+    }
+
+    .auth-card::before {
+        height: 142px;
+    }
+
+    .auth-brand {
+        min-height: 24px;
+        gap: 0.35rem;
+    }
+
+    .auth-brand-mark {
+        width: 24px;
+        height: 24px;
+    }
+
+    .auth-brand-name {
+        font-size: 0.84rem;
+    }
+
+    .auth-brand-tag {
+        font-size: 0.5rem;
+        padding-left: 0.45rem;
+    }
+
+    .auth-heading {
+        font-size: 1.2rem;
+    }
+
+    .auth-subheading {
+        font-size: 0.74rem;
+    }
+
+    .auth-toggle {
+        height: 38px;
+    }
+
+    .auth-toggle-btn {
+        height: 28px !important;
+        min-height: 0 !important;
+        padding: 0 0.4rem !important;
+        line-height: 1.1 !important;
+    }
+
+    .auth-form {
+        gap: 0.45rem;
+    }
+
+    .auth-card .input-group {
+        gap: 0.18rem;
+    }
+
+    .auth-card .input-group label {
+        line-height: 1.15;
+    }
+
+    .auth-card .input-group input {
+        height: 36px;
+        min-height: 0;
+        padding: 0 0.7rem;
+        font-size: 0.84rem;
+    }
+
+    .auth-card .btn-primary {
+        min-height: 38px;
+        padding: 0.45rem 0.75rem;
+    }
 }
 
 /* Operator Profile Card */
@@ -4245,6 +4431,13 @@ body.chat-scroll-lock {
     color: var(--g-800);
     font-size: 0.68rem;
     font-weight: 650;
+}
+
+.profile-account-status {
+    margin-top: 0.35rem;
+    color: #a34a24;
+    font-size: 0.72rem;
+    line-height: 1.4;
 }
 
 .profile-photo-status.is-error {
