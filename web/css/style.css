@@ -6807,4 +6807,10 @@ body.mobile-home-fixed .farm-footer,
         padding: 0.25rem 0.4rem !important;
         font-size: 0.65rem !important;
     }
+
+    /* Mobile Bottom Nav: Remove Profile button while keeping its layout space intact */
+    .bottom-nav-link.mobile-profile-btn {
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
 }
