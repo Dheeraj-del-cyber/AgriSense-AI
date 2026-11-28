@@ -2668,7 +2668,7 @@ function stopGaugeTilt() {
 
     gaugeTiltTarget = { angle: 0, x: 0, y: 0 };
     gaugeTiltCurrent = { angle: 0, x: 0, y: 0 };
-    const waterSurface = document.getElementById('moistureWaterSurface');
+    const waterSurface = document.getElementById('moistureWaveContainer') || document.getElementById('moistureWaterSurface');
     if (waterSurface) {
         waterSurface.style.setProperty('--water-tilt-angle', '0deg');
         waterSurface.style.setProperty('--water-tilt-x', '0px');
@@ -2796,7 +2796,7 @@ function queueGaugeTiltFrame() {
 
 function animateGaugeTilt() {
     gaugeTiltFrame = null;
-    const waterSurface = document.getElementById('moistureWaterSurface');
+    const waterSurface = document.getElementById('moistureWaveContainer') || document.getElementById('moistureWaterSurface');
     if (!waterSurface || !gaugeTiltEnabled) return;
 
     let shakeAngle = 0;
@@ -2851,7 +2851,8 @@ function setMoistureCardWaterLevel(moisture) {
     if (!waterFill) return;
 
     const level = Number.isFinite(moisture) ? Math.max(0, Math.min(100, moisture)) : 0;
-    waterFill.style.transform = `scaleY(${level / 100})`;
+    waterFill.style.height = `${level}%`;
+    waterFill.style.opacity = level > 0 ? '1' : '0';
 }
 
 function setIoTOffline(lastUpdated = '--:--:--') {

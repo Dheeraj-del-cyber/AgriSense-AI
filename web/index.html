@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Production Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=phase162">
+    <link rel="stylesheet" href="css/style.css?v=phase163">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -1042,6 +1042,15 @@
                 <div class="telemetry-card moisture-level-card" role="group" aria-label="Soil Moisture Level">
                     <div id="moistureCardWaterFill" class="moisture-card-water-fill" aria-hidden="true">
                         <div id="moistureWaterBody" class="moisture-water-body">
+                            <!-- Realistic Dual Layer Wave Crests -->
+                            <div id="moistureWaveContainer" class="moisture-wave-container">
+                                <svg class="moisture-wave wave-back" viewBox="0 0 1600 90" preserveAspectRatio="none">
+                                    <path d="M 0,35 Q 200,65 400,35 T 800,35 T 1200,35 T 1600,35 L 1600,90 L 0,90 Z"></path>
+                                </svg>
+                                <svg class="moisture-wave wave-front" viewBox="0 0 1600 90" preserveAspectRatio="none">
+                                    <path d="M 0,45 Q 200,15 400,45 T 800,45 T 1200,45 T 1600,45 L 1600,90 L 0,90 Z"></path>
+                                </svg>
+                            </div>
                             <div class="water-bubbles">
                                 <span class="bubble b1"></span>
                                 <span class="bubble b2"></span>
@@ -1067,10 +1076,6 @@
                                 <span id="moistureValue" class="gauge-number">0</span>
                                 <span class="gauge-unit">%</span>
                             </div>
-                        </div>
-                        <div class="moisture-test-fill-control">
-                            <button id="fillWaterTestButton" class="moisture-test-fill-button" type="button"
-                                aria-pressed="false">Fill Water (Test)</button>
                         </div>
                     </div>
                     <div class="telemetry-card-footer">
@@ -1653,8 +1658,8 @@
 
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="config.js?v=phase162"></script>
-    <script src="js/script.js?v=phase162"></script>
+    <script src="config.js?v=phase163"></script>
+    <script src="js/script.js?v=phase163"></script>
 </body>
 
 </html>
