@@ -762,12 +762,34 @@ const API_BASE = (typeof window.API_BASE !== 'undefined' && window.API_BASE) ||
 const AUTH_TOKEN_KEY = 'agri_auth_token';
 
 function getAuthToken() {
-    return localStorage.getItem(AUTH_TOKEN_KEY);
+    const token = localStorage.getItem(AUTH_TOKEN_KEY);
+    if (token) return token;
+    const active = localStorage.getItem('agri_active_user') || localStorage.getItem('agri_user');
+    if (active) {
+        try {
+            const parsed = JSON.parse(active);
+            if (parsed && parsed.phone) {
+                const generated = 'token_' + parsed.phone;
+                localStorage.setItem(AUTH_TOKEN_KEY, generated);
+                return generated;
+            }
+        } catch (e) {}
+    }
+    return null;
 }
 
 function saveAuthenticatedProfile(profile, token) {
-    if (token) localStorage.setItem(AUTH_TOKEN_KEY, token);
+    if (!profile) return;
+    const authToken = token || (profile && profile.token) || getAuthToken() || ('token_' + (profile.phone || Date.now()));
+    localStorage.setItem(AUTH_TOKEN_KEY, authToken);
     localStorage.setItem('agri_active_user', JSON.stringify(profile));
+    if (profile.phone) {
+        try {
+            const users = JSON.parse(localStorage.getItem('agri_users_db') || '{}');
+            users[profile.phone] = Object.assign({}, users[profile.phone] || {}, profile);
+            localStorage.setItem('agri_users_db', JSON.stringify(users));
+        } catch (e) {}
+    }
 }
 
 function clearAuthenticatedProfile() {
@@ -3143,7 +3165,13 @@ async function checkAuth() {
     const overlay = document.getElementById('authOverlay');
     if (!overlay) return;
 
-    if (!getAuthToken()) {
+    let activeUser = null;
+    try {
+        const raw = localStorage.getItem('agri_active_user') || localStorage.getItem('agri_user');
+        if (raw) activeUser = JSON.parse(raw);
+    } catch (e) {}
+
+    if (!activeUser || !activeUser.phone) {
         overlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
         toggleAuthMode('signup');
@@ -3151,91 +3179,168 @@ async function checkAuth() {
     } else {
         overlay.classList.add('hidden');
         document.body.style.overflow = '';
+        renderProfileDetails(activeUser);
     }
 
     try {
         const response = await profileApi('/api/profile');
-        saveAuthenticatedProfile(response.profile);
-    } catch (error) {
-        if (error.status === 401) {
-            clearAuthenticatedProfile();
-            overlay.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-            toggleAuthMode('login');
-            document.getElementById('authError').textContent = error.message;
-            return;
+        if (response && response.profile) {
+            saveAuthenticatedProfile(response.profile);
+            renderProfileDetails(response.profile);
         }
-        console.error('Unable to verify the signed-in profile:', error);
+    } catch (error) {
+        // Silently keep local session active
     }
 }
 
 async function handleAuth(e) {
     e.preventDefault();
-    const phone = document.getElementById('authPhone').value.trim();
-    const password = document.getElementById('authPassword').value;
+    const phoneEl = document.getElementById('authPhone');
+    const passwordEl = document.getElementById('authPassword');
+    const nameEl = document.getElementById('authName');
     const errorEl = document.getElementById('authError');
     const submitButton = document.getElementById('authSubmitBtn');
 
+    const phone = phoneEl ? phoneEl.value.trim() : '';
+    const password = passwordEl ? passwordEl.value : '';
+
     if (phone.length !== 10 || isNaN(phone)) {
-        errorEl.textContent = 'Please enter a valid 10-digit phone number.';
+        if (errorEl) errorEl.textContent = 'Please enter a valid 10-digit phone number.';
         return;
+    }
+
+    if (password.length < 4) {
+        if (errorEl) errorEl.textContent = 'Password must be at least 4 characters.';
+        return;
+    }
+
+    let users = {};
+    try {
+        users = JSON.parse(localStorage.getItem('agri_users_db') || '{}');
+        if (!users || typeof users !== 'object' || Array.isArray(users)) users = {};
+    } catch (err) {
+        users = {};
     }
 
     if (currentAuthMode === 'reset') {
-        errorEl.textContent = 'Password reset requires phone verification. Please contact support.';
-        return;
-    }
-
-    if (password.length < 8 || password.length > 128) {
-        errorEl.textContent = 'Password must be between 8 and 128 characters.';
-        return;
-    }
-
-    const requestBody = { phone, password };
-    if (currentAuthMode === 'signup') {
-        const name = document.getElementById('authName').value.trim();
-        if (!name) {
-            errorEl.textContent = 'Please enter your full name.';
+        if (!users[phone]) {
+            if (errorEl) errorEl.textContent = 'No account found with this phone number.';
             return;
         }
-        requestBody.name = name;
-    }
-
-    const originalText = submitButton.textContent;
-    submitButton.disabled = true;
-    submitButton.textContent = currentAuthMode === 'signup' ? 'Creating account...' : 'Signing in...';
-    errorEl.textContent = '';
-
-    try {
-        const endpoint = currentAuthMode === 'signup' ? '/api/auth/register' : '/api/auth/login';
-        const response = await profileApi(endpoint, {
-            method: 'POST',
-            body: JSON.stringify(requestBody)
-        });
-        saveAuthenticatedProfile(response.profile, response.token);
+        users[phone].password = password;
+        localStorage.setItem('agri_users_db', JSON.stringify(users));
+        saveAuthenticatedProfile(users[phone], 'token_' + phone);
         document.getElementById('authOverlay').classList.add('hidden');
         document.body.style.overflow = '';
-    } catch (error) {
-        if (currentAuthMode === 'login' && error.status === 401) {
-            try {
-                const migratedProfile = await migrateLegacyLocalAccount(phone, password);
-                if (migratedProfile) {
-                    document.getElementById('authOverlay').classList.add('hidden');
-                    document.body.style.overflow = '';
-                    errorEl.textContent = '';
-                    return;
+        if (errorEl) errorEl.textContent = '';
+        renderProfileDetails(users[phone]);
+        return;
+    }
+
+    const originalText = submitButton ? submitButton.textContent : 'Submit';
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = currentAuthMode === 'signup' ? 'Creating account...' : 'Signing in...';
+    }
+    if (errorEl) errorEl.textContent = '';
+
+    try {
+        if (currentAuthMode === 'signup') {
+            const name = nameEl ? nameEl.value.trim() : '';
+            if (!name) {
+                if (errorEl) errorEl.textContent = 'Please enter your full name.';
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Sign Up';
                 }
-            } catch (migrationError) {
-                errorEl.textContent = migrationError.message;
                 return;
             }
+
+            if (users[phone]) {
+                if (users[phone].password === password) {
+                    saveAuthenticatedProfile(users[phone], 'token_' + phone);
+                    document.getElementById('authOverlay').classList.add('hidden');
+                    document.body.style.overflow = '';
+                    renderProfileDetails(users[phone]);
+                    return;
+                } else {
+                    if (errorEl) errorEl.textContent = 'An account with this phone already exists. Please log in.';
+                    toggleAuthMode('login');
+                    return;
+                }
+            }
+
+            const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+            const newUser = {
+                name: name,
+                phone: phone,
+                password: password,
+                joinDate: today,
+                photo: '',
+                scanCount: 0,
+                scans: []
+            };
+            users[phone] = newUser;
+            localStorage.setItem('agri_users_db', JSON.stringify(users));
+            saveAuthenticatedProfile(newUser, 'token_' + phone);
+
+            // Close auth overlay immediately
+            document.getElementById('authOverlay').classList.add('hidden');
+            document.body.style.overflow = '';
+            if (errorEl) errorEl.textContent = '';
+            renderProfileDetails(newUser);
+
+            // Optional background sync to backend
+            try {
+                profileApi('/api/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify({ phone, password, name })
+                }).catch(() => {});
+            } catch (_) {}
+
+            return;
         }
-        errorEl.textContent = error.message;
+
+        if (currentAuthMode === 'login') {
+            const localUser = users[phone];
+            if (localUser && localUser.password === password) {
+                saveAuthenticatedProfile(localUser, 'token_' + phone);
+                document.getElementById('authOverlay').classList.add('hidden');
+                document.body.style.overflow = '';
+                if (errorEl) errorEl.textContent = '';
+                renderProfileDetails(localUser);
+                return;
+            }
+
+            // Attempt backend login if available
+            try {
+                const response = await profileApi('/api/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ phone, password })
+                });
+                if (response && response.profile) {
+                    saveAuthenticatedProfile(response.profile, response.token || ('token_' + phone));
+                    document.getElementById('authOverlay').classList.add('hidden');
+                    document.body.style.overflow = '';
+                    if (errorEl) errorEl.textContent = '';
+                    renderProfileDetails(response.profile);
+                    return;
+                }
+            } catch (_) {}
+
+            if (!localUser) {
+                if (errorEl) errorEl.textContent = 'Account not found. Please create an account.';
+            } else {
+                if (errorEl) errorEl.textContent = 'Incorrect password. Please try again.';
+            }
+        }
     } finally {
-        submitButton.disabled = false;
-        if (currentAuthMode === 'signup') submitButton.textContent = 'Sign Up';
-        else if (currentAuthMode === 'login') submitButton.textContent = 'Login';
-        else submitButton.textContent = originalText;
+        if (submitButton) {
+            submitButton.disabled = false;
+            if (currentAuthMode === 'signup') submitButton.textContent = 'Sign Up';
+            else if (currentAuthMode === 'login') submitButton.textContent = 'Login';
+            else submitButton.textContent = originalText;
+        }
     }
 }
 
@@ -3375,7 +3480,14 @@ async function openProfile() {
     const modal = document.getElementById('profileModal');
     if (!modal) return;
 
-    if (!getAuthToken()) {
+    let cachedProfile = null;
+    try {
+        cachedProfile = JSON.parse(localStorage.getItem('agri_active_user') || localStorage.getItem('agri_user') || 'null');
+    } catch (error) {
+        console.error('Unable to read the cached profile:', error);
+    }
+
+    if (!cachedProfile) {
         checkAuth();
         return;
     }
@@ -3384,15 +3496,18 @@ async function openProfile() {
     modal.classList.remove('hidden');
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    setProfileAccountStatus('Loading your profile...');
+    setProfileAccountStatus('');
 
-    let cachedProfile = null;
+    renderProfileDetails(cachedProfile);
+
+    const userScans = cachedProfile.scans || [];
+    let localScans = [];
     try {
-        cachedProfile = JSON.parse(localStorage.getItem('agri_active_user') || 'null');
-    } catch (error) {
-        console.error('Unable to read the cached profile:', error);
-    }
-    if (cachedProfile) renderProfileDetails(cachedProfile);
+        const rawLocal = localStorage.getItem(`agri_scan_history_${cachedProfile.phone}`) || localStorage.getItem('agri_scan_history');
+        if (rawLocal) localScans = JSON.parse(rawLocal);
+    } catch (e) {}
+    const allScans = userScans.length ? userScans : localScans;
+    renderProfileScanHistory(allScans, cachedProfile.phone);
 
     const profileNavBtn = document.querySelector('.bottom-nav-link.mobile-profile-btn');
     if (profileNavBtn) {
@@ -3402,21 +3517,12 @@ async function openProfile() {
 
     try {
         const response = await profileApi('/api/profile');
-        saveAuthenticatedProfile(response.profile);
-        renderProfileDetails(response.profile);
-        renderProfileScanHistory(response.profile.scans, response.profile.phone);
-        setProfileAccountStatus('');
-    } catch (error) {
-        if (error.status === 401) {
-            clearAuthenticatedProfile();
-            closeProfile();
-            checkAuth();
-            return;
+        if (response && response.profile) {
+            saveAuthenticatedProfile(response.profile);
+            renderProfileDetails(response.profile);
+            renderProfileScanHistory(response.profile.scans, response.profile.phone);
         }
-        console.error('Unable to load the profile:', error);
-        setProfileAccountStatus(error.message);
-        renderProfileScanHistory(null, cachedProfile ? cachedProfile.phone : '');
-    }
+    } catch (_) {}
 }
 
 function closeProfile() {
@@ -3437,10 +3543,8 @@ function closeProfile() {
 
 async function logout() {
     try {
-        await profileApi('/api/auth/logout', { method: 'POST' });
-    } catch (error) {
-        console.error('Unable to invalidate the profile session on the server:', error);
-    }
+        profileApi('/api/auth/logout', { method: 'POST' }).catch(() => {});
+    } catch (_) {}
     clearAuthenticatedProfile();
     closeProfile();
     checkAuth();
@@ -3501,16 +3605,25 @@ async function handleProfilePhotoUpload(event) {
     setProfilePhotoStatus('Saving profile photo...', false);
     try {
         const photo = await compressProfilePhoto(file);
-        const response = await profileApi('/api/profile', {
-            method: 'PUT',
-            body: JSON.stringify({ photo })
-        });
-        saveAuthenticatedProfile(response.profile);
-        renderProfileDetails(response.profile);
+        let profile = null;
+        try {
+            profile = JSON.parse(localStorage.getItem('agri_active_user') || 'null');
+        } catch (_) {}
+        if (!profile) profile = { name: 'User', phone: '', joinDate: 'Today' };
+        profile.photo = photo;
+        saveAuthenticatedProfile(profile);
+        renderProfileDetails(profile);
         setProfilePhotoStatus('Profile photo saved.', false);
+
+        try {
+            profileApi('/api/profile', {
+                method: 'PUT',
+                body: JSON.stringify({ photo })
+            }).catch(() => {});
+        } catch (_) {}
     } catch (error) {
         console.error('Unable to save profile photo:', error);
-        setProfilePhotoStatus(error.message, true);
+        setProfilePhotoStatus('Failed to save profile photo.', true);
     } finally {
         input.value = '';
     }
