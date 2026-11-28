@@ -1109,15 +1109,18 @@ ol {
     0% {
         transform: scaleX(1) scaleY(1) rotate(0deg);
     }
+
     50% {
         transform: scaleX(0.28) scaleY(1.06) rotate(3deg);
     }
+
     100% {
         transform: scaleX(0.95) scaleY(0.98) rotate(-1deg);
     }
 }
 
 @keyframes butterfly-drift {
+
     /* --- Pass 1: Enters low, rises in a gentle soaring arc across to upper right --- */
     0% {
         left: -8%;
@@ -1125,48 +1128,56 @@ ol {
         opacity: 0;
         transform: rotate(-6deg);
     }
+
     3% {
         opacity: 0.82;
         left: 2%;
         top: 52%;
         transform: rotate(-12deg);
     }
+
     10% {
         left: 20%;
         top: 38%;
         opacity: 0.82;
         transform: rotate(-14deg);
     }
+
     18% {
         left: 42%;
         top: 28%;
         opacity: 0.82;
         transform: rotate(-4deg);
     }
+
     26% {
         left: 62%;
         top: 24%;
         opacity: 0.82;
         transform: rotate(4deg);
     }
+
     34% {
         left: 80%;
         top: 30%;
         opacity: 0.82;
         transform: rotate(14deg);
     }
+
     40% {
         left: 94%;
         top: 20%;
         opacity: 0.82;
         transform: rotate(-10deg);
     }
+
     45% {
         left: 106%;
         top: 15%;
         opacity: 0.82;
         transform: rotate(-12deg);
     }
+
     47% {
         left: 110%;
         top: 14%;
@@ -1189,42 +1200,49 @@ ol {
         opacity: 0.82;
         transform: rotate(14deg);
     }
+
     62% {
         left: 24%;
         top: 35%;
         opacity: 0.82;
         transform: rotate(16deg);
     }
+
     70% {
         left: 48%;
         top: 50%;
         opacity: 0.82;
         transform: rotate(2deg);
     }
+
     77% {
         left: 64%;
         top: 46%;
         opacity: 0.82;
         transform: rotate(-12deg);
     }
+
     85% {
         left: 78%;
         top: 38%;
         opacity: 0.82;
         transform: rotate(-4deg);
     }
+
     92% {
         left: 92%;
         top: 43%;
         opacity: 0.82;
         transform: rotate(8deg);
     }
+
     97% {
         left: 104%;
         top: 47%;
         opacity: 0.82;
         transform: rotate(10deg);
     }
+
     100% {
         left: 110%;
         top: 48%;
@@ -1242,6 +1260,7 @@ ol {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .hero-butterfly,
     .butterfly-wings-wrap {
         animation: none !important;
@@ -2679,7 +2698,7 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     background: #ffffff;
 }
 
-.moisture-level-card > :not(.moisture-card-water-fill) {
+.moisture-level-card> :not(.moisture-card-water-fill) {
     position: relative;
     z-index: 1;
 }
@@ -2718,8 +2737,6 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     height: 26px;
     overflow: visible;
     pointer-events: none;
-    transform: translate3d(var(--water-tilt-x, 0px), var(--water-tilt-y, 0px), 0) rotate(var(--water-tilt-angle, 0deg));
-    transform-origin: 50% 50%;
 }
 
 .moisture-wave {
@@ -2767,10 +2784,10 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     z-index: 1;
     inset: 0;
     background: linear-gradient(115deg,
-        rgba(255, 255, 255, 0.3) 0%,
-        rgba(255, 255, 255, 0.04) 32%,
-        transparent 58%,
-        rgba(255, 255, 255, 0.2) 100%);
+            rgba(255, 255, 255, 0.3) 0%,
+            rgba(255, 255, 255, 0.04) 32%,
+            transparent 58%,
+            rgba(255, 255, 255, 0.2) 100%);
     background-size: 180% 100%;
     animation: moistureWaterShimmer 7s ease-in-out infinite alternate;
     pointer-events: none;
@@ -2871,7 +2888,7 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     padding: 0.2rem 0.35rem;
 }
 
-.moisture-level-card .scale-item + .scale-item {
+.moisture-level-card .scale-item+.scale-item {
     border-left: 1px solid var(--border-subtle);
 }
 
@@ -5501,7 +5518,9 @@ body.mobile-home-fixed .farm-footer,
     }
 
     @keyframes moonAuraPulse {
-        0%, 100% {
+
+        0%,
+        100% {
             opacity: 0.82;
         }
 
@@ -5955,9 +5974,10 @@ body.mobile-home-fixed .farm-footer,
         user-select: none !important;
     }
 
-    .desktop-creeper-strip .desktop-creeper-item + .desktop-creeper-item {
+    .desktop-creeper-strip .desktop-creeper-item+.desktop-creeper-item {
         margin-left: -52px !important;
     }
+
     body:has(#screenHome.active) {
         background: #ffffff !important;
         background-color: #ffffff !important;
@@ -6101,15 +6121,19 @@ body.mobile-home-fixed .farm-footer,
         0% {
             transform: rotate(0deg) translateY(0);
         }
+
         28% {
             transform: rotate(1.8deg) translateY(-4px);
         }
+
         55% {
             transform: rotate(-1deg) translateY(-1px);
         }
+
         80% {
             transform: rotate(-1.8deg) translateY(-5px);
         }
+
         100% {
             transform: rotate(0deg) translateY(0);
         }
@@ -6172,11 +6196,12 @@ body.mobile-home-fixed .farm-footer,
         animation: desktop-grass-sway 6.6s cubic-bezier(0.44, 0.05, 0.55, 0.95) infinite !important;
     }
 
-    .desktop-grass-strip .desktop-grass-item + .desktop-grass-item {
+    .desktop-grass-strip .desktop-grass-item+.desktop-grass-item {
         margin-left: -48px !important;
     }
 
     @keyframes desktop-grass-sway {
+
         0%,
         100% {
             transform: skewX(0deg) scale(1, 1);
