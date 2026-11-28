@@ -2668,11 +2668,11 @@ function stopGaugeTilt() {
 
     gaugeTiltTarget = { angle: 0, x: 0, y: 0 };
     gaugeTiltCurrent = { angle: 0, x: 0, y: 0 };
-    const waterFill = document.getElementById('moistureCardWaterFill');
-    if (waterFill) {
-        waterFill.style.setProperty('--water-tilt-angle', '0deg');
-        waterFill.style.setProperty('--water-tilt-x', '0px');
-        waterFill.style.setProperty('--water-tilt-y', '0px');
+    const waterSurface = document.getElementById('moistureWaterSurface');
+    if (waterSurface) {
+        waterSurface.style.setProperty('--water-tilt-angle', '0deg');
+        waterSurface.style.setProperty('--water-tilt-x', '0px');
+        waterSurface.style.setProperty('--water-tilt-y', '0px');
     }
 }
 
@@ -2796,8 +2796,8 @@ function queueGaugeTiltFrame() {
 
 function animateGaugeTilt() {
     gaugeTiltFrame = null;
-    const waterFill = document.getElementById('moistureCardWaterFill');
-    if (!waterFill || !gaugeTiltEnabled) return;
+    const waterSurface = document.getElementById('moistureWaterSurface');
+    if (!waterSurface || !gaugeTiltEnabled) return;
 
     let shakeAngle = 0;
     let shakeX = 0;
@@ -2820,9 +2820,9 @@ function animateGaugeTilt() {
     gaugeTiltCurrent.x += (targetX - gaugeTiltCurrent.x) * smoothing;
     gaugeTiltCurrent.y += (gaugeTiltTarget.y - gaugeTiltCurrent.y) * smoothing;
 
-    waterFill.style.setProperty('--water-tilt-angle', `${gaugeTiltCurrent.angle.toFixed(2)}deg`);
-    waterFill.style.setProperty('--water-tilt-x', `${gaugeTiltCurrent.x.toFixed(2)}px`);
-    waterFill.style.setProperty('--water-tilt-y', `${gaugeTiltCurrent.y.toFixed(2)}px`);
+    waterSurface.style.setProperty('--water-tilt-angle', `${gaugeTiltCurrent.angle.toFixed(2)}deg`);
+    waterSurface.style.setProperty('--water-tilt-x', `${gaugeTiltCurrent.x.toFixed(2)}px`);
+    waterSurface.style.setProperty('--water-tilt-y', `${gaugeTiltCurrent.y.toFixed(2)}px`);
 
     const remaining = Math.abs(targetAngle - gaugeTiltCurrent.angle) +
         Math.abs(targetX - gaugeTiltCurrent.x) +
@@ -2846,9 +2846,6 @@ async function fetchIoTData() {
     }
 }
 
-let moistureTestFillActive = false;
-let latestLiveMoistureLevel = 0;
-
 function setMoistureCardWaterLevel(moisture) {
     const waterFill = document.getElementById('moistureWaterBody');
     if (!waterFill) return;
@@ -2860,8 +2857,7 @@ function setMoistureCardWaterLevel(moisture) {
 function setIoTOffline(lastUpdated = '--:--:--') {
     const dict = TRANSLATIONS[AppState.currentLang] || TRANSLATIONS.en;
     const offlineText = dict.iotOffline || 'Offline';
-    latestLiveMoistureLevel = 0;
-    if (!moistureTestFillActive) setMoistureCardWaterLevel(0);
+    setMoistureCardWaterLevel(0);
 
     const valEl = document.getElementById('moistureValue');
     const updateEl = document.getElementById('lastUpdated');
@@ -2945,8 +2941,7 @@ function updateIoTUI(data) {
         return;
     }
 
-    latestLiveMoistureLevel = moisture;
-    if (!moistureTestFillActive) setMoistureCardWaterLevel(moisture);
+    setMoistureCardWaterLevel(moisture);
 
     const lastUpdated = formatLocalTime(rawLastUpdated);
 
@@ -4038,16 +4033,6 @@ function updateFarmLighting() {
 document.addEventListener('DOMContentLoaded', () => {
     updateFarmLighting();
     setInterval(updateFarmLighting, 1000 * 60 * 60);
-    const fillWaterTestButton = document.getElementById('fillWaterTestButton');
-    if (fillWaterTestButton) {
-        fillWaterTestButton.addEventListener('click', () => {
-            const isFilled = fillWaterTestButton.getAttribute('aria-pressed') !== 'true';
-            moistureTestFillActive = isFilled;
-            fillWaterTestButton.setAttribute('aria-pressed', String(isFilled));
-            fillWaterTestButton.textContent = isFilled ? 'Reset Test' : 'Fill Water (Test)';
-            setMoistureCardWaterLevel(isFilled ? 100 : latestLiveMoistureLevel);
-        });
-    }
     if (typeof fetchIoTData === 'function') {
         fetchIoTData();
     }

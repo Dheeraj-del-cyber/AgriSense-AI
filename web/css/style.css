@@ -2687,15 +2687,13 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     position: absolute;
     z-index: 0;
     inset: 0;
-    transform: translate3d(var(--water-tilt-x, 0px), var(--water-tilt-y, 0px), 0) rotate(var(--water-tilt-angle, 0deg));
-    transform-origin: 50% 100%;
     pointer-events: none;
 }
 
 .moisture-water-body {
     position: absolute;
     inset: 0;
-    overflow: hidden;
+    overflow: visible;
     background:
         radial-gradient(ellipse at 18% 28%, rgba(224, 242, 254, 0.42), transparent 38%),
         radial-gradient(ellipse at 82% 72%, rgba(3, 105, 161, 0.3), transparent 42%),
@@ -2703,13 +2701,26 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     filter: saturate(1.4) contrast(1.1);
     transform: scaleY(0);
     transform-origin: bottom;
-    clip-path: polygon(0 3%, 5% 2%, 10% 1%, 15% 1.5%, 20% 3%, 25% 4.5%, 30% 5%, 35% 4.5%, 40% 3%, 45% 1.5%, 50% 1%, 55% 2%, 60% 3.5%, 65% 4.5%, 70% 4.5%, 75% 3%, 80% 1.5%, 85% 1%, 90% 2%, 95% 3.5%, 100% 4%, 100% 100%, 0 100%);
-    animation: moistureWaterSurface 4.2s ease-in-out infinite alternate;
     transition: transform 900ms ease;
 }
 
-.moisture-water-body::before,
-.moisture-water-body::after {
+.moisture-water-surface {
+    position: absolute;
+    z-index: 3;
+    top: -0.85rem;
+    left: -12%;
+    width: 124%;
+    height: 2rem;
+    background: linear-gradient(180deg, rgba(125, 211, 252, 0.96), rgba(56, 189, 248, 0.92) 32%, rgba(14, 165, 233, 0.52) 74%, rgba(14, 165, 233, 0));
+    clip-path: polygon(0 20%, 5% 14%, 10% 9%, 15% 12%, 20% 20%, 25% 29%, 30% 33%, 35% 30%, 40% 22%, 45% 14%, 50% 9%, 55% 11%, 60% 19%, 65% 28%, 70% 32%, 75% 29%, 80% 21%, 85% 13%, 90% 10%, 95% 15%, 100% 23%, 100% 100%, 0 100%);
+    transform: translate3d(var(--water-tilt-x, 0px), var(--water-tilt-y, 0px), 0) rotate(var(--water-tilt-angle, 0deg));
+    transform-origin: 50% 50%;
+    animation: moistureWaterSurface 4.2s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.moisture-water-surface::before,
+.moisture-water-surface::after {
     position: absolute;
     left: -30%;
     width: 160%;
@@ -2717,7 +2728,7 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     pointer-events: none;
 }
 
-.moisture-water-body::before {
+.moisture-water-surface::before {
     top: -0.75rem;
     height: 2.25rem;
     border-radius: 44%;
@@ -2729,7 +2740,7 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     animation: moistureCardWaterWave 4.5s ease-in-out infinite alternate;
 }
 
-.moisture-water-body::after {
+.moisture-water-surface::after {
     top: 0.15rem;
     height: 0.8rem;
     border-radius: 50%;
@@ -2797,11 +2808,11 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
 
 @keyframes moistureWaterSurface {
     from {
-        clip-path: polygon(0 3%, 5% 2%, 10% 1%, 15% 1.5%, 20% 3%, 25% 4.5%, 30% 5%, 35% 4.5%, 40% 3%, 45% 1.5%, 50% 1%, 55% 2%, 60% 3.5%, 65% 4.5%, 70% 4.5%, 75% 3%, 80% 1.5%, 85% 1%, 90% 2%, 95% 3.5%, 100% 4%, 100% 100%, 0 100%);
+        clip-path: polygon(0 20%, 5% 14%, 10% 9%, 15% 12%, 20% 20%, 25% 29%, 30% 33%, 35% 30%, 40% 22%, 45% 14%, 50% 9%, 55% 11%, 60% 19%, 65% 28%, 70% 32%, 75% 29%, 80% 21%, 85% 13%, 90% 10%, 95% 15%, 100% 23%, 100% 100%, 0 100%);
     }
 
     to {
-        clip-path: polygon(0 4%, 5% 4.5%, 10% 3.5%, 15% 2%, 20% 1%, 25% 1.5%, 30% 3%, 35% 4.5%, 40% 5%, 45% 4%, 50% 2.5%, 55% 1%, 60% 1.5%, 65% 3%, 70% 4.5%, 75% 5%, 80% 4%, 85% 2%, 90% 1%, 95% 1.5%, 100% 3%, 100% 100%, 0 100%);
+        clip-path: polygon(0 29%, 5% 32%, 10% 28%, 15% 20%, 20% 12%, 25% 9%, 30% 13%, 35% 21%, 40% 29%, 45% 33%, 50% 29%, 55% 21%, 60% 13%, 65% 10%, 70% 14%, 75% 22%, 80% 30%, 85% 33%, 90% 28%, 95% 20%, 100% 13%, 100% 100%, 0 100%);
     }
 }
 
@@ -2847,35 +2858,6 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
 
 .moisture-level-card .gauge-unit {
     font-size: 1rem;
-}
-
-.moisture-test-fill-control {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.moisture-test-fill-button {
-    display: block;
-    margin: 0;
-    padding: 0.4rem 0.75rem;
-    border: 1px solid #000;
-    border-radius: 0;
-    background: var(--accent-sky-bg);
-    color: var(--accent-sky);
-    font: inherit;
-    font-size: 0.75rem;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.moisture-test-fill-button:hover {
-    background: #bae6fd;
-}
-
-.moisture-test-fill-button:focus-visible {
-    outline: 2px solid var(--accent-sky);
-    outline-offset: 2px;
 }
 
 @media (min-width: 1024px) {

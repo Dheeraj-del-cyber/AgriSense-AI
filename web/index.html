@@ -17,7 +17,7 @@
 
     <!-- Production Stylesheet -->
     <!-- Production Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=phase158">
+    <link rel="stylesheet" href="css/style.css?v=phase159">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -1042,6 +1042,7 @@
                 <div class="telemetry-card moisture-level-card" role="group" aria-label="Soil Moisture Level">
                     <div id="moistureCardWaterFill" class="moisture-card-water-fill" aria-hidden="true">
                         <div id="moistureWaterBody" class="moisture-water-body">
+                            <div id="moistureWaterSurface" class="moisture-water-surface"></div>
                             <div class="water-bubbles">
                                 <span class="bubble b1"></span>
                                 <span class="bubble b2"></span>
@@ -1067,10 +1068,6 @@
                                 <span id="moistureValue" class="gauge-number">0</span>
                                 <span class="gauge-unit">%</span>
                             </div>
-                        </div>
-                        <div class="moisture-test-fill-control">
-                            <button id="fillWaterTestButton" class="moisture-test-fill-button" type="button"
-                                aria-pressed="false">Fill Water (Test)</button>
                         </div>
                     </div>
                     <div class="telemetry-card-footer">
@@ -1654,7 +1651,7 @@
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="config.js"></script>
-    <script src="js/script.js?v=phase158"></script>
+    <script src="js/script.js?v=phase159"></script>
 </body>
 
 </html>
