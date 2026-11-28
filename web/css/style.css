@@ -2525,6 +2525,51 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
     animation-duration: 3.6s;
 }
 
+.bubble.b4 {
+    width: 8px;
+    height: 8px;
+    left: 15%;
+    bottom: 2px;
+    animation-delay: 0.8s;
+    animation-duration: 4.3s;
+}
+
+.bubble.b5 {
+    width: 5px;
+    height: 5px;
+    left: 82%;
+    bottom: 4px;
+    animation-delay: 1.6s;
+    animation-duration: 3.1s;
+}
+
+.bubble.b6 {
+    width: 7px;
+    height: 7px;
+    left: 39%;
+    bottom: 12px;
+    animation-delay: 2.4s;
+    animation-duration: 4.7s;
+}
+
+.bubble.b7 {
+    width: 4px;
+    height: 4px;
+    left: 58%;
+    bottom: 6px;
+    animation-delay: 3.1s;
+    animation-duration: 3.5s;
+}
+
+.bubble.b8 {
+    width: 6px;
+    height: 6px;
+    left: 92%;
+    bottom: 2px;
+    animation-delay: 1s;
+    animation-duration: 4.1s;
+}
+
 @keyframes bubbleRise {
     0% {
         transform: translateY(0) scale(0.6);
@@ -2617,11 +2662,259 @@ body:has(#screenDiseaseDetect.active) .farm-footer {
 
 .moisture-scale-legend {
     display: flex;
-    justify-content: center;
-    gap: 1.25rem;
+    justify-content: space-between;
+    gap: 0;
     width: 100%;
-    padding-top: 0.5rem;
+    padding-top: 0.75rem;
     border-top: 1px solid var(--border-subtle);
+}
+
+.moisture-level-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border: 1px solid #000;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.moisture-level-card > :not(.moisture-card-water-fill) {
+    position: relative;
+    z-index: 1;
+}
+
+.moisture-card-water-fill {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    transform: translate3d(var(--water-tilt-x, 0px), var(--water-tilt-y, 0px), 0) rotate(var(--water-tilt-angle, 0deg));
+    transform-origin: 50% 100%;
+    pointer-events: none;
+}
+
+.moisture-water-body {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 18% 28%, rgba(224, 242, 254, 0.42), transparent 38%),
+        radial-gradient(ellipse at 82% 72%, rgba(3, 105, 161, 0.3), transparent 42%),
+        linear-gradient(180deg, #38bdf8 0%, #0ea5e9 48%, #0284c7 100%);
+    filter: saturate(1.4) contrast(1.1);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    clip-path: polygon(0 3%, 5% 2%, 10% 1%, 15% 1.5%, 20% 3%, 25% 4.5%, 30% 5%, 35% 4.5%, 40% 3%, 45% 1.5%, 50% 1%, 55% 2%, 60% 3.5%, 65% 4.5%, 70% 4.5%, 75% 3%, 80% 1.5%, 85% 1%, 90% 2%, 95% 3.5%, 100% 4%, 100% 100%, 0 100%);
+    animation: moistureWaterSurface 4.2s ease-in-out infinite alternate;
+    transition: transform 900ms ease;
+}
+
+.moisture-water-body::before,
+.moisture-water-body::after {
+    position: absolute;
+    left: -30%;
+    width: 160%;
+    content: "";
+    pointer-events: none;
+}
+
+.moisture-water-body::before {
+    top: -0.75rem;
+    height: 2.25rem;
+    border-radius: 44%;
+    background:
+        radial-gradient(ellipse at 32% 100%, rgba(255, 255, 255, 0.45), transparent 64%),
+        radial-gradient(ellipse at 72% 100%, rgba(186, 230, 253, 0.32), transparent 68%);
+    filter: blur(2px);
+    opacity: 0.9;
+    animation: moistureCardWaterWave 4.5s ease-in-out infinite alternate;
+}
+
+.moisture-water-body::after {
+    top: 0.15rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(224, 242, 254, 0.08) 55%, transparent);
+    filter: blur(1px);
+    box-shadow: 0 0 8px rgba(224, 242, 254, 0.65);
+    opacity: 0.8;
+    animation: moistureCardWaterWaveReverse 5.6s ease-in-out infinite alternate;
+}
+
+.moisture-water-body .water-bubbles {
+    z-index: 2;
+}
+
+.moisture-water-body .bubble {
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    background: radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.95), rgba(186, 230, 253, 0.3) 68%);
+    box-shadow: 0 0 8px rgba(224, 242, 254, 0.75), inset 0 0 3px rgba(255, 255, 255, 0.9);
+}
+
+.moisture-water-sheen {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    background: linear-gradient(115deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0.04) 32%,
+        transparent 58%,
+        rgba(255, 255, 255, 0.2) 100%);
+    background-size: 180% 100%;
+    animation: moistureWaterShimmer 7s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.moisture-water-depth {
+    position: absolute;
+    z-index: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 20%;
+    background: linear-gradient(180deg, rgba(3, 105, 161, 0), rgba(3, 37, 65, 0.38));
+    pointer-events: none;
+}
+
+@keyframes moistureCardWaterWave {
+    from {
+        transform: translateX(-9%) rotate(-2deg);
+    }
+
+    to {
+        transform: translateX(9%) rotate(2deg);
+    }
+}
+
+@keyframes moistureCardWaterWaveReverse {
+    from {
+        transform: translateX(8%) rotate(2deg);
+    }
+
+    to {
+        transform: translateX(-8%) rotate(-2deg);
+    }
+}
+
+@keyframes moistureWaterSurface {
+    from {
+        clip-path: polygon(0 3%, 5% 2%, 10% 1%, 15% 1.5%, 20% 3%, 25% 4.5%, 30% 5%, 35% 4.5%, 40% 3%, 45% 1.5%, 50% 1%, 55% 2%, 60% 3.5%, 65% 4.5%, 70% 4.5%, 75% 3%, 80% 1.5%, 85% 1%, 90% 2%, 95% 3.5%, 100% 4%, 100% 100%, 0 100%);
+    }
+
+    to {
+        clip-path: polygon(0 4%, 5% 4.5%, 10% 3.5%, 15% 2%, 20% 1%, 25% 1.5%, 30% 3%, 35% 4.5%, 40% 5%, 45% 4%, 50% 2.5%, 55% 1%, 60% 1.5%, 65% 3%, 70% 4.5%, 75% 5%, 80% 4%, 85% 2%, 90% 1%, 95% 1.5%, 100% 3%, 100% 100%, 0 100%);
+    }
+}
+
+@keyframes moistureWaterShimmer {
+    from {
+        background-position: 0 50%;
+    }
+
+    to {
+        background-position: 100% 50%;
+    }
+}
+
+.moisture-level-card .telemetry-card-header {
+    justify-content: flex-end;
+    margin-bottom: 0.75rem;
+}
+
+.moisture-level-card .moisture-meter-display {
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 0.25rem 0 0.75rem;
+}
+
+.moisture-level-card .moisture-gauge-track {
+    width: 100%;
+    height: auto;
+    min-height: 3rem;
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
+    background: transparent;
+    box-shadow: none;
+}
+
+.moisture-level-card .gauge-center-reading {
+    text-shadow: none;
+}
+
+.moisture-level-card .gauge-number {
+    font-size: 2rem;
+}
+
+.moisture-level-card .gauge-unit {
+    font-size: 1rem;
+}
+
+.moisture-test-fill-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.moisture-test-fill-button {
+    display: block;
+    margin: 0;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid #000;
+    border-radius: 0;
+    background: var(--accent-sky-bg);
+    color: var(--accent-sky);
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.moisture-test-fill-button:hover {
+    background: #bae6fd;
+}
+
+.moisture-test-fill-button:focus-visible {
+    outline: 2px solid var(--accent-sky);
+    outline-offset: 2px;
+}
+
+@media (min-width: 1024px) {
+    .moisture-level-card {
+        min-height: 420px;
+        padding: 2rem 2.5rem;
+    }
+
+    .moisture-level-card .telemetry-card-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .moisture-level-card .moisture-meter-display {
+        flex: 1;
+        justify-content: center;
+        gap: 1.5rem;
+        padding: 1.25rem 0;
+    }
+
+    .moisture-level-card .moisture-gauge-track {
+        min-height: 5rem;
+    }
+
+    .moisture-level-card .gauge-number {
+        font-size: 3rem;
+    }
+
+    .moisture-level-card .gauge-unit {
+        font-size: 1.375rem;
+    }
+}
+
+.moisture-level-card .scale-item {
+    flex: 1 1 0;
+    padding: 0.2rem 0.35rem;
+}
+
+.moisture-level-card .scale-item + .scale-item {
+    border-left: 1px solid var(--border-subtle);
 }
 
 .gauge-tilt-control {
