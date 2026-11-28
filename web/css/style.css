@@ -6852,9 +6852,12 @@ body.mobile-home-fixed .farm-footer,
         font-size: 0.65rem !important;
     }
 
-    /* Mobile Bottom Nav: Remove Profile button while keeping its layout space intact */
+    /* Mobile Bottom Nav: Replace Profile space with Shop */
     .bottom-nav-link.mobile-profile-btn {
-        visibility: hidden !important;
-        pointer-events: none !important;
+        display: none !important;
+    }
+
+    .bottom-nav-link[data-screen="screenShop"] {
+        display: flex !important;
     }
 }
