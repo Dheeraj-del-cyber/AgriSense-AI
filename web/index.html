@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Production Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=phase145">
+    <link rel="stylesheet" href="css/style.css?v=phase157">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -1030,55 +1030,40 @@
             <!-- Primary Telemetry Dashboard -->
             <div class="iot-dashboard">
                 <!-- Moisture Meter Card -->
-                <div class="telemetry-card">
-                    <div class="telemetry-card-header">
-                        <div class="telemetry-header-title">
-                            <span class="telemetry-icon-wrap icon-water">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
-                                </svg>
-                            </span>
-                            <h3 data-i18n="iotSoilMoisture">Soil Moisture Level</h3>
+                <div class="telemetry-card moisture-level-card" role="group" aria-label="Soil Moisture Level">
+                    <div id="moistureCardWaterFill" class="moisture-card-water-fill" aria-hidden="true">
+                        <div id="moistureWaterBody" class="moisture-water-body">
+                            <div class="water-bubbles">
+                                <span class="bubble b1"></span>
+                                <span class="bubble b2"></span>
+                                <span class="bubble b3"></span>
+                                <span class="bubble b4"></span>
+                                <span class="bubble b5"></span>
+                                <span class="bubble b6"></span>
+                                <span class="bubble b7"></span>
+                                <span class="bubble b8"></span>
+                            </div>
+                            <div class="moisture-water-sheen"></div>
+                            <div class="moisture-water-depth"></div>
                         </div>
+                    </div>
+                    <div class="telemetry-card-header">
                         <span id="moistureStatusBadge" class="status-badge status-unknown" data-i18n="fetching">Syncing
                             telemetry...</span>
                     </div>
 
                     <div class="moisture-meter-display">
                         <div class="moisture-gauge-track" id="moistureGaugeTrack">
-                            <!-- Floating Micro-bubbles (Kept as requested) -->
-                            <div class="water-bubbles" aria-hidden="true">
-                                <span class="bubble b1"></span>
-                                <span class="bubble b2"></span>
-                                <span class="bubble b3"></span>
-                            </div>
-
-                            <!-- Seamless Organic Wave Generator (Pure CSS, No SVG) -->
-                            <div class="wave-container" id="moistureWaterFill" style="bottom: -10%;">
-                                <div class="wave-cover wave-back" aria-hidden="true"></div>
-                                <div class="wave-cover wave-front" aria-hidden="true"></div>
-                            </div>
-
-                            <!-- Specular Convex Glass Dome Sheen -->
-                            <div class="gauge-glass-sheen" aria-hidden="true"></div>
-
-                            <!-- Central Moisture Reading -->
                             <div class="gauge-center-reading">
                                 <span id="moistureValue" class="gauge-number">0</span>
                                 <span class="gauge-unit">%</span>
                             </div>
-
-                            <!-- Telemetry Ping Ring -->
-                            <div class="gauge-pulse-ring" id="gaugePulseRing" aria-hidden="true"></div>
                         </div>
-                        <div class="moisture-scale-legend">
-                            <div class="scale-item scale-dry"><span>&lt; 30%</span><small>Deficit</small></div>
-                            <div class="scale-item scale-opt"><span>30–75%</span><small>Optimal</small></div>
-                            <div class="scale-item scale-wet"><span>&gt; 75%</span><small>Saturated</small></div>
+                        <div class="moisture-test-fill-control">
+                            <button id="fillWaterTestButton" class="moisture-test-fill-button" type="button"
+                                aria-pressed="false">Fill Water (Test)</button>
                         </div>
                     </div>
-
                     <div class="telemetry-card-footer">
                         <span class="telemetry-subtext" data-i18n="lastUpdated">Last Packet:</span>
                         <strong id="lastUpdated" class="telemetry-timestamp">--:--:--</strong>
@@ -1660,7 +1645,7 @@
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="config.js"></script>
-    <script src="js/script.js?v=phase145"></script>
+    <script src="js/script.js?v=phase157"></script>
 </body>
 
 </html>

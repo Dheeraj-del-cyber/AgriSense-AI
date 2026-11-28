@@ -2409,6 +2409,7 @@ function stopIoTMonioting() {
 
 function initializeGaugeTilt() {
     if (!window.isSecureContext || !window.DeviceOrientationEvent) {
+        startGaugeTilt(false);
         return;
     }
 
@@ -2441,20 +2442,19 @@ function initializeGaugeTilt() {
         }
     } catch (error) {
         console.error('Phone motion permission error:', error);
+        startGaugeTilt(false);
         return;
     }
 
     if (permissionRequests.length > 0) {
         Promise.all(permissionRequests).then(() => {
-            if (orientationNeedsPermission && !gaugeTiltPermissionGranted) {
-                return;
-            }
-            startGaugeTilt();
+            const sensorsAllowed =
+                (!orientationNeedsPermission || gaugeTiltPermissionGranted) &&
+                (!motionNeedsPermission || gaugeMotionPermissionGranted);
+            startGaugeTilt(sensorsAllowed);
         }).catch(error => {
             console.error('Phone motion permission error:', error);
-            if (!orientationNeedsPermission) {
-                startGaugeTilt();
-            }
+            startGaugeTilt(false);
         });
         return;
     }
@@ -2462,24 +2462,31 @@ function initializeGaugeTilt() {
     startGaugeTilt();
 }
 
-function startGaugeTilt() {
+function startGaugeTilt(useDeviceSensors = true) {
     if (gaugeTiltEnabled || AppState.currentScreen !== 'screenIoT') return;
     gaugeTiltEnabled = true;
     gaugeTiltBaseline = null;
     gaugeShakeBaseline = null;
     gaugeTiltShake = null;
     gaugeTiltHasSensorData = false;
-    window.addEventListener('deviceorientation', handleGaugeTilt, true);
-    if (window.DeviceMotionEvent) {
-        window.addEventListener('devicemotion', handleGaugeShake, true);
+    const moistureCard = document.querySelector('.moisture-level-card');
+    moistureCard?.addEventListener('pointermove', handleGaugePointerTilt);
+    moistureCard?.addEventListener('pointerleave', resetGaugePointerTilt);
+    if (useDeviceSensors && window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', handleGaugeTilt, true);
+        if (window.DeviceMotionEvent) {
+            window.addEventListener('devicemotion', handleGaugeShake, true);
+        }
     }
-    document.getElementById('moistureGaugeTrack')?.classList.add('tilt-active');
 }
 
 function stopGaugeTilt() {
     if (gaugeTiltEnabled) {
         window.removeEventListener('deviceorientation', handleGaugeTilt, true);
         window.removeEventListener('devicemotion', handleGaugeShake, true);
+        const moistureCard = document.querySelector('.moisture-level-card');
+        moistureCard?.removeEventListener('pointermove', handleGaugePointerTilt);
+        moistureCard?.removeEventListener('pointerleave', resetGaugePointerTilt);
         gaugeTiltEnabled = false;
     }
     if (gaugeTiltEventTimer !== null) {
@@ -2497,13 +2504,34 @@ function stopGaugeTilt() {
 
     gaugeTiltTarget = { angle: 0, x: 0, y: 0 };
     gaugeTiltCurrent = { angle: 0, x: 0, y: 0 };
-    const waterFill = document.getElementById('moistureWaterFill');
-    document.getElementById('moistureGaugeTrack')?.classList.remove('tilt-active');
+    const waterFill = document.getElementById('moistureCardWaterFill');
     if (waterFill) {
         waterFill.style.setProperty('--water-tilt-angle', '0deg');
         waterFill.style.setProperty('--water-tilt-x', '0px');
         waterFill.style.setProperty('--water-tilt-y', '0px');
     }
+}
+
+function handleGaugePointerTilt(event) {
+    if (!gaugeTiltEnabled || AppState.currentScreen !== 'screenIoT' || event.pointerType === 'touch') return;
+
+    const bounds = event.currentTarget.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) return;
+
+    const x = Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width - 0.5) * 2));
+    const y = Math.max(-1, Math.min(1, ((event.clientY - bounds.top) / bounds.height - 0.5) * 2));
+    gaugeTiltTarget = {
+        angle: Math.max(-10, Math.min(10, -x * 7 + y * 2)),
+        x: x * 7,
+        y: y * 3
+    };
+    queueGaugeTiltFrame();
+}
+
+function resetGaugePointerTilt() {
+    if (!gaugeTiltEnabled) return;
+    gaugeTiltTarget = { angle: 0, x: 0, y: 0 };
+    queueGaugeTiltFrame();
 }
 
 function handleGaugeTilt(event) {
@@ -2604,7 +2632,7 @@ function queueGaugeTiltFrame() {
 
 function animateGaugeTilt() {
     gaugeTiltFrame = null;
-    const waterFill = document.getElementById('moistureWaterFill');
+    const waterFill = document.getElementById('moistureCardWaterFill');
     if (!waterFill || !gaugeTiltEnabled) return;
 
     let shakeAngle = 0;
@@ -2654,9 +2682,22 @@ async function fetchIoTData() {
     }
 }
 
+let moistureTestFillActive = false;
+let latestLiveMoistureLevel = 0;
+
+function setMoistureCardWaterLevel(moisture) {
+    const waterFill = document.getElementById('moistureWaterBody');
+    if (!waterFill) return;
+
+    const level = Number.isFinite(moisture) ? Math.max(0, Math.min(100, moisture)) : 0;
+    waterFill.style.transform = `scaleY(${level / 100})`;
+}
+
 function setIoTOffline(lastUpdated = '--:--:--') {
     const dict = TRANSLATIONS[AppState.currentLang] || TRANSLATIONS.en;
     const offlineText = dict.iotOffline || 'Offline';
+    latestLiveMoistureLevel = 0;
+    if (!moistureTestFillActive) setMoistureCardWaterLevel(0);
 
     const valEl = document.getElementById('moistureValue');
     const updateEl = document.getElementById('lastUpdated');
@@ -2665,7 +2706,6 @@ function setIoTOffline(lastUpdated = '--:--:--') {
     const recBox = document.getElementById('iotRecommendation');
     const gradeEl = document.getElementById('healthGrade');
     const scoreEl = document.getElementById('healthScore');
-    const waterFill = document.getElementById('moistureWaterFill');
     const ring = document.getElementById('healthRingFill');
     const banner = document.getElementById('iotAlertBanner');
 
@@ -2679,8 +2719,8 @@ function setIoTOffline(lastUpdated = '--:--:--') {
         connStatus.style.color = 'var(--accent-rose)';
     }
     if (badge) {
-        badge.className = 'status-badge status-unknown';
-        badge.textContent = offlineText;
+        badge.className = 'status-badge status-unknown hidden';
+        badge.textContent = '';
     }
     if (recBox) {
         recBox.textContent = 'Live soil moisture monitoring is unavailable.';
@@ -2690,9 +2730,6 @@ function setIoTOffline(lastUpdated = '--:--:--') {
         gradeEl.className = 'health-grade grade-bad';
     }
     if (scoreEl) scoreEl.textContent = '--';
-    if (waterFill) {
-        waterFill.style.bottom = '-10%';
-    }
     const gaugeTrack = document.getElementById('moistureGaugeTrack');
     if (gaugeTrack) {
         gaugeTrack.classList.remove('state-dry', 'state-opt', 'state-wet');
@@ -2744,6 +2781,9 @@ function updateIoTUI(data) {
         return;
     }
 
+    latestLiveMoistureLevel = moisture;
+    if (!moistureTestFillActive) setMoistureCardWaterLevel(moisture);
+
     const lastUpdated = formatLocalTime(rawLastUpdated);
 
     // Update Value with Smooth Count-Up Animation
@@ -2761,19 +2801,8 @@ function updateIoTUI(data) {
         connStatus.style.color = 'var(--g-600)';
     }
 
-    // Update Fluid Gauge & Dynamic State Theme
-    const waterFill = document.getElementById('moistureWaterFill');
+    // Update Dynamic Moisture State Theme
     const gaugeTrack = document.getElementById('moistureGaugeTrack');
-    if (waterFill) {
-        const clamped = Math.max(0, Math.min(100, moisture));
-        if (clamped <= 0) {
-            waterFill.style.bottom = '-10%';
-        } else if (clamped >= 100) {
-            waterFill.style.bottom = '110%';
-        } else {
-            waterFill.style.bottom = clamped + '%';
-        }
-    }
 
     if (gaugeTrack) {
         gaugeTrack.classList.remove('state-dry', 'state-opt', 'state-wet');
@@ -3845,6 +3874,16 @@ function updateFarmLighting() {
 document.addEventListener('DOMContentLoaded', () => {
     updateFarmLighting();
     setInterval(updateFarmLighting, 1000 * 60 * 60);
+    const fillWaterTestButton = document.getElementById('fillWaterTestButton');
+    if (fillWaterTestButton) {
+        fillWaterTestButton.addEventListener('click', () => {
+            const isFilled = fillWaterTestButton.getAttribute('aria-pressed') !== 'true';
+            moistureTestFillActive = isFilled;
+            fillWaterTestButton.setAttribute('aria-pressed', String(isFilled));
+            fillWaterTestButton.textContent = isFilled ? 'Reset Test' : 'Fill Water (Test)';
+            setMoistureCardWaterLevel(isFilled ? 100 : latestLiveMoistureLevel);
+        });
+    }
     if (typeof fetchIoTData === 'function') {
         fetchIoTData();
     }
