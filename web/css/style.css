@@ -4433,13 +4433,6 @@ body.chat-scroll-lock {
     font-weight: 650;
 }
 
-.profile-account-status {
-    margin-top: 0.35rem;
-    color: #a34a24;
-    font-size: 0.72rem;
-    line-height: 1.4;
-}
-
 .profile-photo-status.is-error {
     color: #a34a24;
 }

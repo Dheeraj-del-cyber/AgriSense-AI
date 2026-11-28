@@ -13,19 +13,16 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 
 try:
-    from handlers import model_handler, llm_handler, profile_handler
+    from handlers import model_handler, llm_handler
 except ImportError:
     try:
-        from server.handlers import model_handler, llm_handler, profile_handler
+        from server.handlers import model_handler, llm_handler
     except ImportError:
         import model_handler
         import llm_handler
-        import profile_handler
 
 # Set static folder to the web directory (located one level up)
 app = Flask(__name__, static_folder='../web', static_url_path='')
-app.register_blueprint(profile_handler.profile_bp)
-profile_handler.initialize_profile_store()
 
 # Production-safe CORS: read allowed origins from env (comma-separated)
 allowed = os.getenv('ALLOWED_ORIGINS', '')

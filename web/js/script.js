@@ -387,7 +387,7 @@ function initApp() {
 }
 
 function attachProfileButtons() {
-    document.querySelectorAll('.nav-profile-btn, .mobile-profile-btn, #heroLangProfileBtn').forEach(btn => {
+    document.querySelectorAll('.nav-profile-btn, .mobile-profile-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             openProfile();
@@ -759,50 +759,6 @@ const API_BASE = (typeof window.API_BASE !== 'undefined' && window.API_BASE) ||
     document.querySelector('meta[name="api-base"]')?.content ||
     (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:5000' : '');
 
-const AUTH_TOKEN_KEY = 'agri_auth_token';
-
-function getAuthToken() {
-    return localStorage.getItem(AUTH_TOKEN_KEY);
-}
-
-function saveAuthenticatedProfile(profile, token) {
-    if (token) localStorage.setItem(AUTH_TOKEN_KEY, token);
-    localStorage.setItem('agri_active_user', JSON.stringify(profile));
-}
-
-function clearAuthenticatedProfile() {
-    localStorage.removeItem(AUTH_TOKEN_KEY);
-    localStorage.removeItem('agri_active_user');
-    localStorage.removeItem('agri_user');
-}
-
-async function profileApi(path, options = {}) {
-    const headers = Object.assign({}, options.headers || {});
-    const token = getAuthToken();
-    if (token) headers.Authorization = `Bearer ${token}`;
-    if (options.body && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
-
-    let response;
-    try {
-        response = await fetch(`${API_BASE}${path}`, Object.assign({}, options, { headers }));
-    } catch (error) {
-        throw new Error('Could not reach the profile server. Check your connection and try again.');
-    }
-
-    let payload;
-    try {
-        payload = await response.json();
-    } catch (error) {
-        throw new Error('The profile server returned an invalid response.');
-    }
-    if (!response.ok) {
-        const apiError = new Error(payload.error || 'The profile request failed.');
-        apiError.status = response.status;
-        throw apiError;
-    }
-    return payload;
-}
-
 
 
 /* Get image file — always use original file to preserve quality */
@@ -850,71 +806,57 @@ function getHistoryGuidance(guidance) {
     }
 }
 
-async function saveDiagnosticScan(data) {
-    let user;
+function saveDiagnosticScan(data) {
+    let phone = '';
     try {
-        user = JSON.parse(localStorage.getItem('agri_active_user') || 'null');
-    } catch (error) {
-        console.error('Unable to read the signed-in profile for scan history:', error);
-        return;
-    }
-    const phone = user && user.phone ? String(user.phone) : '';
-    if (!phone || !getAuthToken()) return;
+        const user = JSON.parse(localStorage.getItem('agri_active_user') || 'null');
+        if (!user || !user.phone) return;
 
-    const confidence = data.prediction_results.confidence == null
-        ? NaN
-        : Number(data.prediction_results.confidence);
-    const hasMoisture = AppState.lastMoisture !== null &&
-        AppState.lastMoisture !== undefined &&
-        Number.isFinite(Number(AppState.lastMoisture));
-    let guidanceDetails = null;
-    try {
-        guidanceDetails = typeof data.guidance === 'string' ? JSON.parse(data.guidance) : data.guidance;
-    } catch (error) {
-        guidanceDetails = null;
-    }
-
-    const record = {
-        diagnosis: String(data.prediction_results.disease || 'Unknown'),
-        confidence: Number.isFinite(confidence) ? confidence : null,
-        moisture: hasMoisture ? Number(AppState.lastMoisture) : null,
-        guidance: getHistoryGuidance(data.guidance),
-        guidanceDetails: guidanceDetails || null,
-        thumbnail: createScanThumbnail()
-    };
-
-    try {
+        phone = String(user.phone);
         const key = `agri_scan_history_${phone}`;
         const stored = JSON.parse(localStorage.getItem(key) || '[]');
         if (!Array.isArray(stored)) throw new Error('Stored scan history is not a list.');
-        stored.unshift(Object.assign({}, record, { createdAt: new Date().toISOString() }));
-        localStorage.setItem(key, JSON.stringify(stored.slice(0, MAX_PROFILE_SCAN_HISTORY)));
-    } catch (error) {
-        console.error('Unable to cache scan history on this device:', error);
-    }
 
-    try {
-        const response = await profileApi('/api/profile/scans', {
-            method: 'POST',
-            body: JSON.stringify(record)
-        });
-        saveAuthenticatedProfile(response.profile);
-        profileHistorySaveWarning = null;
+        const confidence = data.prediction_results.confidence == null
+            ? NaN
+            : Number(data.prediction_results.confidence);
+        const hasMoisture = AppState.lastMoisture !== null && AppState.lastMoisture !== undefined && Number.isFinite(Number(AppState.lastMoisture));
+        const moisture = hasMoisture ? Number(AppState.lastMoisture) : null;
+
+        let parsedGuidance = null;
+        try {
+            parsedGuidance = typeof data.guidance === 'string' ? JSON.parse(data.guidance) : data.guidance;
+        } catch (_) {}
+
+        const record = {
+            diagnosis: String(data.prediction_results.disease || 'Unknown'),
+            confidence: Number.isFinite(confidence) ? confidence : null,
+            moisture: moisture,
+            guidance: getHistoryGuidance(data.guidance),
+            guidanceDetails: parsedGuidance || null,
+            createdAt: new Date().toISOString(),
+            thumbnail: createScanThumbnail()
+        };
+        stored.unshift(record);
+        localStorage.setItem(key, JSON.stringify(stored.slice(0, MAX_PROFILE_SCAN_HISTORY)));
+        if (profileHistorySaveWarning && profileHistorySaveWarning.phone === phone) {
+            profileHistorySaveWarning = null;
+        }
     } catch (error) {
-        console.error('Unable to save scan history to the profile server:', error);
+        console.error('Unable to save this scan to profile history:', error);
         profileHistorySaveWarning = {
             phone,
-            message: 'This scan is saved on this device, but could not sync to your profile.'
+            message: 'The scan completed, but its history could not be saved on this device.'
         };
         const notice = document.getElementById('profileHistoryNotice');
-        if (notice) {
+        if (notice && phone) {
             notice.textContent = profileHistorySaveWarning.message;
             notice.classList.remove('hidden');
         }
     }
 }
 
-function renderProfileScanHistory(history, phone) {
+function renderProfileScanHistory(phone) {
     const list = document.getElementById('profileHistoryList');
     const count = document.getElementById('profileHistoryCount');
     const buttonCount = document.getElementById('profileHistoryButtonCount');
@@ -930,12 +872,21 @@ function renderProfileScanHistory(history, phone) {
         notice.classList.toggle('hidden', !warning);
     }
 
-    if (!Array.isArray(history)) {
+    let history;
+    try {
+        history = JSON.parse(localStorage.getItem(`agri_scan_history_${phone}`) || '[]');
+        if (!Array.isArray(history)) throw new Error('Stored scan history is not a list.');
+    } catch (error) {
+        console.error('Unable to read profile scan history:', error);
+        history = null;
+    }
+
+    if (history === null) {
         if (count) count.textContent = 'Unavailable';
         if (buttonCount) buttonCount.textContent = '--';
         const errorState = document.createElement('div');
         errorState.className = 'profile-history-empty';
-        errorState.textContent = 'Scan history could not be loaded from the profile server.';
+        errorState.textContent = 'Scan history could not be loaded from this device.';
         list.appendChild(errorState);
         return;
     }
@@ -1078,7 +1029,22 @@ async function analyzeImage() {
                 : null;
             AppState.isSensorOnline = Boolean(data.is_sensor_online);
 
-            await saveDiagnosticScan(data);
+            // Update scan count
+            const userStr = localStorage.getItem('agri_active_user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    user.scanCount = (user.scanCount || 0) + 1;
+                    localStorage.setItem('agri_active_user', JSON.stringify(user));
+                    let users = JSON.parse(localStorage.getItem('agri_users_db') || '{}');
+                    if (users[user.phone]) {
+                        users[user.phone].scanCount = user.scanCount;
+                        localStorage.setItem('agri_users_db', JSON.stringify(users));
+                    }
+                } catch (e) { }
+            }
+
+            saveDiagnosticScan(data);
             renderRealDiseaseResult(data);
         } else if (data.status === 'blurry') {
             renderBlurryResult(data.message || 'Image is too blurry. Please retake.');
@@ -3420,103 +3386,88 @@ function toggleAuthMode(mode) {
     }
 }
 
-async function checkAuth() {
+function checkAuth() {
+    const userStr = localStorage.getItem('agri_active_user') || localStorage.getItem('agri_user');
     const overlay = document.getElementById('authOverlay');
     if (!overlay) return;
 
-    if (!getAuthToken()) {
+    if (!userStr) {
         overlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
         toggleAuthMode('signup');
-        return;
     } else {
         overlay.classList.add('hidden');
         document.body.style.overflow = '';
     }
-
-    try {
-        const response = await profileApi('/api/profile');
-        saveAuthenticatedProfile(response.profile);
-    } catch (error) {
-        if (error.status === 401) {
-            clearAuthenticatedProfile();
-            overlay.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-            toggleAuthMode('login');
-            document.getElementById('authError').textContent = error.message;
-            return;
-        }
-        console.error('Unable to verify the signed-in profile:', error);
-    }
 }
 
-async function handleAuth(e) {
+function handleAuth(e) {
     e.preventDefault();
     const phone = document.getElementById('authPhone').value.trim();
-    const password = document.getElementById('authPassword').value;
+    const password = document.getElementById('authPassword').value.trim();
     const errorEl = document.getElementById('authError');
-    const submitButton = document.getElementById('authSubmitBtn');
 
     if (phone.length !== 10 || isNaN(phone)) {
         errorEl.textContent = 'Please enter a valid 10-digit phone number.';
         return;
     }
 
-    if (currentAuthMode === 'reset') {
-        errorEl.textContent = 'Password reset requires phone verification. Please contact support.';
+    if (password.length < 4) {
+        errorEl.textContent = 'Password must be at least 4 characters.';
         return;
     }
 
-    if (password.length < 8 || password.length > 128) {
-        errorEl.textContent = 'Password must be between 8 and 128 characters.';
-        return;
-    }
+    let users = JSON.parse(localStorage.getItem('agri_users_db') || '{}');
 
-    const requestBody = { phone, password };
     if (currentAuthMode === 'signup') {
         const name = document.getElementById('authName').value.trim();
         if (!name) {
             errorEl.textContent = 'Please enter your full name.';
             return;
         }
-        requestBody.name = name;
+        if (users[phone]) {
+            errorEl.textContent = 'An account with this phone number already exists. Please login.';
+            return;
+        }
+
+        const joinDate = new Date().toLocaleDateString();
+        users[phone] = { name, phone, password, joinDate };
+        localStorage.setItem('agri_users_db', JSON.stringify(users));
+        localStorage.setItem('agri_active_user', JSON.stringify(users[phone]));
+    } else if (currentAuthMode === 'reset') {
+        if (!users[phone]) {
+            errorEl.textContent = 'Account not found. Please sign up first.';
+            return;
+        }
+        users[phone].password = password;
+        localStorage.setItem('agri_users_db', JSON.stringify(users));
+        localStorage.setItem('agri_active_user', JSON.stringify(users[phone]));
+        alert('Password reset successfully!');
+    } else {
+        // Login
+        if (!users[phone]) {
+            errorEl.textContent = 'Account not found. Please sign up first.';
+            return;
+        }
+        if (users[phone].password !== password) {
+            errorEl.textContent = 'Incorrect password.';
+            return;
+        }
+        // Backfill joinDate for old accounts that were created before this field existed
+        if (!users[phone].joinDate) {
+            users[phone].joinDate = new Date().toLocaleDateString();
+            localStorage.setItem('agri_users_db', JSON.stringify(users));
+        }
+        localStorage.setItem('agri_active_user', JSON.stringify(users[phone]));
     }
 
-    const originalText = submitButton.textContent;
-    submitButton.disabled = true;
-    submitButton.textContent = currentAuthMode === 'signup' ? 'Creating account...' : 'Signing in...';
     errorEl.textContent = '';
 
-    try {
-        const endpoint = currentAuthMode === 'signup' ? '/api/auth/register' : '/api/auth/login';
-        const response = await profileApi(endpoint, {
-            method: 'POST',
-            body: JSON.stringify(requestBody)
-        });
-        saveAuthenticatedProfile(response.profile, response.token);
-        document.getElementById('authOverlay').classList.add('hidden');
+    // Close overlay
+    const overlay = document.getElementById('authOverlay');
+    if (overlay) {
+        overlay.classList.add('hidden');
         document.body.style.overflow = '';
-    } catch (error) {
-        if (currentAuthMode === 'login' && error.status === 401) {
-            try {
-                const migratedProfile = await migrateLegacyLocalAccount(phone, password);
-                if (migratedProfile) {
-                    document.getElementById('authOverlay').classList.add('hidden');
-                    document.body.style.overflow = '';
-                    errorEl.textContent = '';
-                    return;
-                }
-            } catch (migrationError) {
-                errorEl.textContent = migrationError.message;
-                return;
-            }
-        }
-        errorEl.textContent = error.message;
-    } finally {
-        submitButton.disabled = false;
-        if (currentAuthMode === 'signup') submitButton.textContent = 'Sign Up';
-        else if (currentAuthMode === 'login') submitButton.textContent = 'Login';
-        else submitButton.textContent = originalText;
     }
 }
 
@@ -3542,161 +3493,54 @@ function setProfilePhoto(photo) {
     photoImg.style.display = 'block';
 }
 
-function renderProfileDetails(profile) {
-    document.getElementById('profileName').textContent = (profile.name || 'User').toUpperCase();
-    document.getElementById('profilePhone').textContent = profile.phone || '';
-    setProfilePhoto(profile.photo || '');
-
-    const langNames = { en: 'English', hi: 'Hindi', kn: 'Kannada' };
-    const language = document.getElementById('profileLanguage');
-    if (language) language.textContent = langNames[AppState.currentLang] || 'English';
-
-    const date = document.getElementById('profileDate');
-    if (date) date.textContent = profile.joinDate || 'Unknown';
-
-    const scanCount = document.getElementById('profileScans');
-    if (scanCount) scanCount.textContent = Number(profile.scanCount) || 0;
-
-    const moisture = document.getElementById('profileMoisture');
-    if (moisture) {
-        moisture.textContent = AppState.lastMoisture !== null && AppState.lastMoisture !== undefined
-            ? `${Number(AppState.lastMoisture).toFixed(2)}%`
-            : '--';
-    }
-}
-
-function setProfileAccountStatus(message) {
-    const status = document.getElementById('profileAccountStatus');
-    if (!status) return;
-    status.textContent = message;
-    status.classList.toggle('hidden', !message);
-}
-
-async function migrateLegacyLocalAccount(phone, password) {
-    let users;
-    try {
-        users = JSON.parse(localStorage.getItem('agri_users_db') || '{}');
-    } catch (error) {
-        console.error('Unable to read the legacy local account:', error);
-        return null;
-    }
-
-    const legacyUser = users && !Array.isArray(users) ? users[phone] : null;
-    if (!legacyUser || legacyUser.password !== password) return null;
-
-    let response;
-    try {
-        response = await profileApi('/api/auth/register', {
-            method: 'POST',
-            body: JSON.stringify({
-                name: legacyUser.name || 'AgriSense User',
-                phone,
-                password
-            })
-        });
-    } catch (error) {
-        if (error.status === 409) return null;
-        throw error;
-    }
-
-    saveAuthenticatedProfile(response.profile, response.token);
-    let profile = response.profile;
-
-    if (typeof legacyUser.photo === 'string' && legacyUser.photo) {
-        try {
-            const photoUpdate = await profileApi('/api/profile', {
-                method: 'PUT',
-                body: JSON.stringify({ photo: legacyUser.photo })
-            });
-            profile = photoUpdate.profile;
-        } catch (error) {
-            console.error('Unable to migrate the legacy profile photo:', error);
-        }
-    }
-
-    try {
-        const history = JSON.parse(localStorage.getItem(`agri_scan_history_${phone}`) || '[]');
-        if (Array.isArray(history)) {
-            for (const scan of history.slice(0, MAX_PROFILE_SCAN_HISTORY).reverse()) {
-                try {
-                    const savedScan = await profileApi('/api/profile/scans', {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            diagnosis: scan.diagnosis,
-                            confidence: scan.confidence,
-                            moisture: scan.moisture,
-                            guidance: scan.guidance || '',
-                            guidanceDetails: scan.guidanceDetails || null,
-                            thumbnail: scan.thumbnail || ''
-                        })
-                    });
-                    profile = savedScan.profile;
-                } catch (error) {
-                    console.error('Unable to migrate a legacy scan record:', error);
-                }
-            }
-        }
-    } catch (error) {
-        console.error('Unable to read legacy scan history:', error);
-    }
-
-    saveAuthenticatedProfile(profile);
-    delete users[phone];
-    try {
-        if (Object.keys(users).length) localStorage.setItem('agri_users_db', JSON.stringify(users));
-        else localStorage.removeItem('agri_users_db');
-    } catch (error) {
-        console.error('Unable to remove the migrated local account:', error);
-    }
-
-    return profile;
-}
-
-async function openProfile() {
+function openProfile() {
     const modal = document.getElementById('profileModal');
     if (!modal) return;
 
-    if (!getAuthToken()) {
+    const userStr = localStorage.getItem('agri_active_user');
+    if (!userStr) {
         checkAuth();
         return;
     }
 
+    try {
+        const user = JSON.parse(userStr);
+        document.getElementById('profileName').textContent = (user.name || 'User').toUpperCase();
+        document.getElementById('profilePhone').textContent = user.phone || '';
+
+        setProfilePhoto(user.photo || '');
+
+        // Extra info
+        const elLang = document.getElementById('profileLanguage');
+        if (elLang) {
+            const langNames = { 'en': 'English', 'hi': 'Hindi', 'kn': 'Kannada' };
+            elLang.textContent = langNames[AppState.currentLang] || 'English';
+        }
+
+        const elDate = document.getElementById('profileDate');
+        if (elDate) elDate.textContent = user.joinDate || 'Unknown';
+
+        const elScans = document.getElementById('profileScans');
+        if (elScans) elScans.textContent = user.scanCount || 0;
+
+        const elMoisture = document.getElementById('profileMoisture');
+        if (elMoisture) elMoisture.textContent = AppState.lastMoisture ? AppState.lastMoisture.toFixed(2) + '%' : '--';
+
+        renderProfileScanHistory(user.phone);
+    } catch (e) { }
+
     setProfileHistoryExpanded(false);
+
+    // Use style.display directly — most reliable on mobile
     modal.classList.remove('hidden');
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    setProfileAccountStatus('Loading your profile...');
 
-    let cachedProfile = null;
-    try {
-        cachedProfile = JSON.parse(localStorage.getItem('agri_active_user') || 'null');
-    } catch (error) {
-        console.error('Unable to read the cached profile:', error);
-    }
-    if (cachedProfile) renderProfileDetails(cachedProfile);
-
+    // Highlight bottom nav profile item if present
     const profileNavBtn = document.querySelector('.bottom-nav-link.mobile-profile-btn');
     if (profileNavBtn) {
         document.querySelectorAll('.bottom-nav-link').forEach(l => l.classList.remove('active'));
         profileNavBtn.classList.add('active');
-    }
-
-    try {
-        const response = await profileApi('/api/profile');
-        saveAuthenticatedProfile(response.profile);
-        renderProfileDetails(response.profile);
-        renderProfileScanHistory(response.profile.scans, response.profile.phone);
-        setProfileAccountStatus('');
-    } catch (error) {
-        if (error.status === 401) {
-            clearAuthenticatedProfile();
-            closeProfile();
-            checkAuth();
-            return;
-        }
-        console.error('Unable to load the profile:', error);
-        setProfileAccountStatus(error.message);
-        renderProfileScanHistory(null, cachedProfile ? cachedProfile.phone : '');
     }
 }
 
@@ -3716,13 +3560,8 @@ function closeProfile() {
     }
 }
 
-async function logout() {
-    try {
-        await profileApi('/api/auth/logout', { method: 'POST' });
-    } catch (error) {
-        console.error('Unable to invalidate the profile session on the server:', error);
-    }
-    clearAuthenticatedProfile();
+function logout() {
+    localStorage.removeItem('agri_active_user');
     closeProfile();
     checkAuth();
 }
@@ -3782,16 +3621,40 @@ async function handleProfilePhotoUpload(event) {
     setProfilePhotoStatus('Saving profile photo...', false);
     try {
         const photo = await compressProfilePhoto(file);
-        const response = await profileApi('/api/profile', {
-            method: 'PUT',
-            body: JSON.stringify({ photo })
-        });
-        saveAuthenticatedProfile(response.profile);
-        renderProfileDetails(response.profile);
+        const activeUserString = localStorage.getItem('agri_active_user');
+        if (!activeUserString) throw new Error('No signed-in profile is available.');
+
+        const user = JSON.parse(activeUserString);
+        if (!user.phone) throw new Error('The signed-in profile has no user identifier.');
+
+        const usersString = localStorage.getItem('agri_users_db');
+        const users = JSON.parse(usersString || '{}');
+        if (!users || typeof users !== 'object' || Array.isArray(users)) {
+            throw new Error('The saved user database is invalid.');
+        }
+
+        const updatedUser = Object.assign({}, user, { photo });
+        const updatedUsers = Object.assign({}, users);
+        updatedUsers[user.phone] = Object.assign({}, users[user.phone] || user, { photo });
+        try {
+            localStorage.setItem('agri_users_db', JSON.stringify(updatedUsers));
+            localStorage.setItem('agri_active_user', JSON.stringify(updatedUser));
+        } catch (storageError) {
+            try {
+                if (usersString === null) localStorage.removeItem('agri_users_db');
+                else localStorage.setItem('agri_users_db', usersString);
+                localStorage.setItem('agri_active_user', activeUserString);
+            } catch (rollbackError) {
+                console.error('Unable to restore profile data after a failed photo save:', rollbackError);
+            }
+            throw storageError;
+        }
+
+        setProfilePhoto(photo);
         setProfilePhotoStatus('Profile photo saved.', false);
     } catch (error) {
         console.error('Unable to save profile photo:', error);
-        setProfilePhotoStatus(error.message, true);
+        setProfilePhotoStatus('Could not save your photo. Try a smaller image.', true);
     } finally {
         input.value = '';
     }

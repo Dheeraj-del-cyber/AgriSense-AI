@@ -44,4 +44,3 @@ desktop.ini
 .venv
 venv/
 ENV/
-server/instance/
