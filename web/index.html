@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Production Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=phase167">
+    <link rel="stylesheet" href="css/style.css?v=phase168">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -1042,53 +1042,9 @@
                 <div class="telemetry-card moisture-level-card" role="group" aria-label="Soil Moisture Level">
                     <div id="moistureCardWaterFill" class="moisture-card-water-fill" aria-hidden="true">
                         <div id="moistureWaterBody" class="moisture-water-body">
-                            <!-- Volumetric Multi-Layer Fluid Waves (No Flat Rectangle) -->
-                            <div id="moistureWaveContainer" class="moisture-wave-container">
-                                <!-- Layer 1: Deep Oceanic Swell (2400x400 ViewBox) -->
-                                <svg class="moisture-wave wave-deep" viewBox="0 0 2400 400" preserveAspectRatio="none">
-                                    <defs>
-                                        <linearGradient id="waveDeepGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" stop-color="#0284c7" stop-opacity="0.45" />
-                                            <stop offset="40%" stop-color="#0369a1" stop-opacity="0.75" />
-                                            <stop offset="100%" stop-color="#075985" stop-opacity="0.9" />
-                                        </linearGradient>
-                                    </defs>
-                                    <path fill="url(#waveDeepGrad)" d="M 0,85.1 C 66.7,78.7 133.3,75.7 200,66.5 C 266.7,57.2 333.3,49.9 400,63.6 C 466.7,77.2 533.3,102.8 600,104.8 C 666.7,106.9 733.3,91.6 800,85.1 C 866.7,78.7 933.3,75.7 1000,66.5 C 1066.7,57.2 1133.3,49.9 1200,63.6 C 1266.7,77.2 1333.3,102.8 1400,104.8 C 1466.7,106.9 1533.3,91.6 1600,85.1 C 1666.7,78.7 1733.3,75.7 1800,66.5 C 1866.7,57.2 1933.3,49.9 2000,63.6 C 2066.7,77.2 2133.3,102.8 2200,104.8 C 2266.7,106.9 2333.3,91.6 2400,85.1 L 2400,400 L 0,400 Z"></path>
-                                </svg>
-                                <!-- Layer 2: Mid Counter-Current Wave -->
-                                <svg class="moisture-wave wave-mid" viewBox="0 0 2400 400" preserveAspectRatio="none">
-                                    <defs>
-                                        <linearGradient id="waveMidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.7" />
-                                            <stop offset="40%" stop-color="#0284c7" stop-opacity="0.85" />
-                                            <stop offset="100%" stop-color="#0369a1" stop-opacity="0.95" />
-                                        </linearGradient>
-                                    </defs>
-                                    <path fill="url(#waveMidGrad)" d="M 0,101.5 C 66.7,118.4 133.3,108.6 200,96.8 C 266.7,85.1 333.3,81.5 400,73.2 C 466.7,64.8 533.3,45.4 600,48.5 C 666.7,51.6 733.3,84.5 800,101.5 C 866.7,118.4 933.3,108.6 1000,96.8 C 1066.7,85.1 1133.3,81.5 1200,73.2 C 1266.7,64.8 1333.3,45.4 1400,48.5 C 1466.7,51.6 1533.3,84.5 1600,101.5 C 1666.7,118.4 1733.3,108.6 1800,96.8 C 1866.7,85.1 1933.3,81.5 2000,73.2 C 2066.7,64.8 2133.3,45.4 2200,48.5 C 2266.7,51.6 2333.3,84.5 2400,101.5 L 2400,400 L 0,400 Z"></path>
-                                </svg>
-                                <!-- Layer 3: Foreground Dynamic Wave with Specular Foam Lip -->
-                                <svg class="moisture-wave wave-front" viewBox="0 0 2400 400" preserveAspectRatio="none">
-                                    <defs>
-                                        <linearGradient id="waveFrontGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.95" />
-                                            <stop offset="30%" stop-color="#0284c7" stop-opacity="1" />
-                                            <stop offset="70%" stop-color="#0369a1" stop-opacity="1" />
-                                            <stop offset="100%" stop-color="#075985" stop-opacity="1" />
-                                        </linearGradient>
-                                        <linearGradient id="waveRimGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                            <stop offset="0%" stop-color="rgba(255,255,255,0.95)" />
-                                            <stop offset="25%" stop-color="rgba(186,230,253,0.75)" />
-                                            <stop offset="50%" stop-color="rgba(255,255,255,1)" />
-                                            <stop offset="75%" stop-color="rgba(186,230,253,0.75)" />
-                                            <stop offset="100%" stop-color="rgba(255,255,255,0.95)" />
-                                        </linearGradient>
-                                    </defs>
-                                    <!-- Full Liquid Volumetric Body -->
-                                    <path fill="url(#waveFrontGrad)" d="M 0,44.0 C 66.7,32.7 133.3,49.8 200,80.0 C 266.7,110.2 333.3,127.3 400,116.0 C 466.7,104.7 533.3,87.5 600,80.0 C 666.7,72.5 733.3,55.3 800,44.0 C 866.7,32.7 933.3,49.8 1000,80.0 C 1066.7,110.2 1133.3,127.3 1200,116.0 C 1266.7,104.7 1333.3,87.5 1400,80.0 C 1466.7,72.5 1533.3,55.3 1600,44.0 C 1666.7,32.7 1733.3,49.8 1800,80.0 C 1866.7,110.2 1933.3,127.3 2000,116.0 C 2066.7,104.7 2133.3,87.5 2200,80.0 C 2266.7,72.5 2333.3,55.3 2400,44.0 L 2400,400 L 0,400 Z"></path>
-                                    <!-- Meniscus Specular Foam Rim Highlight -->
-                                    <path fill="none" stroke="url(#waveRimGrad)" stroke-width="3" stroke-linecap="round" d="M 0,44.0 C 66.7,32.7 133.3,49.8 200,80.0 C 266.7,110.2 333.3,127.3 400,116.0 C 466.7,104.7 533.3,87.5 600,80.0 C 666.7,72.5 733.3,55.3 800,44.0 C 866.7,32.7 933.3,49.8 1000,80.0 C 1066.7,110.2 1133.3,127.3 1200,116.0 C 1266.7,104.7 1333.3,87.5 1400,80.0 C 1466.7,72.5 1533.3,55.3 1600,44.0 C 1666.7,32.7 1733.3,49.8 1800,80.0 C 1866.7,110.2 1933.3,127.3 2000,116.0 C 2066.7,104.7 2133.3,87.5 2200,80.0 C 2266.7,72.5 2333.3,55.3 2400,44.0"></path>
-                                </svg>
-                            </div>
+                            <!-- Dual-Layer Repeating Wave Fill -->
+                            <div class="moisture-wave-layer wave-back"></div>
+                            <div class="moisture-wave-layer wave-front"></div>
                             <div class="water-bubbles">
                                 <span class="bubble b1"></span>
                                 <span class="bubble b2"></span>
@@ -1696,8 +1652,8 @@
 
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="config.js?v=phase167"></script>
-    <script src="js/script.js?v=phase167"></script>
+    <script src="config.js?v=phase168"></script>
+    <script src="js/script.js?v=phase168"></script>
 </body>
 
 </html>
