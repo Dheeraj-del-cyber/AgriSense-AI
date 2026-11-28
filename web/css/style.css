@@ -5169,10 +5169,6 @@ body.mobile-home-fixed .farm-footer,
         background: transparent !important;
     }
 
-    #screenHome.active .hub-horiz-loop-track {
-        animation-play-state: running;
-    }
-
     #screenHome:not(.active) .hub-horiz-loop-track {
         animation-play-state: paused;
     }
@@ -5223,8 +5219,6 @@ body.mobile-home-fixed .farm-footer,
         box-sizing: border-box;
         transition: box-shadow var(--transition-fast);
         transform-origin: center bottom;
-        -webkit-backdrop-filter: none;
-        backdrop-filter: none;
     }
 
     .hub-big-card:active {
@@ -6299,10 +6293,6 @@ body.mobile-home-fixed .farm-footer,
 }
 
 @media (prefers-reduced-motion: reduce) {
-
-    .hub-horiz-loop-track {
-        animation: none !important;
-    }
 
     .hub-hero::before {
         transition: none;
