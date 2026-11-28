@@ -15,6 +15,86 @@ const AppState = {
     cameraStream: null
 };
 
+let homeGyroEnabled = false;
+let homeGyroBaseline = null;
+let homeGyroPermissionPending = false;
+
+function clampHomeGyro(value, limit) {
+    return Math.max(-limit, Math.min(limit, value));
+}
+
+function setHomeBackgroundOffset(x, y) {
+    const hero = document.querySelector('#screenHome .hub-hero');
+    if (!hero) return;
+    hero.style.setProperty('--home-bg-x', `${clampHomeGyro(x, 14).toFixed(2)}px`);
+    hero.style.setProperty('--home-bg-y', `${clampHomeGyro(y, 14).toFixed(2)}px`);
+}
+
+function resetHomeBackgroundOffset() {
+    setHomeBackgroundOffset(0, 0);
+}
+
+function handleHomePointerParallax(event) {
+    if (AppState.currentScreen !== 'screenHome') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const hero = document.querySelector('#screenHome .hub-hero');
+    if (!hero) return;
+    const rect = hero.getBoundingClientRect();
+    if (!rect) return;
+
+    const relativeX = (event.clientX - rect.left) / rect.width - 0.5;
+    const relativeY = (event.clientY - rect.top) / rect.height - 0.5;
+    setHomeBackgroundOffset(relativeX * 20, relativeY * 20);
+}
+
+function handleHomeGyro(event) {
+    if (AppState.currentScreen !== 'screenHome') return;
+    if (!Number.isFinite(event.beta) || !Number.isFinite(event.gamma)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    if (!homeGyroBaseline) {
+        homeGyroBaseline = { beta: event.beta, gamma: event.gamma };
+        return;
+    }
+
+    const normalizeDelta = (value) => ((value + 180) % 360 + 360) % 360 - 180;
+    const pitch = normalizeDelta(event.beta - homeGyroBaseline.beta);
+    const roll = normalizeDelta(event.gamma - homeGyroBaseline.gamma);
+    setHomeBackgroundOffset(roll * 0.45, pitch * 0.35);
+}
+
+function startHomeGyro() {
+    if (homeGyroEnabled) return;
+    homeGyroEnabled = true;
+    homeGyroBaseline = null;
+    window.addEventListener('deviceorientation', handleHomeGyro, true);
+}
+
+function stopHomeGyro() {
+    if (!homeGyroEnabled) return;
+    window.removeEventListener('deviceorientation', handleHomeGyro, true);
+    homeGyroEnabled = false;
+    homeGyroBaseline = null;
+    resetHomeBackgroundOffset();
+}
+
+async function requestHomeGyroPermissionOnce() {
+    if (homeGyroPermissionPending) return;
+    if (typeof window.DeviceOrientationEvent?.requestPermission !== 'function') {
+        startHomeGyro();
+        return;
+    }
+
+    homeGyroPermissionPending = true;
+    try {
+        const permission = await window.DeviceOrientationEvent.requestPermission();
+        if (permission === 'granted') startHomeGyro();
+    } catch (error) {
+        console.warn('Home gyroscope permission unavailable:', error);
+    }
+}
+
 
 
 /* --- Translations --- */
@@ -2071,6 +2151,20 @@ document.addEventListener('DOMContentLoaded', () => {
         panel.style.display = 'none';
     }
     loadUserChatHistory();
+
+    const homeHero = document.querySelector('#screenHome .hub-hero');
+    if (homeHero) {
+        homeHero.addEventListener('pointermove', handleHomePointerParallax);
+        homeHero.addEventListener('pointerleave', resetHomeBackgroundOffset);
+    }
+
+    if (window.DeviceOrientationEvent) {
+        if (typeof window.DeviceOrientationEvent.requestPermission !== 'function') {
+            startHomeGyro();
+        } else {
+            document.addEventListener('pointerdown', requestHomeGyroPermissionOnce, { once: true });
+        }
+    }
 });
 
 function clearChat() {
@@ -3860,10 +3954,14 @@ if (typeof originalNavigateTo === "function") {
         if (screenId === "screenHome") {
             updateFarmLighting();
             startSunTrajectory();
+            if (window.DeviceOrientationEvent && typeof window.DeviceOrientationEvent.requestPermission !== 'function') {
+                startHomeGyro();
+            }
             const track = document.querySelector('.hub-horiz-loop-track');
             if (track) track.style.animationPlayState = 'running';
         } else {
             stopSunTrajectory();
+            stopHomeGyro();
             const track = document.querySelector('.hub-horiz-loop-track');
             if (track) track.style.animationPlayState = 'paused';
         }
