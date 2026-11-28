@@ -16,7 +16,7 @@
         rel="stylesheet">
 
     <!-- Production Stylesheet -->
-    <link rel="stylesheet" href="css/style.css?v=phase169">
+    <link rel="stylesheet" href="css/style.css?v=phase170">
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
@@ -1363,6 +1363,11 @@
     <!-- Operator Authentication Dialog -->
     <div id="authOverlay" class="auth-overlay hidden">
         <div class="auth-card">
+            <div class="auth-brand">
+                <img src="assets/images/logo.png" alt="" class="auth-brand-mark">
+                <span class="auth-brand-name">AgriSense <strong>AI</strong></span>
+                <span class="auth-brand-tag">SMART FARMING</span>
+            </div>
             <div class="auth-header">
                 <h2 id="authTitle" class="auth-heading">Operator Access</h2>
                 <p id="authSubtitle" class="auth-subheading">Sign in to sync your diagnostic archive and field
@@ -1387,7 +1392,8 @@
                 </div>
                 <div class="input-group">
                     <label for="authPassword">Password</label>
-                    <input type="password" id="authPassword" placeholder="Enter account password" required>
+                    <input type="password" id="authPassword" placeholder="Enter account password" minlength="8"
+                        maxlength="128" required>
                     <a href="#" id="forgotPasswordLink" onclick="toggleAuthMode('reset'); return false;"
                         class="forgot-link">Forgot Password?</a>
                 </div>
@@ -1449,6 +1455,8 @@
                         <h2 id="profileName" class="profile-name-premium">Operator</h2>
                         <p id="profilePhone" class="profile-phone-premium">--</p>
                         <div class="profile-member-since">Active Since <span id="profileDate">2026</span></div>
+                        <p id="profileAccountStatus" class="profile-account-status hidden" role="status"
+                            aria-live="polite"></p>
                         <p id="profilePhotoStatus" class="profile-photo-status hidden" role="status" aria-live="polite">
                         </p>
                     </div>
@@ -1661,8 +1669,8 @@
 
     <!-- Core Runtime Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="config.js?v=phase169"></script>
-    <script src="js/script.js?v=phase169"></script>
+    <script src="config.js?v=phase170"></script>
+    <script src="js/script.js?v=phase170"></script>
 </body>
 
 </html>
