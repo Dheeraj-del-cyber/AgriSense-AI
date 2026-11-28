@@ -4027,22 +4027,16 @@ if (typeof originalNavigateTo === "function") {
             if (window.DeviceOrientationEvent && typeof window.DeviceOrientationEvent.requestPermission !== 'function') {
                 startHomeGyro();
             }
-            const track = document.querySelector('.hub-horiz-loop-track');
-            if (track) track.style.animationPlayState = 'running';
         } else {
             stopSunTrajectory();
             stopHomeGyro();
-            const track = document.querySelector('.hub-horiz-loop-track');
-            if (track) track.style.animationPlayState = 'paused';
         }
     };
 }
 
 // ==========================================
-// HORIZONTAL MOVING CARDS LOOP CONTROLLER (DYNAMIC ARCH)
+// HORIZONTAL MOVING CARDS LOOP CONTROLLER
 // ==========================================
-let horizLoopAnimFrame = null;
-
 function initHorizLoopCards() {
     const track = document.querySelector('.hub-horiz-loop-track');
     const container = document.getElementById('hubHorizLoopContainer');
@@ -4052,14 +4046,12 @@ function initHorizLoopCards() {
         .filter(card => card.getAttribute('aria-hidden') !== 'true');
     if (!originalCards.length) return;
 
-    let cards = [];
-
     function configureLoopCopies() {
         track.querySelectorAll('.hub-big-card[aria-hidden="true"]').forEach(card => card.remove());
 
         const groupWidth = originalCards.reduce((width, card) => {
             const style = window.getComputedStyle(card);
-            return width + card.getBoundingClientRect().width + (parseFloat(style.marginRight) || 0);
+            return width + card.offsetWidth + (parseFloat(style.marginRight) || 0);
         }, 0);
 
         if (!groupWidth) return;
@@ -4074,70 +4066,13 @@ function initHorizLoopCards() {
         }
 
         track.style.setProperty('--hub-loop-offset', `-${groupWidth}px`);
-        cards = Array.from(track.querySelectorAll('.hub-big-card'));
     }
 
     configureLoopCopies();
 
-    function updateDynamicCardArch() {
-        const homeScreen = document.getElementById('screenHome');
-        const isHomeActive = homeScreen && homeScreen.classList.contains('active');
-
-        if (isHomeActive && window.innerWidth <= 768) {
-            const screenWidth = window.innerWidth;
-            const screenCenterX = screenWidth / 2;
-            const halfScreen = screenWidth * 0.52;
-            const maxDip = 18; // px: matches the dome curve curvature
-            const maxRotation = 2.4; // deg: dynamic radial arch flare
-
-            for (let i = 0; i < cards.length; i++) {
-                const card = cards[i];
-                const rect = card.getBoundingClientRect();
-
-                // Skip if offscreen
-                if (rect.right < -40 || rect.left > screenWidth + 40) continue;
-
-                const cardCenterX = rect.left + rect.width / 2;
-                const dist = (cardCenterX - screenCenterX) / halfScreen;
-                const clamped = Math.max(-1.15, Math.min(1.15, dist));
-
-                // Quadratic parabolic curve matching dome arch
-                const dip = Math.pow(clamped, 2) * maxDip;
-                const rot = clamped * maxRotation;
-                const scale = 1 - Math.abs(clamped) * 0.025;
-
-                card.style.transform = `translate3d(0, ${dip.toFixed(2)}px, 0) rotate(${rot.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
-            }
-        } else if (window.innerWidth > 768) {
-            cards.forEach(card => {
-                if (card.style.transform) card.style.transform = '';
-            });
-        }
-
-        horizLoopAnimFrame = requestAnimationFrame(updateDynamicCardArch);
-    }
-
-    if (horizLoopAnimFrame) cancelAnimationFrame(horizLoopAnimFrame);
-    horizLoopAnimFrame = requestAnimationFrame(updateDynamicCardArch);
-
-    // Prevent duplicate event listeners
     if (!track.dataset.loopListenersAttached) {
         track.dataset.loopListenersAttached = 'true';
         window.addEventListener('resize', configureLoopCopies, { passive: true });
-
-        // Pause moving cards on touch/hover, resume on release
-        container.addEventListener('pointerenter', () => {
-            track.style.animationPlayState = 'paused';
-        });
-        container.addEventListener('pointerleave', () => {
-            track.style.animationPlayState = 'running';
-        });
-        container.addEventListener('touchstart', () => {
-            track.style.animationPlayState = 'paused';
-        }, { passive: true });
-        container.addEventListener('touchend', () => {
-            track.style.animationPlayState = 'running';
-        }, { passive: true });
     }
 }
 
