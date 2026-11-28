@@ -5163,31 +5163,15 @@ body.mobile-home-fixed .farm-footer,
         align-items: flex-start;
         gap: 0;
         width: max-content;
-        animation: hub-horiz-slide 24s linear infinite;
+        animation: hub-horiz-slide 20s linear infinite;
         will-change: transform;
         padding-top: 0.15rem;
         background: transparent !important;
     }
 
-    #screenHome:not(.active) .hub-horiz-loop-track {
+    .hub-horiz-loop-track:hover,
+    .hub-horiz-loop-track:active {
         animation-play-state: paused;
-    }
-
-    .hub-big-card:nth-child(5n + 1) {
-        transform: translate3d(0, 26px, 0) rotate(-2deg) scale(0.96);
-    }
-
-    .hub-big-card:nth-child(5n + 2) {
-        transform: translate3d(0, 0, 0) rotate(-0.5deg);
-    }
-
-    .hub-big-card:nth-child(5n + 3) {
-        transform: translate3d(0, 26px, 0) rotate(2deg) scale(0.96);
-    }
-
-    .hub-big-card:nth-child(5n + 4),
-    .hub-big-card:nth-child(5n) {
-        transform: translate3d(0, 38px, 0) rotate(3deg) scale(0.94);
     }
 
     @keyframes hub-horiz-slide {
@@ -5218,6 +5202,9 @@ body.mobile-home-fixed .farm-footer,
         outline: none;
         box-sizing: border-box;
         transition: box-shadow var(--transition-fast);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        will-change: transform;
         transform-origin: center bottom;
     }
 
